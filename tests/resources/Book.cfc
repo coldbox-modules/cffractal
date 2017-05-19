@@ -11,4 +11,12 @@ component accessors="true" {
         }
         return this;
     }
+
+    function getMemento() {
+        return {
+            "id" = getId(),
+            "title" = getTitle(),
+            "year" = getYear()
+        };
+    }
 }

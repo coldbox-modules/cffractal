@@ -40,6 +40,20 @@ component extends="testbox.system.BaseSpec" {
                         expect( scope.toStruct() ).toBe( {"year":1960,"title":"To Kill a Mockingbird","id":1} );
                         expect( scope.toJSON() ).toBe( '{"year":1960,"title":"To Kill a Mockingbird","id":1}' );
                     } );
+
+                    it( "defaults to a call to `getMemento`", function() {
+                        var book = new tests.resources.Book( {
+                            id = 1,
+                            title = "To Kill a Mockingbird",
+                            year = "1960"
+                        } );
+
+                        var resource = new fractal.models.Item( book );
+
+                        var scope = fractal.createData( resource );
+                        expect( scope.toStruct() ).toBe( {"year":1960,"title":"To Kill a Mockingbird","id":1} );
+                        expect( scope.toJSON() ).toBe( '{"year":1960,"title":"To Kill a Mockingbird","id":1}' );
+                    } );
                 } );
 
                 describe( "converting collections", function() {

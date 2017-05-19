@@ -51,6 +51,21 @@ component extends="testbox.system.BaseSpec" {
                         var scope = new fractal.models.Scope( mockFractal, mockItem );
                         expect( scope.toStruct() ).toBe( data );
                     } );
+
+                    it( "defaults to a call to `getMemento`", function() {
+                        var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
+                        
+                        var data = { "foo" = "bar" };
+                        var mockObject = getMockBox().createStub();
+                        mockObject.$( "getMemento", data );
+
+                        var mockItem = getMockBox().createMock( "fractal.models.Item" );
+                        mockItem.$( "getTransformer", function( item ) { return item.getMemento(); } );
+                        mockItem.$( "getData", mockObject );
+
+                        var scope = new fractal.models.Scope( mockFractal, mockItem );
+                        expect( scope.toStruct() ).toBe( data );
+                    } );
                 } );
 
                 describe( "converting a collection", function() {
