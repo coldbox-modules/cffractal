@@ -10,25 +10,7 @@ component accessors="true" {
     }
 
     function toStruct() {
-        if ( isInstanceOf( getResource(), "fractal.models.Item" ) ) {
-            return transformData(
-                getResource().getTransformer(),
-                getResource().getData()
-            );
-        }
-        else {
-            var transformedData = [];
-            for ( var value in getResource().getData() ) {
-                arrayAppend(
-                    transformedData,
-                    transformData(
-                        getResource().getTransformer(),
-                        value
-                    )
-                );
-            }
-            return { "data" = transformedData };
-        }
+        return getResource().transform();
     }
 
     function toJSON() {        
