@@ -10,14 +10,33 @@ component accessors="true" {
     }
 
     function toJSON() {
-        var transformer = getResource().getTransformer();
-        if ( isClosure( transformer ) ) {
-            var transformedData = transformer( getResource().getData() ); 
+        if ( isInstanceOf( getResource(), "fractal.models.Item" ) ) {
+            var transformedData = transformData(
+                getResource().getTransformer(),
+                getResource().getData()
+            );
         }
         else {
-            var transformedData = transformer.transform( getResource().getData() ); 
+            var transformedData = [];
+            for ( var value in getResource().getData() ) {
+                arrayAppend(
+                    transformedData,
+                    transformData(
+                        getResource().getTransformer(),
+                        value
+                    )
+                );
+            }
+            transformedData = { "data" = transformedData };
         }
+        
         return serializeJSON( transformedData );
+    }
+
+    function transformData( transformer, data ) {
+        return isClosure( transformer ) ?
+            transformer( data ) :
+            transformer.transform( data );
     }
 
 }
