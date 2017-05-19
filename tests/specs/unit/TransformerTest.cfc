@@ -47,6 +47,11 @@ component extends="testbox.system.BaseSpec" {
                     var item = transformer.item( {}, function() {} );
                     expect( item ).toBeInstanceOf( "fractal.models.Item" );
                 } );
+
+                it( "can create new collections", function() {
+                    var collection = transformer.collection( [ {}, {} ], function() {} );
+                    expect( collection ).toBeInstanceOf( "fractal.models.Collection" );
+                } );
             } );
         } );
     }
