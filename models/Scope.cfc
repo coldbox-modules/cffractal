@@ -9,9 +9,9 @@ component accessors="true" {
         return this;
     }
 
-    function toJSON() {
+    function toStruct() {
         if ( isInstanceOf( getResource(), "fractal.models.Item" ) ) {
-            var transformedData = transformData(
+            return transformData(
                 getResource().getTransformer(),
                 getResource().getData()
             );
@@ -27,10 +27,12 @@ component accessors="true" {
                     )
                 );
             }
-            transformedData = { "data" = transformedData };
+            return { "data" = transformedData };
         }
-        
-        return serializeJSON( transformedData );
+    }
+
+    function toJSON() {        
+        return serializeJSON( toStruct() );
     }
 
     function transformData( transformer, data ) {

@@ -22,9 +22,9 @@ component extends="testbox.system.BaseSpec" {
                             };
                         } );
 
-                        var json = fractal.createData( resource ).toJson();
-
-                        expect( json ).toBe( '{"year":1960,"title":"To Kill a Mockingbird","id":1}' );
+                        var scope = fractal.createData( resource );
+                        expect( scope.toStruct() ).toBe( {"year":1960,"title":"To Kill a Mockingbird","id":1} );
+                        expect( scope.toJson() ).toBe( '{"year":1960,"title":"To Kill a Mockingbird","id":1}' );
                     } );
 
                     it( "with a custom transformer", function() {
@@ -36,9 +36,9 @@ component extends="testbox.system.BaseSpec" {
 
                         var resource = new fractal.models.Item( book, new tests.resources.BookTransformer() );
 
-                        var json = fractal.createData( resource ).toJson();
-
-                        expect( json ).toBe( '{"year":1960,"title":"To Kill a Mockingbird","id":1}' );
+                        var scope = fractal.createData( resource );
+                        expect( scope.toStruct() ).toBe( {"year":1960,"title":"To Kill a Mockingbird","id":1} );
+                        expect( scope.toJSON() ).toBe( '{"year":1960,"title":"To Kill a Mockingbird","id":1}' );
                     } );
                 } );
 
@@ -64,9 +64,9 @@ component extends="testbox.system.BaseSpec" {
                             };
                         } );
 
-                        var json = fractal.createData( resource ).toJson();
-
-                        expect( json ).toBe( '{"data":[{"year":1960,"title":"To Kill a Mockingbird","id":1},{"year":1859,"title":"A Tale of Two Cities","id":2}]}' );
+                        var scope = fractal.createData( resource );
+                        expect( scope.toStruct() ).toBe( {"data":[{"year":1960,"title":"To Kill a Mockingbird","id":1},{"year":1859,"title":"A Tale of Two Cities","id":2}]} );
+                        expect( scope.toJson() ).toBe( '{"data":[{"year":1960,"title":"To Kill a Mockingbird","id":1},{"year":1859,"title":"A Tale of Two Cities","id":2}]}' );
                     } );
 
                     it( "with a custom transformer", function() {
@@ -78,9 +78,9 @@ component extends="testbox.system.BaseSpec" {
 
                         var resource = new fractal.models.Item( book, new tests.resources.BookTransformer() );
 
-                        var json = fractal.createData( resource ).toJson();
-
-                        expect( json ).toBe( '{"year":1960,"title":"To Kill a Mockingbird","id":1}' );
+                        var scope = fractal.createData( resource );
+                        expect( scope.toStruct() ).toBe( {"year":1960,"title":"To Kill a Mockingbird","id":1} );
+                        expect( scope.toJson() ).toBe( '{"year":1960,"title":"To Kill a Mockingbird","id":1}' );
                     } );
                 } );
             } );
