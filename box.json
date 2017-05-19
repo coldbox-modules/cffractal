@@ -1,0 +1,38 @@
+{
+    "name":"cffractal",
+    "version":"0.0.0",
+    "author":"Eric Peterson",
+    "location":"elpete/cffractal#v0.0.0",
+    "homepage":"https://github.com/elpete/cffractal",
+    "documentation":"https://github.com/elpete/cffractal",
+    "repository":{
+        "type":"git",
+        "URL":"https://github.com/elpete/cffractal"
+    },
+    "bugs":"https://github.com/elpete/cffractal/issues",
+    "slug":"cffractal",
+    "shortDescription":"Transform business models to JSON data structures. Based on the Fractal PHP library.",
+    "description":"Transform business models to JSON data structures. Based on the Fractal PHP library.",
+    "type":"modules",
+    "dependencies":{
+        
+    },
+    "devDependencies":{
+        "coldbox":"^4.3.0+188",
+        "testbox":"^2.4.0+80"
+    },
+    "installPaths":{
+        "testbox":"testbox",
+        "coldbox":"tests/resources/app/coldbox"
+    },
+    "scripts":{
+        "postVersion":"package set location='elpete/cffractal#v`package version`'",
+        "onRelease":"publish",
+        "postPublish":"!git push && !git push --tags"
+    },
+    "ignore":[
+        "**/.*",
+        "test",
+        "tests"
+    ]
+}
