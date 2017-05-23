@@ -2,8 +2,6 @@ component accessors="true" {
 
     property name="id";
     property name="name";
-    property name="birthdate";
-    property name="country";
 
     function init( struct args = {} ) {
         for ( var arg in args ) {

@@ -100,6 +100,90 @@ component extends="testbox.system.BaseSpec" {
                             expect( scope.toStruct() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}} );
                             expect( scope.toJSON() ).toBe( '{"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}}' );
                         } );
+
+                        it( "can parse an item with a nested includes", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 ),
+                                    country = new tests.resources.Country( {
+                                        id = 1,
+                                        name = "United States"
+                                    } )
+                                } )
+                            } );
+
+                            var resource = new fractal.models.resources.Item( book, new tests.resources.BookTransformer() );
+
+                            fractal.parseIncludes( "author,author.country" );
+                            var scope = fractal.createData( resource );
+                            var expectedData = {
+                                "data" = {
+                                    "year" = 1960,
+                                    "title" = "To Kill a Mockingbird",
+                                    "id" = 1,
+                                    "author" = {
+                                        "data" = {
+                                            "name" = "Harper Lee",
+                                            "country" = {
+                                                "data" = {
+                                                    "id" = 1,
+                                                    "name" = "United States"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            };
+                            expect( scope.toStruct() ).toBe( expectedData );
+                            expect( scope.toJSON() ).toBe( serializeJSON( expectedData ) );
+                        } );
+
+                        it( "can automatically includes the parent when grabbing a nested include", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 ),
+                                    country = new tests.resources.Country( {
+                                        id = 1,
+                                        name = "United States"
+                                    } )
+                                } )
+                            } );
+
+                            var resource = new fractal.models.resources.Item( book, new tests.resources.BookTransformer() );
+
+                            fractal.parseIncludes( "author.country" );
+                            var scope = fractal.createData( resource );
+                            var expectedData = {
+                                "data" = {
+                                    "year" = 1960,
+                                    "title" = "To Kill a Mockingbird",
+                                    "id" = 1,
+                                    "author" = {
+                                        "data" = {
+                                            "name" = "Harper Lee",
+                                            "country" = {
+                                                "data" = {
+                                                    "id" = 1,
+                                                    "name" = "United States"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            };
+                            expect( scope.toStruct() ).toBe( expectedData );
+                            expect( scope.toJSON() ).toBe( serializeJSON( expectedData ) );
+                        } );
                     } );
                 } );
 

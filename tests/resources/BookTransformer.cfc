@@ -11,11 +11,7 @@ component extends="fractal.models.AbstractTransformer" {
     }
 
     function includeAuthor( book ) {
-        return item( book.getAuthor(), function( author ) {
-            return {
-                "name" = author.getName()
-            };
-        } );
+        return item( book.getAuthor(), new tests.resources.AuthorTransformer() );
     }
 
 }

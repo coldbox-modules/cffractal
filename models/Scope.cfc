@@ -12,7 +12,7 @@ component accessors="true" {
     }
 
     function requestedInclude( include ) {
-        return getManager().requestedInclude( include );
+        return getManager().requestedInclude( include, getScopeIdentifier() );
     }
 
     function embedChildScope( scopeIdentifier, resource ) {
