@@ -3,7 +3,8 @@ component extends="testbox.system.BaseSpec" {
     function run() {
         describe( "all the pieces working together", function() {
             beforeEach( function() {
-                variables.fractal = new fractal.models.Manager();
+                variables.dataSerializer = new fractal.models.serializers.DataSerializer();
+                variables.fractal = new fractal.models.Manager( dataSerializer );
             } );
 
             describe( "converting models", function() {
@@ -23,8 +24,8 @@ component extends="testbox.system.BaseSpec" {
                         } );
 
                         var scope = fractal.createData( resource );
-                        expect( scope.toStruct() ).toBe( {"year":1960,"title":"To Kill a Mockingbird","id":1} );
-                        expect( scope.toJson() ).toBe( '{"year":1960,"title":"To Kill a Mockingbird","id":1}' );
+                        expect( scope.toStruct() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}} );
+                        expect( scope.toJson() ).toBe( '{"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}}' );
                     } );
 
                     it( "with a custom transformer", function() {
@@ -37,8 +38,8 @@ component extends="testbox.system.BaseSpec" {
                         var resource = new fractal.models.Item( book, new tests.resources.BookTransformer() );
 
                         var scope = fractal.createData( resource );
-                        expect( scope.toStruct() ).toBe( {"year":1960,"title":"To Kill a Mockingbird","id":1} );
-                        expect( scope.toJSON() ).toBe( '{"year":1960,"title":"To Kill a Mockingbird","id":1}' );
+                        expect( scope.toStruct() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}} );
+                        expect( scope.toJSON() ).toBe( '{"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}}' );
                     } );
                 } );
 

@@ -10,7 +10,9 @@ component accessors="true" {
     }
 
     function toStruct() {
-        return getResource().transform();
+        return getManager().serialize(
+            getResource().transform()
+        );
     }
 
     function toJSON() {        

@@ -8,7 +8,7 @@ component accessors="true" extends="fractal.models.AbstractResource" {
                 transformData( getTransformer(), value )
             );
         }
-        return { "data" = transformedData };
+        return transformedData;
     }
 
 }
