@@ -41,6 +41,66 @@ component extends="testbox.system.BaseSpec" {
                         expect( scope.toStruct() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}} );
                         expect( scope.toJSON() ).toBe( '{"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}}' );
                     } );
+
+                    describe( "includes", function() {
+                        it( "ignores includes by default", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var resource = new fractal.models.resources.Item( book, new tests.resources.BookTransformer() );
+
+                            var scope = fractal.createData( resource );
+                            expect( scope.toStruct() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}} );
+                            expect( scope.toJSON() ).toBe( '{"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}}' );
+                        } );
+
+                        it( "can parse an item with an includes", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var resource = new fractal.models.resources.Item( book, new tests.resources.BookTransformer() );
+
+                            fractal.parseIncludes( "author" );
+                            var scope = fractal.createData( resource );
+                            expect( scope.toStruct() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}} );
+                            expect( scope.toJSON() ).toBe( '{"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}}' );
+                        } );
+
+                        it( "can parse an item with a default includes", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var resource = new fractal.models.resources.Item( book, new tests.resources.DefaultIncludesBookTransformer() );
+
+                            var scope = fractal.createData( resource );
+                            expect( scope.toStruct() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}} );
+                            expect( scope.toJSON() ).toBe( '{"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}}' );
+                        } );
+                    } );
                 } );
 
                 describe( "converting collections", function() {

@@ -45,6 +45,7 @@ component extends="testbox.system.BaseSpec" {
                         var data = { "foo" = "bar" };
                         var mockTransformer = getMockBox().createMock( "fractal.models.AbstractTransformer" );
                         mockTransformer.$( "transform", data );
+                        mockTransformer.$( "hasIncludes", false );
 
                         var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
                         mockItem.$( "getTransformer", mockTransformer );
@@ -83,6 +84,7 @@ component extends="testbox.system.BaseSpec" {
                         var mockTransformer = getMockBox().createMock( "fractal.models.AbstractTransformer" );
                         mockTransformer.$( "transform" ).$args( { "foo" = "bar" } ).$results( { "foo" = "bar" } );
                         mockTransformer.$( "transform" ).$args( { "baz" = "ban" } ).$results( { "baz" = "ban" } );
+                        mockTransformer.$( "hasIncludes", false );
 
                         var mockCollection = getMockBox().createMock( "fractal.models.resources.Collection" );
                         mockCollection.$( "getTransformer", mockTransformer );
@@ -122,6 +124,7 @@ component extends="testbox.system.BaseSpec" {
                         var data = { "foo" = "bar" };
                         var mockTransformer = getMockBox().createMock( "fractal.models.AbstractTransformer" );
                         mockTransformer.$( "transform", data );
+                        mockTransformer.$( "hasIncludes", false );
 
                         var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
                         mockItem.$( "getTransformer", mockTransformer );
@@ -160,6 +163,7 @@ component extends="testbox.system.BaseSpec" {
                         var mockTransformer = getMockBox().createMock( "fractal.models.AbstractTransformer" );
                         mockTransformer.$( "transform" ).$args( { "foo" = "bar" } ).$results( { "foo" = "bar" } );
                         mockTransformer.$( "transform" ).$args( { "baz" = "ban" } ).$results( { "baz" = "ban" } );
+                        mockTransformer.$( "hasIncludes", false );
 
                         var mockCollection = getMockBox().createMock( "fractal.models.resources.Collection" );
                         mockCollection.$( "getTransformer", mockTransformer );

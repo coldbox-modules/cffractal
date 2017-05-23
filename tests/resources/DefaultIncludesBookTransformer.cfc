@@ -1,6 +1,6 @@
 component extends="fractal.models.AbstractTransformer" {
 
-    variables.availableIncludes = [ "author" ];
+    variables.defaultIncludes = [ "author" ];
 
     function transform( book ) {
         return {

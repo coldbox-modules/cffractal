@@ -1,9 +1,8 @@
 component accessors="true" {
 
     property name="id";
-    property name="title";
-    property name="year";
-    property name="author";
+    property name="name";
+    property name="birthdate";
 
     function init( struct args = {} ) {
         for ( var arg in args ) {

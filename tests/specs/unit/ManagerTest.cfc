@@ -47,6 +47,12 @@ component extends="testbox.system.BaseSpec" {
                     expect( fractal.serialize( originalData ) )
                         .toBe( serializedData );
                 } );
+
+                describe( "parseIncludes", function() {
+                    xit( "can set a list of includes for the transformed data", function() {
+                        
+                    } );
+                } );
             } );
         } );
     }

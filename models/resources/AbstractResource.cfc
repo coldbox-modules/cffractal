@@ -9,6 +9,26 @@ component accessors="true" {
         return this;
     }
 
+    function process( scope ) {
+        var transformedData = transform();
+        
+        if ( isClosure( getTransformer() ) ) {
+            return transformedData;
+        }
+
+        if ( ! getTransformer().hasIncludes() ) {
+            return transformedData;
+        }
+
+        var includedData = getTransformer().processIncludes( scope, getData() );
+        
+        for ( var includedDataSet in includedData ) {
+            structAppend( transformedData, includedDataSet, true /* overwrite */ );
+        }
+
+        return transformedData;
+    }
+
     function transform() {
         throw(
             type = "MethodNotImplemented",

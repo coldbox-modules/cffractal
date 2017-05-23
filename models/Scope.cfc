@@ -2,27 +2,37 @@ component accessors="true" {
 
     property name="manager";
     property name="resource";
+    property name="ScopeIdentifier";
 
-    function init( manager, resource ) {
+    function init( manager, resource, scopeIdentifier = "" ) {
         setManager( manager );
         setResource( resource );
+        setScopeIdentifier( scopeIdentifier );
         return this;
     }
 
+    function requestedInclude( include ) {
+        return getManager().requestedInclude( include );
+    }
+
+    function embedChildScope( scopeIdentifier, resource ) {
+        return getManager().createData( resource, scopeIdentifier );
+    }
+
     function toStruct() {
-        return getManager().serialize(
-            getResource().transform()
+        var serializedData = getManager().serialize(
+            getResource().process( this )
         );
+
+        if ( getScopeIdentifier() == "" ) {
+            return serializedData;
+        }
+
+        return { "#getScopeIdentifier()#" = serializedData };
     }
 
     function toJSON() {        
         return serializeJSON( toStruct() );
-    }
-
-    function transformData( transformer, data ) {
-        return isClosure( transformer ) ?
-            transformer( data ) :
-            transformer.transform( data );
     }
 
 }
