@@ -15,7 +15,7 @@ component extends="testbox.system.BaseSpec" {
                             title = "To Kill a Mockingbird",
                             year = "1960"
                         } );
-                        var resource = new fractal.models.Item( book, function( book ) {
+                        var resource = new fractal.models.resources.Item( book, function( book ) {
                             return {
                                 "id" = book.getId(),
                                 "title" = book.getTitle(),
@@ -35,7 +35,7 @@ component extends="testbox.system.BaseSpec" {
                             year = "1960"
                         } );
 
-                        var resource = new fractal.models.Item( book, new tests.resources.BookTransformer() );
+                        var resource = new fractal.models.resources.Item( book, new tests.resources.BookTransformer() );
 
                         var scope = fractal.createData( resource );
                         expect( scope.toStruct() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}} );
@@ -57,7 +57,7 @@ component extends="testbox.system.BaseSpec" {
                                 year = "1859"
                             } )
                         ];
-                        var resource = new fractal.models.Collection( books, function( book ) {
+                        var resource = new fractal.models.resources.Collection( books, function( book ) {
                             return {
                                 "id" = book.getId(),
                                 "title" = book.getTitle(),
@@ -84,7 +84,7 @@ component extends="testbox.system.BaseSpec" {
                             } )
                         ];
 
-                        var resource = new fractal.models.Collection( books, new tests.resources.BookTransformer() );
+                        var resource = new fractal.models.resources.Collection( books, new tests.resources.BookTransformer() );
 
                         var scope = fractal.createData( resource );
                         expect( scope.toStruct() ).toBe( {"data":[{"year":1960,"title":"To Kill a Mockingbird","id":1},{"year":1859,"title":"A Tale of Two Cities","id":2}]} );

@@ -13,7 +13,7 @@ component extends="testbox.system.BaseSpec" {
 
             describe( "create data", function() {
                 it( "with callback", function() {
-                    var resource = new fractal.models.Item( { "foo" = "bar" }, function( data ) {
+                    var resource = new fractal.models.resources.Item( { "foo" = "bar" }, function( data ) {
                         return data;
                     } );
                     var rootScope = fractal.createData( resource );

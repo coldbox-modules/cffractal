@@ -4,21 +4,21 @@ component extends="testbox.system.BaseSpec" {
         describe( "scope", function() {
             it( "can be instantiated", function() {
                 var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                var mockItem = getMockBox().createMock( "fractal.models.Item" );
+                var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
                 expect( new fractal.models.Scope( mockFractal, mockItem ) )
                     .toBeInstanceOf( "fractal.models.Scope" );
             } );
 
             it( "can get the manager from the scope", function() {
                 var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                var mockItem = getMockBox().createMock( "fractal.models.Item" );
+                var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
                 var scope = new fractal.models.Scope( mockFractal, mockItem );
                 expect( scope.getManager() ).toBe( mockFractal );
             } );
 
             it( "can get the resource from the scope", function() {
                 var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                var mockItem = getMockBox().createMock( "fractal.models.Item" );
+                var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
                 var scope = new fractal.models.Scope( mockFractal, mockItem );
                 expect( scope.getResource() ).toBe( mockItem );
             } );
@@ -27,7 +27,7 @@ component extends="testbox.system.BaseSpec" {
                 describe( "converting a single item", function() {
                     it( "with a callback transformer", function() {
                         var data = { "foo" = "bar" };
-                        var mockItem = getMockBox().createMock( "fractal.models.Item" );
+                        var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
                         mockItem.$( "getTransformer", function( data ) { return data; } );
                         mockItem.$( "getData", data );
 
@@ -46,7 +46,7 @@ component extends="testbox.system.BaseSpec" {
                         var mockTransformer = getMockBox().createMock( "fractal.models.AbstractTransformer" );
                         mockTransformer.$( "transform", data );
 
-                        var mockItem = getMockBox().createMock( "fractal.models.Item" );
+                        var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
                         mockItem.$( "getTransformer", mockTransformer );
                         mockItem.$( "getData", data );
 
@@ -64,7 +64,7 @@ component extends="testbox.system.BaseSpec" {
                 describe( "converting a collection", function() {
                     it( "with a callback transformer", function() {
                         var data = [ { "foo" = "bar" }, { "baz" = "ban" } ];
-                        var mockCollection = getMockBox().createMock( "fractal.models.Collection" );
+                        var mockCollection = getMockBox().createMock( "fractal.models.resources.Collection" );
                         mockCollection.$( "getTransformer", function( data ) { return data; } );
                         mockCollection.$( "getData", data );
 
@@ -84,7 +84,7 @@ component extends="testbox.system.BaseSpec" {
                         mockTransformer.$( "transform" ).$args( { "foo" = "bar" } ).$results( { "foo" = "bar" } );
                         mockTransformer.$( "transform" ).$args( { "baz" = "ban" } ).$results( { "baz" = "ban" } );
 
-                        var mockCollection = getMockBox().createMock( "fractal.models.Collection" );
+                        var mockCollection = getMockBox().createMock( "fractal.models.resources.Collection" );
                         mockCollection.$( "getTransformer", mockTransformer );
                         mockCollection.$( "getData", data );
 
@@ -104,7 +104,7 @@ component extends="testbox.system.BaseSpec" {
                 describe( "converting a single item", function() {
                     it( "with a callback transformer", function() {
                         var data = { "foo" = "bar" };
-                        var mockItem = getMockBox().createMock( "fractal.models.Item" );
+                        var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
                         mockItem.$( "getTransformer", function( data ) { return data; } );
                         mockItem.$( "getData", data );
 
@@ -123,7 +123,7 @@ component extends="testbox.system.BaseSpec" {
                         var mockTransformer = getMockBox().createMock( "fractal.models.AbstractTransformer" );
                         mockTransformer.$( "transform", data );
 
-                        var mockItem = getMockBox().createMock( "fractal.models.Item" );
+                        var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
                         mockItem.$( "getTransformer", mockTransformer );
                         mockItem.$( "getData", data );
 
@@ -141,7 +141,7 @@ component extends="testbox.system.BaseSpec" {
                 describe( "converting a collection", function() {
                     it( "with a callback transformer", function() {
                         var data = [ { "foo" = "bar" }, { "baz" = "ban" } ];
-                        var mockCollection = getMockBox().createMock( "fractal.models.Collection" );
+                        var mockCollection = getMockBox().createMock( "fractal.models.resources.Collection" );
                         mockCollection.$( "getTransformer", function( data ) { return data; } );
                         mockCollection.$( "getData", data );
 
@@ -161,7 +161,7 @@ component extends="testbox.system.BaseSpec" {
                         mockTransformer.$( "transform" ).$args( { "foo" = "bar" } ).$results( { "foo" = "bar" } );
                         mockTransformer.$( "transform" ).$args( { "baz" = "ban" } ).$results( { "baz" = "ban" } );
 
-                        var mockCollection = getMockBox().createMock( "fractal.models.Collection" );
+                        var mockCollection = getMockBox().createMock( "fractal.models.resources.Collection" );
                         mockCollection.$( "getTransformer", mockTransformer );
                         mockCollection.$( "getData", data );
 

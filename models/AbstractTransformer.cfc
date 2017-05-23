@@ -11,10 +11,10 @@ component accessors="true" {
     }
 
     function item( data, transformer ) {
-        return new fractal.models.Item( data, transformer );
+        return new fractal.models.resources.Item( data, transformer );
     }
 
     function collection( data, transformer ) {
-        return new fractal.models.Collection( data, transformer );
+        return new fractal.models.resources.Collection( data, transformer );
     }
 }

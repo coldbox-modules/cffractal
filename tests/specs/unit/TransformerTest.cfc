@@ -45,12 +45,12 @@ component extends="testbox.system.BaseSpec" {
             describe( "resource creation", function() {
                 it( "can create new items", function() {
                     var item = transformer.item( {}, function() {} );
-                    expect( item ).toBeInstanceOf( "fractal.models.Item" );
+                    expect( item ).toBeInstanceOf( "fractal.models.resources.Item" );
                 } );
 
                 it( "can create new collections", function() {
                     var collection = transformer.collection( [ {}, {} ], function() {} );
-                    expect( collection ).toBeInstanceOf( "fractal.models.Collection" );
+                    expect( collection ).toBeInstanceOf( "fractal.models.resources.Collection" );
                 } );
             } );
         } );
