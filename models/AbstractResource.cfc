@@ -4,11 +4,6 @@ component accessors="true" {
     property name="transformer";
 
     function init( data, transformer ) {
-        if ( isNull( transformer ) ) {
-            transformer = function( item ) {
-                return item.getMemento();
-            };
-        }
         setData( data );
         setTransformer( transformer );
         return this;
