@@ -2,21 +2,21 @@ component accessors="true" {
 
     property name="manager";
     property name="resource";
-    property name="ScopeIdentifier";
+    property name="identifier";
 
-    function init( manager, resource, scopeIdentifier = "" ) {
+    function init( manager, resource, identifier = "" ) {
         setManager( manager );
         setResource( resource );
-        setScopeIdentifier( scopeIdentifier );
+        setIdentifier( identifier );
         return this;
     }
 
     function requestedInclude( include ) {
-        return getManager().requestedInclude( include, getScopeIdentifier() );
+        return getManager().requestedInclude( include, getIdentifier() );
     }
 
-    function embedChildScope( scopeIdentifier, resource ) {
-        return getManager().createData( resource, scopeIdentifier );
+    function embedChildScope( identifier, resource ) {
+        return getManager().createData( resource, identifier );
     }
 
     function toStruct() {
@@ -24,11 +24,11 @@ component accessors="true" {
             getResource().process( this )
         );
 
-        if ( getScopeIdentifier() == "" ) {
+        if ( getIdentifier() == "" ) {
             return serializedData;
         }
 
-        return { "#getScopeIdentifier()#" = serializedData };
+        return { "#getIdentifier()#" = serializedData };
     }
 
     function toJSON() {        
