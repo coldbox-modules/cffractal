@@ -34,5 +34,11 @@
         "**/.*",
         "test",
         "tests"
-    ]
+    ],
+    "testbox":{
+        "runner":"http://localhost:49652/tests/runner.cfm",
+        "reporter":"json",
+        "verbose":"false",
+        "watchPaths":"/**/*.cfc"
+    }
 }
