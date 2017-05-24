@@ -21,7 +21,7 @@ component extends="testbox.system.BaseSpec" {
                         mockSerializer.$( "serialize", { "data" = data } );
 
                         var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                        mockFractal.$( "getSerializer", mockSerializer );
+                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new fractal.models.Scope( mockFractal, mockItem );
                         expect( scope.toStruct() ).toBe( { "data" = data } );
@@ -41,7 +41,7 @@ component extends="testbox.system.BaseSpec" {
                         mockSerializer.$( "serialize", { "data" = data } );
 
                         var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                        mockFractal.$( "getSerializer", mockSerializer );
+                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new fractal.models.Scope( mockFractal, mockItem );
                         expect( scope.toStruct() ).toBe( { "data" = data } );
@@ -59,7 +59,7 @@ component extends="testbox.system.BaseSpec" {
                         mockSerializer.$( "serialize", { "data" = data } );
 
                         var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                        mockFractal.$( "getSerializer", mockSerializer );
+                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new fractal.models.Scope( mockFractal, mockCollection );
                         expect( scope.toStruct() ).toBe( { "data" = data } );
@@ -80,7 +80,7 @@ component extends="testbox.system.BaseSpec" {
                         mockSerializer.$( "serialize", { "data" = data } );
 
                         var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                        mockFractal.$( "getSerializer", mockSerializer );
+                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new fractal.models.Scope( mockFractal, mockCollection );
                         expect( scope.toStruct() ).toBe( { "data" = data } );
@@ -100,7 +100,7 @@ component extends="testbox.system.BaseSpec" {
                         mockSerializer.$( "serialize", { "data" = data } );
 
                         var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                        mockFractal.$( "getSerializer", mockSerializer );
+                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new fractal.models.Scope( mockFractal, mockItem );
                         expect( scope.toJSON() ).toBe( serializeJSON( { "data" = data } ) );    
@@ -120,7 +120,7 @@ component extends="testbox.system.BaseSpec" {
                         mockSerializer.$( "serialize", { "data" = data } );
 
                         var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                        mockFractal.$( "getSerializer", mockSerializer );
+                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new fractal.models.Scope( mockFractal, mockItem );
                         expect( scope.toJSON() ).toBe( serializeJSON( { "data" = data } ) );
@@ -138,9 +138,9 @@ component extends="testbox.system.BaseSpec" {
                         mockSerializer.$( "serialize", { "data" = data } );
 
                         var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                        mockFractal.$( "getSerializer", mockSerializer );
+                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
-                        var scope = new fractal.models.Scope( mockFractal, mockCollection ); new fractal.models.Scope( mockFractal, mockCollection );
+                        var scope = new fractal.models.Scope( mockFractal, mockCollection );
                         expect( scope.toJSON() ).toBe( serializeJSON( { "data" = data } ) );    
                     } );
 
@@ -159,7 +159,7 @@ component extends="testbox.system.BaseSpec" {
                         mockSerializer.$( "serialize", { "data" = data } );
 
                         var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                        mockFractal.$( "getSerializer", mockSerializer );
+                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new fractal.models.Scope( mockFractal, mockCollection );
                         expect( scope.toJSON() ).toBe( serializeJSON( { "data" = data } ) );
@@ -167,25 +167,69 @@ component extends="testbox.system.BaseSpec" {
                 } );
             } );
 
-            it( "passes on to the manager to check for a requested include", function() {
-                var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                mockFractal.$( "requestedInclude" ).$args( "country", "author" ).$results( true );
-                var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
-                var scope = new fractal.models.Scope( mockFractal, mockItem, "author" );
-                expect( scope.requestedInclude( "country" ) ).toBe( true );
-            } );
-
             it( "can create a new scope with a given identifier", function() {
                 var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
+                mockFractal.$( "createData" );
                 var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
                 var mockCollection = getMockBox().createMock( "fractal.models.resources.Collection" );
                 var scope = new fractal.models.Scope( mockFractal, mockItem );
 
-                var childScope = scope.embedChildScope( "author", mockCollection );
+                scope.embedChildScope( "author", mockCollection );
 
-                prepareMock( childScope );
-                expect( childScope.$getProperty( "resource" ) ).toBe( mockCollection );
-                expect( childScope.$getProperty( "identifier" ) ).toBe( "author" );
+                var callLog = mockFractal.$callLog();
+                expect( callLog ).toHaveKey( "createData" );
+                var createDataCallLog = mockFractal.$callLog().createData;
+                expect( createDataCallLog ).toBeArray();
+                expect( createDataCallLog ).toHaveLength( 1 );
+                expect( createDataCallLog[ 1 ] ).toHaveKey( "includes" );
+                expect( createDataCallLog[ 1 ].includes ).toBe( "" );
+                expect( createDataCallLog[ 1 ] ).toHaveKey( "resource" );
+                expect( createDataCallLog[ 1 ].resource ).toBe( mockCollection );
+                expect( createDataCallLog[ 1 ] ).toHaveKey( "identifier" );
+                expect( createDataCallLog[ 1 ].identifier ).toBe( "author" );
+            } );
+
+            describe( "parseIncludes", function() {
+                it( "can set a list of includes for the transformed data", function() {
+                    var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
+                    var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
+                    var scope = new fractal.models.Scope( mockFractal, mockItem );
+                    makePublic( scope, "parseIncludes", "parseIncludesPublic" );
+                    prepareMock( scope );
+
+                    scope.parseIncludesPublic( "author,publisher" );
+
+                    expect( scope.$getProperty( "includes" ) ).toBe( [ "author", "publisher" ] );    
+                } );
+
+                it( "automatically includes parent scopes", function() {
+                    var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
+                    var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
+                    var scope = new fractal.models.Scope( mockFractal, mockItem, "author.country.planet" );
+
+                    prepareMock( scope );
+                    expect( scope.$getProperty( "includes" ) ).toBe( [ "author.country.planet", "author", "author.country" ] );
+                } );
+            } );
+
+            describe( "requestedInclude", function() {
+                it( "returns true if an include was request", function() {
+                    var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
+                    var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
+                    var scope = new fractal.models.Scope( mockFractal, mockItem, "author" );
+
+                    expect( scope.requestedInclude( "author" ) ).toBeTrue();
+                    expect( scope.requestedInclude( "publisher" ) ).toBeFalse();
+                } );
+
+                it( "prepends the scope identifier if passed", function() {
+                    var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
+                    var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
+
+                    var scope = new fractal.models.Scope( mockFractal, mockItem, "author.country", "author" );
+
+                    expect( scope.requestedInclude( "country" ) ).toBeTrue();
+                } );
             } );
         } );
     }

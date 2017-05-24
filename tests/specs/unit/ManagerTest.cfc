@@ -21,22 +21,20 @@ component extends="testbox.system.BaseSpec" {
 
                 it( "can create a nested scope", function() {
                     var resource = new fractal.models.resources.Item( {}, function() {} );
-                    var nestedScope = fractal.createData( resource, "book" );
+                    var nestedScope = fractal.createData(
+                        resource = resource,
+                        identifier = "book"
+                    );
                     expect( nestedScope ).toBeInstanceOf( "fractal.models.Scope" );
                     expect( prepareMock( nestedScope ).$getProperty( "identifier" ) ).toBe( "book" );
                 } );
             } );
 
             describe( "serializer", function() {
-                it( "defaults to a DataSerializer", function() {
-                    expect( fractal.getSerializer() )
-                        .toBeInstanceOf( "fractal.models.serializers.DataSerializer" );
-                } );
-
                 it( "can set a custom serializer", function() {
                     var simpleSerializer = new fractal.models.serializers.SimpleSerializer();
                     fractal.setSerializer( simpleSerializer );
-                    expect( fractal.getSerializer() )
+                    expect( prepareMock( fractal ).$getProperty( "serializer" ) )
                         .toBeInstanceOf( "fractal.models.serializers.SimpleSerializer" );
                 } );
 
@@ -52,37 +50,6 @@ component extends="testbox.system.BaseSpec" {
 
                     expect( fractal.serialize( originalData ) )
                         .toBe( serializedData );
-                } );
-
-                describe( "parseIncludes", function() {
-                    it( "can set a list of includes for the transformed data", function() {
-                        fractal.parseIncludes( "author,publisher" );
-                        expect( fractal.getIncludes() ).toBe( [ "author", "publisher" ] );    
-                    } );
-
-                    it( "automatically includes parent scopes", function() {
-                        fractal.parseIncludes( "author.country.planet" );
-                        expect( fractal.getIncludes() ).toBe( [ "author.country.planet", "author", "author.country" ] );
-                    } );
-
-                    it( "parsing includes multiple times only remembers the last time", function() {
-                        fractal.parseIncludes( "author" );
-                        fractal.parseIncludes( "publisher" );
-                        expect( fractal.getIncludes() ).toBe( [ "publisher" ] );
-                    } );
-                } );
-
-                describe( "requestedInclude", function() {
-                    it( "returns true if an include was request", function() {
-                        fractal.parseIncludes( "author" );
-                        expect( fractal.requestedInclude( "author" ) ).toBeTrue();
-                        expect( fractal.requestedInclude( "publisher" ) ).toBeFalse();
-                    } );
-
-                    it( "prepends the scope identifier if passed", function() {
-                        fractal.parseIncludes( "author.country" );
-                        expect( fractal.requestedInclude( "country", "author" ) ).toBeTrue();
-                    } );
                 } );
             } );
         } );

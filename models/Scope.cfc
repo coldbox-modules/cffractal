@@ -18,6 +18,11 @@ component {
     property name="resource";
 
     /**
+    * The array of requested includes.
+    */
+    property name="includes";
+
+    /**
     * The resource identifier for the specific resource.
     * Used to determine the correct nesting level.
     */
@@ -28,27 +33,21 @@ component {
     *
     * @manager    A reference to a Fractal manager that has the needed includes.
     * @resource   The specific resoruce to transform and serialize.
+    * @includes   A list of includes for the scope.  Includes are
+    *             comma separated and use dots to designate
+    *             nested resources to be included.
     * @identifier Optional. The resource identifier for the specific resource. Default: "".
     *
     * @returns    A scoped resource instance.
     */
-    function init( manager, resource, identifier = "" ) {
+    function init( manager, resource, includes = "", identifier = "" ) {
         variables.manager = arguments.manager;
         variables.resource = arguments.resource;
         variables.identifier = arguments.identifier;
-        return this;
-    }
 
-    /**
-    * Checks with the manager if the specified include is
-    * requested for the scope's current identifier.
-    *
-    * @include The include to check if it is requested for the scope's current identifier.
-    *
-    * @returns True, if the include is requested.
-    */
-    function requestedInclude( include ) {
-        return variables.manager.requestedInclude( include, variables.identifier );
+        parseIncludes( arguments.includes );
+
+        return this;
     }
 
     /**
@@ -60,7 +59,8 @@ component {
     * @returns    A scoped resource instance.
     */
     function embedChildScope( identifier, resource ) {
-        return variables.manager.createData( arguments.resource, arguments.identifier );
+        arguments.includes = arrayToList( includes );
+        return manager.createData( argumentCollection = arguments );
     }
 
     /**
@@ -71,15 +71,15 @@ component {
     * @returns The transformed and serialized data.
     */
     function toStruct() {
-        var serializedData = variables.manager.serialize(
-            variables.resource.process( this )
+        var serializedData = manager.serialize(
+            resource.process( this )
         );
 
-        if ( variables.identifier == "" ) {
+        if ( identifier == "" ) {
             return serializedData;
         }
 
-        return { "#variables.identifier#" = serializedData };
+        return { "#identifier#" = serializedData };
     }
 
     /**
@@ -91,6 +91,65 @@ component {
     */
     function toJSON() {        
         return serializeJSON( toStruct() );
+    }
+
+    /**
+    * Returns if an include is requested.
+    *
+    * @needle          The include to see if it is requested.
+    *
+    * @returns         True, if the include is requested.
+    */
+    function requestedInclude( needle ) {
+        if ( identifier != "" ) {
+            needle = "#identifier#.#needle#";
+        }
+
+        for ( var include in includes ) {
+            if ( compareNoCase( needle, include ) == 0 ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+    * Parse the list of includes, including parent includes not specified.
+    *
+    * @includes A list of includes.
+    *
+    * @returns  The Fractal manager.
+    */
+    private function parseIncludes( includes ) {
+        variables.includes = listToArray( arguments.includes );
+        addParentIncludes();
+        return this;
+    }
+
+    /**
+    * Add parent includes not specified in the list of includes.
+    *
+    * When a nested resource is specified like `author.country` make
+    * sure the includes has each parent as well (`author` in this case).
+    */
+    private function addParentIncludes() {
+        // we create a temporary array to store the additional includes in
+        // because you cannot concurrently loop over and modify an array.
+        var parentIncludes = [];
+        for ( var include in includes ) {
+            var scopes = listToArray( include, "." );
+            for ( var i = 1; i <= arrayLen( scopes ); i++ ) {
+                var selectedScopes = [];
+                for ( var j = 1; j <= i; j++ ) {
+                    arrayAppend( selectedScopes, scopes[ j ] );
+                }
+                var scopeString = arrayToList( selectedScopes, "." );
+                if ( ! requestedInclude( scopeString ) ) {
+                    arrayAppend( parentIncludes, scopeString );
+                }
+            }
+        }
+        arrayAppend( includes, parentIncludes, true );
     }
 
 }

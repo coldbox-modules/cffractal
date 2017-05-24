@@ -76,8 +76,7 @@ component extends="testbox.system.BaseSpec" {
 
                             var resource = new fractal.models.resources.Item( book, new tests.resources.BookTransformer() );
 
-                            fractal.parseIncludes( "author" );
-                            var scope = fractal.createData( resource );
+                            var scope = fractal.createData( resource = resource, includes = "author" );
                             expect( scope.toStruct() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}} );
                             expect( scope.toJSON() ).toBe( '{"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}}' );
                         } );
@@ -119,8 +118,7 @@ component extends="testbox.system.BaseSpec" {
 
                             var resource = new fractal.models.resources.Item( book, new tests.resources.BookTransformer() );
 
-                            fractal.parseIncludes( "author,author.country" );
-                            var scope = fractal.createData( resource );
+                            var scope = fractal.createData( resource, "author,author.country" );
                             var expectedData = {
                                 "data" = {
                                     "year" = 1960,
@@ -161,8 +159,7 @@ component extends="testbox.system.BaseSpec" {
 
                             var resource = new fractal.models.resources.Item( book, new tests.resources.BookTransformer() );
 
-                            fractal.parseIncludes( "author.country" );
-                            var scope = fractal.createData( resource );
+                            var scope = fractal.createData( resource, "author.country" );
                             var expectedData = {
                                 "data" = {
                                     "year" = 1960,
