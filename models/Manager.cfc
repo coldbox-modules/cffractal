@@ -18,7 +18,7 @@ component accessors="true" {
     }
 
     function parseIncludes( includes ) {
-        variables.includes = listToArray( includes );
+        setIncludes( listToArray( includes ) );
         addParentIncludes();
         return this;
     }
@@ -44,7 +44,7 @@ component accessors="true" {
 
     function requestedInclude( needle, scopeIdentifier = "" ) {
         if ( scopeIdentifier != "" ) {
-            arguments.needle = "#scopeIdentifier#.#needle#";
+            needle = "#scopeIdentifier#.#needle#";
         }
 
         for ( var include in variables.includes ) {
