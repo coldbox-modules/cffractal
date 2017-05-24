@@ -62,7 +62,7 @@ component accessors="true" {
 
     /**
     * @abstract
-    * Defines the method for transforming a specific kind resource.
+    * Defines the method for transforming a specific kind of resource.
     *
     * @returns The transformed data.
     */
