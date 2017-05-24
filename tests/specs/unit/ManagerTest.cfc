@@ -16,14 +16,14 @@ component extends="testbox.system.BaseSpec" {
                     var resource = new fractal.models.resources.Item( {}, function() {} );
                     var rootScope = fractal.createData( resource );
                     expect( rootScope ).toBeInstanceOf( "fractal.models.Scope" );
-                    expect( rootScope.getIdentifier() ).toBe( "" );
+                    expect( prepareMock( rootScope ).$getProperty( "identifier" ) ).toBe( "" );
                 } );
 
                 it( "can create a nested scope", function() {
                     var resource = new fractal.models.resources.Item( {}, function() {} );
                     var nestedScope = fractal.createData( resource, "book" );
                     expect( nestedScope ).toBeInstanceOf( "fractal.models.Scope" );
-                    expect( nestedScope.getIdentifier() ).toBe( "book" );
+                    expect( prepareMock( nestedScope ).$getProperty( "identifier" ) ).toBe( "book" );
                 } );
             } );
 

@@ -1,34 +1,35 @@
-component accessors="true" {
+
+component {
 
     property name="manager";
     property name="resource";
     property name="identifier";
 
     function init( manager, resource, identifier = "" ) {
-        setManager( manager );
-        setResource( resource );
-        setIdentifier( identifier );
+        variables.manager = arguments.manager;
+        variables.resource = arguments.resource;
+        variables.identifier = arguments.identifier;
         return this;
     }
 
     function requestedInclude( include ) {
-        return getManager().requestedInclude( include, getIdentifier() );
+        return variables.manager.requestedInclude( include, variables.identifier );
     }
 
     function embedChildScope( identifier, resource ) {
-        return getManager().createData( resource, identifier );
+        return variables.manager.createData( arguments.resource, arguments.identifier );
     }
 
     function toStruct() {
-        var serializedData = getManager().serialize(
-            getResource().process( this )
+        var serializedData = variables.manager.serialize(
+            variables.resource.process( this )
         );
 
-        if ( getIdentifier() == "" ) {
+        if ( variables.identifier == "" ) {
             return serializedData;
         }
 
-        return { "#getIdentifier()#" = serializedData };
+        return { "#variables.identifier#" = serializedData };
     }
 
     function toJSON() {        

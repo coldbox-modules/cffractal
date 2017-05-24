@@ -9,20 +9,6 @@ component extends="testbox.system.BaseSpec" {
                     .toBeInstanceOf( "fractal.models.Scope" );
             } );
 
-            it( "can get the manager from the scope", function() {
-                var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
-                var scope = new fractal.models.Scope( mockFractal, mockItem );
-                expect( scope.getManager() ).toBe( mockFractal );
-            } );
-
-            it( "can get the resource from the scope", function() {
-                var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
-                var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
-                var scope = new fractal.models.Scope( mockFractal, mockItem );
-                expect( scope.getResource() ).toBe( mockItem );
-            } );
-
             describe( "converting data to struct", function() {
                 describe( "converting a single item", function() {
                     it( "with a callback transformer", function() {
@@ -197,8 +183,9 @@ component extends="testbox.system.BaseSpec" {
 
                 var childScope = scope.embedChildScope( "author", mockCollection );
 
-                expect( childScope.getResource() ).toBe( mockCollection );
-                expect( childScope.getIdentifier() ).toBe( "author" );
+                prepareMock( childScope );
+                expect( childScope.$getProperty( "resource" ) ).toBe( mockCollection );
+                expect( childScope.$getProperty( "identifier" ) ).toBe( "author" );
             } );
         } );
     }
