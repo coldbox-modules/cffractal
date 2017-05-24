@@ -180,6 +180,26 @@ component extends="testbox.system.BaseSpec" {
                     } );
                 } );
             } );
+
+            it( "passes on to the manager to check for a requested include", function() {
+                var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
+                mockFractal.$( "requestedInclude" ).$args( "country", "author" ).$results( true );
+                var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
+                var scope = new fractal.models.Scope( mockFractal, mockItem, "author" );
+                expect( scope.requestedInclude( "country" ) ).toBe( true );
+            } );
+
+            it( "can create a new scope with a given identifier", function() {
+                var mockFractal = getMockBox().createMock( "fractal.models.Manager" );
+                var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
+                var mockCollection = getMockBox().createMock( "fractal.models.resources.Collection" );
+                var scope = new fractal.models.Scope( mockFractal, mockItem );
+
+                var childScope = scope.embedChildScope( "author", mockCollection );
+
+                expect( childScope.getResource() ).toBe( mockCollection );
+                expect( childScope.getIdentifier() ).toBe( "author" );
+            } );
         } );
     }
 
