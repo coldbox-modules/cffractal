@@ -3,7 +3,7 @@
 * @package     fractal.models.serializers
 * @description Nests the data under a "data" key in a struct.
 */
-component implements="fractal.models.serializers.ISerializer" {
+component singleton implements="fractal.models.serializers.ISerializer" {
 
     /**
     * Nests the data underneath a 'data' key.
