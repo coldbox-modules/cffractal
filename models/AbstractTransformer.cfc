@@ -26,15 +26,12 @@ component accessors="true" {
         for ( var include in allIncludes ) {
             var resource = invoke( this, "include#include#", { 1 = data } );
             var childScope = scope.embedChildScope( include, resource );
-            arrayAppend(
-                includedData,
-                childScope.toStruct()
-            );
+            arrayAppend( includedData, childScope.toStruct() );
         }
         return includedData;
     }
 
-    function filterIncludes( scope ) {
+    private array function filterIncludes( scope ) {
         var filteredIncludes = getDefaultIncludes();
         for ( var include in getAvailableIncludes() ) {
             if ( scope.requestedInclude( include ) ) {
@@ -44,11 +41,11 @@ component accessors="true" {
         return filteredIncludes;
     }
 
-    function item( data, transformer ) {
+    private function item( data, transformer ) {
         return new fractal.models.resources.Item( data, transformer );
     }
 
-    function collection( data, transformer ) {
+    private function collection( data, transformer ) {
         return new fractal.models.resources.Collection( data, transformer );
     }
 }

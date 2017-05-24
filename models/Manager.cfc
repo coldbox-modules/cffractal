@@ -23,7 +23,7 @@ component accessors="true" {
         return this;
     }
 
-    function addParentIncludes() {
+    private function addParentIncludes() {
         var parentIncludes = [];
         for ( var include in variables.includes ) {
             var scopes = listToArray( include, "." );

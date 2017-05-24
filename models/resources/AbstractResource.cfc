@@ -36,7 +36,7 @@ component accessors="true" {
         );
     }
 
-    function transformData( transformer, data ) {
+    private function transformData( transformer, data ) {
         return isClosure( transformer ) ?
             transformer( data ) :
             transformer.transform( data );
