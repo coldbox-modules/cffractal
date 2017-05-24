@@ -1,7 +1,7 @@
 /**
 * @name        Manager
 * @package     fractal.models
-* @description The Manager class is responsible for kickstarting
+* @description The Manager component is responsible for kickstarting
 *              the api transformation process.  It orchestrates
 *              the requested includes, creates the root scope,
 *              and serializes the transformed value.
