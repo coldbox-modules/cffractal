@@ -17,32 +17,6 @@ component extends="testbox.system.BaseSpec" {
                 } ).toThrow( type = "MethodNotImplemented" );
             } );
 
-            describe( "available includes", function() {
-                it( "returns itself after setting the available includes", function() {
-                    expect( transformer.setAvailableIncludes( [ "foo" ] ) )
-                        .toBe( transformer );
-                } );
-
-                it( "can get the available includes", function() {
-                    var includes = [ "foo" ];
-                    transformer.setAvailableIncludes( includes );
-                    expect( transformer.getAvailableIncludes() ).toBe( includes );
-                } );
-            } );
-
-            describe( "default includes", function() {
-                it( "returns itself after setting the default includes", function() {
-                    expect( transformer.setDefaultIncludes( [ "foo" ] ) )
-                        .toBe( transformer );
-                } );
-
-                it( "can get the default includes", function() {
-                    var includes = [ "foo" ];
-                    transformer.setDefaultIncludes( includes );
-                    expect( transformer.getDefaultIncludes() ).toBe( includes );
-                } );
-            } );
-
             describe( "resource creation", function() {
                 it( "can create new items", function() {
                     makePublic( transformer, "item", "itemPublic" );
@@ -58,12 +32,22 @@ component extends="testbox.system.BaseSpec" {
             } );
 
             it( "returns true if there are any default or available includes", function() {
+                prepareMock( transformer );
                 expect( transformer.hasIncludes() ).toBeFalse();
-                transformer.setDefaultIncludes( [ "author" ] );
+                transformer.$property(
+                    propertyName = "defaultIncludes",
+                    mock = [ "author" ]
+                );
                 expect( transformer.hasIncludes() ).toBeTrue();
-                transformer.setDefaultIncludes( [] );
+                transformer.$property(
+                    propertyName = "defaultIncludes",
+                    mock = []
+                );
                 expect( transformer.hasIncludes() ).toBeFalse();
-                transformer.setAvailableIncludes( [ "publisher" ] );
+                transformer.$property(
+                    propertyName = "availableIncludes",
+                    mock = [ "publisher" ]
+                );
                 expect( transformer.hasIncludes() ).toBeTrue();
             } );
 
@@ -76,8 +60,11 @@ component extends="testbox.system.BaseSpec" {
                 var mockChildScope = getMockBox().createMock( "fractal.models.Scope" );
                 mockChildScope.$( "toStruct", { "foo" = "bar" } );
                 mockScope.$( "embedChildScope" ).$args( "author", { "foo" = "bar" } ).$results( mockChildScope );
+                transformer.$property(
+                    propertyName = "availableIncludes",
+                    mock = [ "author" ]
+                );
 
-                transformer.setAvailableIncludes( [ "author" ] );
                 var includedData = transformer.processIncludes( mockScope, mockItem );
                 expect( includedData ).toBe( [ { "foo" = "bar" } ] );
             } );

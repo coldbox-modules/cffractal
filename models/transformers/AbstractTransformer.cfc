@@ -1,19 +1,27 @@
 /**
 * @name        AbstractTransformer
 * @package     fractal.models.transformers
-* @description Defines the common methods for processing
-*              resources into serializable data.
+* @description Defines the common methods for transforming
+*              resources, including processing includes,
+*              and creating new resources.
 */
-component accessors="true" {
+component {
 
-    property name="defaultIncludes";
-    property name="availableIncludes";
+    /**
+    * The array of default includes.
+    * These includes are always return whether requested or not.
+    * These are normally set by setting the `variables.defaultIncludes`
+    * inside a concrete Transformer component.
+    */
+    variables.defaultIncludes = [];
 
-    function init() {
-        param variables.defaultIncludes = [];
-        param variables.availableIncludes = [];
-        return this;
-    }
+    /**
+    * The array of available includes.
+    * These includes are only returned if requested in the Fractal Manager.
+    * These are normally set by setting the `variables.availableIncludes`
+    * inside a concrete Transformer component.
+    */
+    variables.availableIncludes = [];
 
     function transform( scope ) {
         throw(
@@ -23,7 +31,7 @@ component accessors="true" {
     }
 
     function hasIncludes() {
-        return ! arrayIsEmpty( getDefaultIncludes() ) || ! arrayIsEmpty( getAvailableIncludes() );
+        return ! arrayIsEmpty( variables.defaultIncludes ) || ! arrayIsEmpty( variables.availableIncludes );
     }
 
     function processIncludes( scope, data ) {
@@ -38,8 +46,8 @@ component accessors="true" {
     }
 
     private array function filterIncludes( scope ) {
-        var filteredIncludes = getDefaultIncludes();
-        for ( var include in getAvailableIncludes() ) {
+        var filteredIncludes = variables.defaultIncludes;
+        for ( var include in variables.availableIncludes ) {
             if ( scope.requestedInclude( include ) ) {
                 arrayAppend( filteredIncludes, include );
             }
