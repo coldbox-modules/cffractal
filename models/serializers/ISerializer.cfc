@@ -1,0 +1,3 @@
+interface {
+    function serialize( data );
+}
