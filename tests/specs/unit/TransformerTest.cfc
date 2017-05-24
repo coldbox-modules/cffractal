@@ -1,14 +1,14 @@
 component extends="testbox.system.BaseSpec" {
     
     function beforeAll() {
-        variables.transformer = new fractal.models.AbstractTransformer();
+        variables.transformer = new fractal.models.transformers.AbstractTransformer();
     }
 
     function run() {
         describe( "abstract transformers", function() {
             it( "can be instantiated", function() {
                 expect( transformer )
-                    .toBeInstanceOf( "fractal.models.AbstractTransformer" );
+                    .toBeInstanceOf( "fractal.models.transformers.AbstractTransformer" );
             } );
             
             it( "throws if the `transform()` method has not been implemented", function() {

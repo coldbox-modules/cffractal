@@ -1,3 +1,9 @@
+/**
+* @name        AbstractTransformer
+* @package     fractal.models.transformers
+* @description Defines the common methods for processing
+*              resources into serializable data.
+*/
 component accessors="true" {
 
     property name="defaultIncludes";

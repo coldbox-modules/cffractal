@@ -43,7 +43,7 @@ component extends="testbox.system.BaseSpec" {
 
                     it( "with a custom transformer", function() {
                         var data = { "foo" = "bar" };
-                        var mockTransformer = getMockBox().createMock( "fractal.models.AbstractTransformer" );
+                        var mockTransformer = getMockBox().createMock( "fractal.models.transformers.AbstractTransformer" );
                         mockTransformer.$( "transform", data );
                         mockTransformer.$( "hasIncludes", false );
 
@@ -81,7 +81,7 @@ component extends="testbox.system.BaseSpec" {
 
                     it( "with a custom transformer", function() {
                         var data = [ { "foo" = "bar" }, { "baz" = "ban" } ];
-                        var mockTransformer = getMockBox().createMock( "fractal.models.AbstractTransformer" );
+                        var mockTransformer = getMockBox().createMock( "fractal.models.transformers.AbstractTransformer" );
                         mockTransformer.$( "transform" ).$args( { "foo" = "bar" } ).$results( { "foo" = "bar" } );
                         mockTransformer.$( "transform" ).$args( { "baz" = "ban" } ).$results( { "baz" = "ban" } );
                         mockTransformer.$( "hasIncludes", false );
@@ -122,7 +122,7 @@ component extends="testbox.system.BaseSpec" {
 
                     it( "with a custom transformer", function() {
                         var data = { "foo" = "bar" };
-                        var mockTransformer = getMockBox().createMock( "fractal.models.AbstractTransformer" );
+                        var mockTransformer = getMockBox().createMock( "fractal.models.transformers.AbstractTransformer" );
                         mockTransformer.$( "transform", data );
                         mockTransformer.$( "hasIncludes", false );
 
@@ -160,7 +160,7 @@ component extends="testbox.system.BaseSpec" {
 
                     it( "with a custom transformer", function() {
                         var data = [ { "foo" = "bar" }, { "baz" = "ban" } ];
-                        var mockTransformer = getMockBox().createMock( "fractal.models.AbstractTransformer" );
+                        var mockTransformer = getMockBox().createMock( "fractal.models.transformers.AbstractTransformer" );
                         mockTransformer.$( "transform" ).$args( { "foo" = "bar" } ).$results( { "foo" = "bar" } );
                         mockTransformer.$( "transform" ).$args( { "baz" = "ban" } ).$results( { "baz" = "ban" } );
                         mockTransformer.$( "hasIncludes", false );
