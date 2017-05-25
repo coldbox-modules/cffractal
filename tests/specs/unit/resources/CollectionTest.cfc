@@ -6,22 +6,25 @@ component extends="testbox.system.BaseSpec" {
     ];
 
     function run() {
-        describe( "item resources", function() {
-            it( "can get the data from an item resource", function() {
-                var item = new fractal.models.resources.Collection( simpleCollection, function() {} );
-                expect( item.getData() ).toBe( simpleCollection );
+        describe( "collection resources", function() {
+            it( "can get the data from an collection resource", function() {
+                var collection = new fractal.models.resources.Collection( simpleCollection, function() {} );
+                prepareMock( collection );
+                expect( collection.$getProperty( "data" ) ).toBe( simpleCollection );
             } );
 
-            describe( "can get the transformer from an item resource", function() {
+            describe( "can get the transformer from an collection resource", function() {
                 it( "works with a closure", function() {
-                    var item = new fractal.models.resources.Collection( simpleCollection, function() {} );
-                    expect( isClosure( item.getTransformer() ) ).toBeTrue();
+                    var collection = new fractal.models.resources.Collection( simpleCollection, function() {} );
+                    prepareMock( collection );
+                    expect( isClosure( collection.$getProperty( "transformer" ) ) ).toBeTrue();
                 } );
 
                 it( "can work with components", function() {
                     var transformerStub = getMockBox().createStub();
-                    var item = new fractal.models.resources.Collection( simpleCollection, transformerStub );
-                    expect( item.getTransformer() ).toBe( transformerStub );
+                    var collection = new fractal.models.resources.Collection( simpleCollection, transformerStub );
+                    prepareMock( collection );
+                    expect( collection.$getProperty( "transformer" ) ).toBe( transformerStub );
                 } );
             } );
         } );

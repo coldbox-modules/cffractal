@@ -4,7 +4,7 @@
 * @description Defines the common methods for processing
 *              resources into serializable data.
 */
-component accessors="true" {
+component {
 
     /**
     * The item to transform into serializable data. 
@@ -26,8 +26,8 @@ component accessors="true" {
     * @returns     A Fractal resource.
     */
     function init( data, transformer ) {
-        setData( data );
-        setTransformer( transformer );
+        variables.data = arguments.data;
+        variables.transformer = arguments.transformer;
         return this;
     }
 
@@ -43,15 +43,15 @@ component accessors="true" {
     function process( scope ) {
         var transformedData = transform();
         
-        if ( isClosure( getTransformer() ) ) {
+        if ( isClosure( transformer ) ) {
             return transformedData;
         }
 
-        if ( ! getTransformer().hasIncludes() ) {
+        if ( ! transformer.hasIncludes() ) {
             return transformedData;
         }
 
-        var includedData = getTransformer().processIncludes( scope, getData() );
+        var includedData = transformer.processIncludes( scope, data );
         
         for ( var includedDataSet in includedData ) {
             structAppend( transformedData, includedDataSet, true /* overwrite */ );

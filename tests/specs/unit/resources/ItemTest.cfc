@@ -6,19 +6,22 @@ component extends="testbox.system.BaseSpec" {
         describe( "item resources", function() {
             it( "can get the data from an item resource", function() {
                 var item = new fractal.models.resources.Item( simpleItem, function() {} );
-                expect( item.getData() ).toBe( simpleItem );
+                prepareMock( item );
+                expect( item.$getProperty( "data" ) ).toBe( simpleItem );
             } );
 
             describe( "can get the transformer from an item resource", function() {
                 it( "works with a closure", function() {
                     var item = new fractal.models.resources.Item( simpleItem, function() {} );
-                    expect( isClosure( item.getTransformer() ) ).toBeTrue();
+                    prepareMock( item );
+                    expect( isClosure( item.$getProperty( "transformer" ) ) ).toBeTrue();
                 } );
 
                 it( "can work with components", function() {
                     var transformerStub = getMockBox().createStub();
                     var item = new fractal.models.resources.Item( simpleItem, transformerStub );
-                    expect( item.getTransformer() ).toBe( transformerStub );
+                    prepareMock( item );
+                    expect( item.$getProperty( "transformer" ) ).toBe( transformerStub );
                 } );
             } );
         } );

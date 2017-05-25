@@ -14,8 +14,8 @@ component extends="testbox.system.BaseSpec" {
                     it( "with a callback transformer", function() {
                         var data = { "foo" = "bar" };
                         var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
-                        mockItem.$( "getTransformer", function( data ) { return data; } );
-                        mockItem.$( "getData", data );
+                        mockItem.$property( propertyName = "transformer", mock = function( data ) { return data; } );
+                        mockItem.$property( propertyName = "data", mock = data );
 
                         var mockSerializer = getMockBox().createMock( "fractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
@@ -34,8 +34,8 @@ component extends="testbox.system.BaseSpec" {
                         mockTransformer.$( "hasIncludes", false );
 
                         var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
-                        mockItem.$( "getTransformer", mockTransformer );
-                        mockItem.$( "getData", data );
+                        mockItem.$property( propertyName = "transformer", mock = mockTransformer );
+                        mockItem.$property( propertyName = "data", mock = data );
 
                         var mockSerializer = getMockBox().createMock( "fractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
@@ -52,8 +52,11 @@ component extends="testbox.system.BaseSpec" {
                     it( "with a callback transformer", function() {
                         var data = [ { "foo" = "bar" }, { "baz" = "ban" } ];
                         var mockCollection = getMockBox().createMock( "fractal.models.resources.Collection" );
-                        mockCollection.$( "getTransformer", function( data ) { return data; } );
-                        mockCollection.$( "getData", data );
+                        mockCollection.$property(
+                            propertyName = "transformer",
+                            mock = function( data ) { return data; }
+                        );
+                        mockCollection.$property( propertyName = "data", mock = data );
 
                         var mockSerializer = getMockBox().createMock( "fractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
@@ -73,8 +76,8 @@ component extends="testbox.system.BaseSpec" {
                         mockTransformer.$( "hasIncludes", false );
 
                         var mockCollection = getMockBox().createMock( "fractal.models.resources.Collection" );
-                        mockCollection.$( "getTransformer", mockTransformer );
-                        mockCollection.$( "getData", data );
+                        mockCollection.$property( propertyName = "transformer", mock = mockTransformer );
+                        mockCollection.$property( propertyName = "data", mock = data );
 
                         var mockSerializer = getMockBox().createMock( "fractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
@@ -93,8 +96,8 @@ component extends="testbox.system.BaseSpec" {
                     it( "with a callback transformer", function() {
                         var data = { "foo" = "bar" };
                         var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
-                        mockItem.$( "getTransformer", function( data ) { return data; } );
-                        mockItem.$( "getData", data );
+                        mockItem.$property( propertyName = "transformer", mock = function( data ) { return data; } );
+                        mockItem.$property( propertyName = "data", mock = data );
 
                         var mockSerializer = getMockBox().createMock( "fractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
@@ -113,8 +116,8 @@ component extends="testbox.system.BaseSpec" {
                         mockTransformer.$( "hasIncludes", false );
 
                         var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
-                        mockItem.$( "getTransformer", mockTransformer );
-                        mockItem.$( "getData", data );
+                        mockItem.$property( propertyName = "transformer", mock = mockTransformer );
+                        mockItem.$property( propertyName = "data", mock = data );
 
                         var mockSerializer = getMockBox().createMock( "fractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
@@ -131,8 +134,11 @@ component extends="testbox.system.BaseSpec" {
                     it( "with a callback transformer", function() {
                         var data = [ { "foo" = "bar" }, { "baz" = "ban" } ];
                         var mockCollection = getMockBox().createMock( "fractal.models.resources.Collection" );
-                        mockCollection.$( "getTransformer", function( data ) { return data; } );
-                        mockCollection.$( "getData", data );
+                        mockCollection.$property(
+                            propertyName = "transformer",
+                            mock = function( data ) { return data; }
+                        );
+                        mockCollection.$property( propertyName = "data", mock = data );
 
                         var mockSerializer = getMockBox().createMock( "fractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
@@ -152,8 +158,8 @@ component extends="testbox.system.BaseSpec" {
                         mockTransformer.$( "hasIncludes", false );
 
                         var mockCollection = getMockBox().createMock( "fractal.models.resources.Collection" );
-                        mockCollection.$( "getTransformer", mockTransformer );
-                        mockCollection.$( "getData", data );
+                        mockCollection.$property( propertyName = "transformer", mock = mockTransformer );
+                        mockCollection.$property( propertyName = "data", mock = data );
 
                         var mockSerializer = getMockBox().createMock( "fractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );

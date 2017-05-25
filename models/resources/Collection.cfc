@@ -13,10 +13,10 @@ component extends="fractal.models.resources.AbstractResource" {
     */
     function transform() {
         var transformedData = [];
-        for ( var value in getData() ) {
+        for ( var value in data ) {
             arrayAppend(
                 transformedData,
-                transformData( getTransformer(), value )
+                transformData( transformer, value )
             );
         }
         return transformedData;
