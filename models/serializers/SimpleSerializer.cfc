@@ -3,7 +3,7 @@
 * @package     fractal.models.serializers
 * @description Does no further transformation to the data.
 */
-component singleton implements="fractal.models.serializers.ISerializer" {
+component singleton {
 
     /**
     * Does no further transformation to the data.
