@@ -61,7 +61,7 @@ component {
     function processItem( scope, item ) {
         var transformedData = transformData( transformer, item );
 
-        if ( isClosure( transformer ) ) {
+        if ( isClosure( transformer ) || isCustomFunction( transformer ) ) {
             return transformedData;
         }
 
@@ -88,7 +88,7 @@ component {
     * @returns     The transformed data.
     */
     private function transformData( transformer, item ) {
-        return isClosure( transformer ) ?
+        return isClosure( transformer ) || isCustomFunction( transformer ) ?
             transformer( item ) :
             transformer.transform( item );
     }
