@@ -1,4 +1,4 @@
-component extends="fractal.models.transformers.AbstractTransformer" {
+component extends="cffractal.models.transformers.AbstractTransformer" {
 
     variables.defaultIncludes = [ "author" ];
 

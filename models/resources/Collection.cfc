@@ -1,25 +1,28 @@
 /**
 * @name        Collection
-* @package     fractal.models.resources
+* @package     cffractal.models.resources
 * @description Defines how to convert collections in to serializable data.
 */
-component extends="fractal.models.resources.AbstractResource" {
+component extends="cffractal.models.resources.AbstractResource" {
 
     /**
-    * Defines the method for transforming a collection
-    * of data into a serializable format.
+    * Processes the conversion of a resource to serializable data.
+    * Also processes any default or requested includes.
     *
-    * @returns The transformed data.
+    * @scope   A Fractal scope instance.  Used to determinal requested
+    *          includes and handle nesting identifiers.
+    *
+    * @returns The transformed data. 
     */
-    function transform() {
-        var transformedData = [];
+    function process( scope ) {
+        var transformedDataArray = [];
         for ( var value in data ) {
             arrayAppend(
-                transformedData,
-                transformData( transformer, value )
+                transformedDataArray,
+                processItem( scope, value )
             );
         }
-        return transformedData;
+        return transformedDataArray;
     }
 
 }

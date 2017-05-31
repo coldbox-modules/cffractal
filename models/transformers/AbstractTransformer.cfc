@@ -1,6 +1,6 @@
 /**
 * @name        AbstractTransformer
-* @package     fractal.models.transformers
+* @package     cffractal.models.transformers
 * @description Defines the common methods for transforming
 *              resources, including processing includes,
 *              and creating new resources.
@@ -94,10 +94,10 @@ component {
     * @transformer The transformer callback or component to use
     *              transforming the above data.
     *
-    * @returns A new Fractal Item wrapping the given data and transformer.
+    * @returns A new cffractal Item wrapping the given data and transformer.
     */
     private function item( data, transformer ) {
-        return new fractal.models.resources.Item( data, transformer );
+        return new cffractal.models.resources.Item( data, transformer );
     }
 
     /**
@@ -108,9 +108,9 @@ component {
     * @transformer The transformer callback or component to use
     *              transforming the above data.
     *
-    * @returns A new Fractal Collection wrapping the given data and transformer.
+    * @returns A new cffractal Collection wrapping the given data and transformer.
     */
     private function collection( data, transformer ) {
-        return new fractal.models.resources.Collection( data, transformer );
+        return new cffractal.models.resources.Collection( data, transformer );
     }
 }

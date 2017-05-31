@@ -1,6 +1,6 @@
 /**
 * @name        AbstractResource
-* @package     fractal.models.resources
+* @package     cffractal.models.resources
 * @description Defines the common methods for processing
 *              resources into serializable data.
 */
@@ -17,7 +17,7 @@ component {
     property name="transformer";
 
     /**
-    * Creates a new Fractal resource.
+    * Creates a new cffractal resource.
     *
     * @data        The data to be transformed into serializable data.
     * @transformer The transformer component or callback to
@@ -32,6 +32,7 @@ component {
     }
 
     /**
+    * @abstract
     * Processes the conversion of a resource to serializable data.
     * Also processes any default or requested includes.
     *
@@ -41,8 +42,25 @@ component {
     * @returns The transformed data. 
     */
     function process( scope ) {
-        var transformedData = transform();
-        
+        throw(
+            type = "MethodNotImplemented",
+            message = "The method `process()` must be implemented in a subclass."
+        );
+    }
+
+    /**
+    * Processes the conversion of a single item to serializable data.
+    * Also processes any default or requested includes.
+    *
+    * @scope   A Fractal scope instance.  Used to determinal requested
+    *          includes and handle nesting identifiers.
+    * @item    A single item instance to transform.
+    *
+    * @returns The transformed data. 
+    */
+    function processItem( scope, item ) {
+        var transformedData = transformData( transformer, item );
+
         if ( isClosure( transformer ) ) {
             return transformedData;
         }
@@ -51,41 +69,28 @@ component {
             return transformedData;
         }
 
-        var includedData = transformer.processIncludes( scope, data );
-        
+        var includedData = transformer.processIncludes( scope, item );
+
         for ( var includedDataSet in includedData ) {
             structAppend( transformedData, includedDataSet, true /* overwrite */ );
         }
 
-        return transformedData;
-    }
-
-    /**
-    * @abstract
-    * Defines the method for transforming a specific kind of resource.
-    *
-    * @returns The transformed data.
-    */
-    function transform() {
-        throw(
-            type = "MethodNotImplemented",
-            message = "The method `transform()` must be implemented in a subclass."
-        );
+        return transformedData;    
     }
 
     /**
     * Handles the calling of the transformer,
     * whether a callback or a component.
     *
-    * @transformer The callback or component to use to transform the data.
-    * @data        The data to transform.
+    * @transformer The callback or component to use to transform the item.
+    * @item        The item to transform.
     *
     * @returns     The transformed data.
     */
-    private function transformData( transformer, data ) {
+    private function transformData( transformer, item ) {
         return isClosure( transformer ) ?
-            transformer( data ) :
-            transformer.transform( data );
+            transformer( item ) :
+            transformer.transform( item );
     }
 
 }

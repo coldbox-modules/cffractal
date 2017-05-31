@@ -1,41 +1,41 @@
 component extends="testbox.system.BaseSpec" {
 
     function beforeAll() {
-        variables.dataSerializer = getMockBox().createMock( "fractal.models.serializers.DataSerializer" );
-        variables.fractal = new fractal.models.Manager( dataSerializer );
+        variables.dataSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
+        variables.fractal = new cffractal.models.Manager( dataSerializer );
     }
 
     function run() {
-        describe( "fractal manager", function() {
+        describe( "cffractal manager", function() {
             it( "can be instantiated", function() {
-                expect( fractal ).toBeInstanceOf( "fractal.models.Manager" );
+                expect( fractal ).toBeInstanceOf( "cffractal.models.Manager" );
             } );
 
             describe( "create data", function() {
                 it( "can create a root scope", function() {
-                    var resource = new fractal.models.resources.Item( {}, function() {} );
+                    var resource = new cffractal.models.resources.Item( {}, function() {} );
                     var rootScope = fractal.createData( resource );
-                    expect( rootScope ).toBeInstanceOf( "fractal.models.Scope" );
+                    expect( rootScope ).toBeInstanceOf( "cffractal.models.Scope" );
                     expect( prepareMock( rootScope ).$getProperty( "identifier" ) ).toBe( "" );
                 } );
 
                 it( "can create a nested scope", function() {
-                    var resource = new fractal.models.resources.Item( {}, function() {} );
+                    var resource = new cffractal.models.resources.Item( {}, function() {} );
                     var nestedScope = fractal.createData(
                         resource = resource,
                         identifier = "book"
                     );
-                    expect( nestedScope ).toBeInstanceOf( "fractal.models.Scope" );
+                    expect( nestedScope ).toBeInstanceOf( "cffractal.models.Scope" );
                     expect( prepareMock( nestedScope ).$getProperty( "identifier" ) ).toBe( "book" );
                 } );
             } );
 
             describe( "serializer", function() {
                 it( "can set a custom serializer", function() {
-                    var simpleSerializer = new fractal.models.serializers.SimpleSerializer();
+                    var simpleSerializer = new cffractal.models.serializers.SimpleSerializer();
                     fractal.setSerializer( simpleSerializer );
                     expect( prepareMock( fractal ).$getProperty( "serializer" ) )
-                        .toBeInstanceOf( "fractal.models.serializers.SimpleSerializer" );
+                        .toBeInstanceOf( "cffractal.models.serializers.SimpleSerializer" );
                 } );
 
                 it( "has a helper method to call serialize", function() {

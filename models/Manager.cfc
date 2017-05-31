@@ -1,6 +1,6 @@
 /**
 * @name        Manager
-* @package     fractal.models
+* @package     cffractal.models
 * @description The Manager component is responsible for kickstarting
 *              the api transformation process.  It creates the root
 *              scope and serializes the transformed value.
@@ -51,7 +51,7 @@ component singleton {
     */
     function createData( resource, includes = "", identifier = "" ) {
         arguments.manager = this;
-        return new fractal.models.Scope( argumentCollection = arguments );
+        return new cffractal.models.Scope( argumentCollection = arguments );
     }
 
     /**
@@ -63,6 +63,32 @@ component singleton {
     */
     function serialize( data ) {
         return serializer.serialize( data );
+    }
+
+    /**
+    * Returns a new item resource with the given data and transformer.
+    *
+    * @data        The data or component to transform.
+    * @transformer The transformer callback or component to use
+    *              transforming the above data.
+    *
+    * @returns A new cffractal Item wrapping the given data and transformer.
+    */
+    function item( data, transformer ) {
+        return new cffractal.models.resources.Item( data, transformer );
+    }
+
+    /**
+    * Returns a new collection resource with the given data and transformer.
+    *
+    * @data        The data or component to transform.
+    * @transformer The transformer callback or component to use
+    *              transforming the above data.
+    *
+    * @returns A new cffractal Collection wrapping the given data and transformer.
+    */
+    function collection( data, transformer ) {
+        return new cffractal.models.resources.Collection( data, transformer );
     }
 
 }

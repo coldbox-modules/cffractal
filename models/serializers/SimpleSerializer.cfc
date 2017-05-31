@@ -1,6 +1,6 @@
 /**
 * @name        SimpleSerializer
-* @package     fractal.models.serializers
+* @package     cffractal.models.serializers
 * @description Does no further transformation to the data.
 */
 component singleton {

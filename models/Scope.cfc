@@ -1,6 +1,6 @@
 /**
 * @name        Scope
-* @package     fractal.models
+* @package     cffractal.models
 * @description The Scope component is responsible for encapsulating the api
 *              transformation process for a single specific resource
 *              and serializing the result.

@@ -1,6 +1,6 @@
 /**
 * @name        DataSerializer
-* @package     fractal.models.serializers
+* @package     cffractal.models.serializers
 * @description Nests the data under a "data" key in a struct.
 */
 component singleton {

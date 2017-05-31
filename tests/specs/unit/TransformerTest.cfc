@@ -1,14 +1,14 @@
 component extends="testbox.system.BaseSpec" {
     
     function beforeAll() {
-        variables.transformer = new fractal.models.transformers.AbstractTransformer();
+        variables.transformer = new cffractal.models.transformers.AbstractTransformer();
     }
 
     function run() {
         describe( "abstract transformers", function() {
             it( "can be instantiated", function() {
                 expect( transformer )
-                    .toBeInstanceOf( "fractal.models.transformers.AbstractTransformer" );
+                    .toBeInstanceOf( "cffractal.models.transformers.AbstractTransformer" );
             } );
             
             it( "throws if the `transform()` method has not been implemented", function() {
@@ -21,13 +21,13 @@ component extends="testbox.system.BaseSpec" {
                 it( "can create new items", function() {
                     makePublic( transformer, "item", "itemPublic" );
                     var item = transformer.itemPublic( {}, function() {} );
-                    expect( item ).toBeInstanceOf( "fractal.models.resources.Item" );
+                    expect( item ).toBeInstanceOf( "cffractal.models.resources.Item" );
                 } );
 
                 it( "can create new collections", function() {
                     makePublic( transformer, "collection", "collectionPublic" );
                     var collection = transformer.collectionPublic( [ {}, {} ], function() {} );
-                    expect( collection ).toBeInstanceOf( "fractal.models.resources.Collection" );
+                    expect( collection ).toBeInstanceOf( "cffractal.models.resources.Collection" );
                 } );
             } );
 
@@ -52,12 +52,12 @@ component extends="testbox.system.BaseSpec" {
             } );
 
             it( "can process the includes of a transformer", function() {
-                var mockScope = getMockBox().createMock( "fractal.models.Scope" );
+                var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
                 mockScope.$( "requestedInclude" ).$args( "author" ).$results( true );
-                var mockItem = getMockBox().createMock( "fractal.models.resources.Item" );
+                var mockItem = getMockBox().createMock( "cffractal.models.resources.Item" );
                 prepareMock( transformer );
                 transformer.$( "includeAuthor" ).$args( mockItem ).$results( { "foo" = "bar" } );
-                var mockChildScope = getMockBox().createMock( "fractal.models.Scope" );
+                var mockChildScope = getMockBox().createMock( "cffractal.models.Scope" );
                 mockChildScope.$( "toStruct", { "foo" = "bar" } );
                 mockScope.$( "embedChildScope" ).$args( "author", { "foo" = "bar" } ).$results( mockChildScope );
                 transformer.$property(
