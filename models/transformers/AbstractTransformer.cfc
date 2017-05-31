@@ -8,6 +8,12 @@
 component {
 
     /**
+    * A WireBox instance for ColdBox users to easily
+    * retrieve new transformers for includes.
+    */
+    property name="wirebox" inject="wirebox";
+
+    /**
     * The array of default includes.
     * These includes are always return whether requested or not.
     * These are normally set by setting the `variables.defaultIncludes`
