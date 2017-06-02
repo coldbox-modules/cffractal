@@ -222,6 +222,50 @@ component extends="testbox.system.BaseSpec" {
                         var scope = fractal.createData( resource );
                         expect( scope.toStruct() ).toBe( {"data":[{"year":1960,"title":"To Kill a Mockingbird","id":1},{"year":1859,"title":"A Tale of Two Cities","id":2}]} );
                     } );
+
+                    describe( "pagination", function() {
+                        it( "returns pagination data in a meta field", function() {
+                            var books = [
+                                new tests.resources.Book( {
+                                    id = 1,
+                                    title = "To Kill a Mockingbird",
+                                    year = "1960"
+                                } ),
+                                new tests.resources.Book( {
+                                    id = 2,
+                                    title = "A Tale of Two Cities",
+                                    year = "1859"
+                                } )
+                            ];
+
+                            var resource = new cffractal.models.resources.Collection( books, new tests.resources.BookTransformer() );
+                            resource.setPagingData( { "maxrows" = 50, "page" = 2, "pages" = 3, "totalRecords" = 112 } );
+
+                            var scope = fractal.createData( resource );
+                            expect( scope.toStruct() ).toBe( {
+                                "data": [
+                                    {
+                                        "id": 1,
+                                        "title": "To Kill a Mockingbird",
+                                        "year": 1960
+                                    },
+                                    {
+                                        "id": 2,
+                                        "title": "A Tale of Two Cities",
+                                        "year": 1859
+                                    }
+                                ],
+                                "meta": {
+                                    "pagination": {
+                                        "maxrows": 50,
+                                        "page": 2,
+                                        "pages": 3,
+                                        "totalRecords": 112
+                                    }
+                                }
+                            } );
+                        } );
+                    } );
                 } );
             } );
         } );

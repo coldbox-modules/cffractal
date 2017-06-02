@@ -18,4 +18,13 @@ component extends="cffractal.models.resources.AbstractResource" {
         return processItem( scope, data );
     }
 
+    /**
+    * Returns false as an item is never paged.
+    *
+    * @returns false
+    */
+    function hasPagingData() {
+        return false;
+    }
+
 }

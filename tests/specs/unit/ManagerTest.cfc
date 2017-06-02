@@ -34,22 +34,8 @@ component extends="testbox.system.BaseSpec" {
                 it( "can set a custom serializer", function() {
                     var simpleSerializer = new cffractal.models.serializers.SimpleSerializer();
                     fractal.setSerializer( simpleSerializer );
-                    expect( prepareMock( fractal ).$getProperty( "serializer" ) )
+                    expect( fractal.getSerializer() )
                         .toBeInstanceOf( "cffractal.models.serializers.SimpleSerializer" );
-                } );
-
-                it( "has a helper method to call serialize", function() {
-                    var originalData = { "foo" = "bar" };
-                    var serializedData = { "data" = originalData };
-
-                    dataSerializer.$( "serialize" )
-                        .$args( originalData )
-                        .$results( serializedData );
-
-                    fractal.setSerializer( dataSerializer );
-
-                    expect( fractal.serialize( originalData ) )
-                        .toBe( serializedData );
                 } );
             } );
         } );

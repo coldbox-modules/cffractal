@@ -24,7 +24,6 @@ component singleton {
         return this;
     }
 
-
     /**
     * Sets a new serializer to use to serialize the data.
     *
@@ -35,6 +34,15 @@ component singleton {
     function setSerializer( serializer ) {
         variables.serializer = arguments.serializer;
         return this;
+    }
+
+    /**
+    * Gets the currently set serializer.
+    *
+    * @returns The current serializer.
+    */
+    function getSerializer() {
+        return variables.serializer;
     }
 
     /**
@@ -52,17 +60,6 @@ component singleton {
     function createData( resource, includes = "", identifier = "" ) {
         arguments.manager = this;
         return new cffractal.models.Scope( argumentCollection = arguments );
-    }
-
-    /**
-    * Serialize the data through the set serializer.
-    *
-    * @data    The array or struct of data to serialize.
-    *
-    * @returns The serialized data.
-    */
-    function serialize( data ) {
-        return serializer.serialize( data );
     }
 
     /**

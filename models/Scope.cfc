@@ -71,15 +71,23 @@ component {
     * @returns The transformed and serialized data.
     */
     function toStruct() {
-        var serializedData = manager.serialize(
-            resource.process( this )
-        );
+        var serializer = manager.getSerializer();
 
-        if ( identifier == "" ) {
-            return serializedData;
+        var serializedData = serializer.data( resource, this );
+
+        if ( identifier != "" ) {
+            return { "#identifier#" = serializedData };
         }
 
-        return { "#identifier#" = serializedData };
+        if ( resource.hasPagingData() ) {
+            resource.addMeta( "pagination", resource.getPagingData() );
+        }
+
+        if ( resource.hasMeta() ) {
+            structAppend( serializedData, serializer.meta( resource, this ) );
+        }
+
+        return serializedData;
     }
 
     /**

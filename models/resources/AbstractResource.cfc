@@ -17,6 +17,16 @@ component {
     property name="transformer";
 
     /**
+    * The collection of metadata for this resource. Default: {}.
+    */
+    property name="meta";
+    
+    /**
+    * The paging data for this resource.
+    */
+    property name="pagingData";
+
+    /**
     * Creates a new cffractal resource.
     *
     * @data        The data to be transformed into serializable data.
@@ -25,9 +35,10 @@ component {
     *
     * @returns     A Fractal resource.
     */
-    function init( data, transformer ) {
+    function init( data, transformer, meta = {} ) {
         variables.data = arguments.data;
         variables.transformer = arguments.transformer;
+        variables.meta = arguments.meta;
         return this;
     }
 
@@ -76,6 +87,67 @@ component {
         }
 
         return transformedData;    
+    }
+
+    /**
+    * Returns the current metadata scope.
+    *
+    * @returns The metadata scope.
+    */
+    function getMeta() {
+        return variables.meta;
+    }
+
+    /**
+    * Adds some data under a given identifier in the metadata.
+    *
+    * @identifier The identifier to nest the data under in the metadata scope.
+    * @data       The data to store under the given identifier.
+    *
+    * @returns    The resource instance.
+    */
+    function addMeta( identifier, data ) {
+        variables.meta[ identifier ] = data;
+        return this;
+    }
+
+    /**
+    * Returns whether the resource has any metadata associated with it.
+    *
+    * @returns True if there are any metadata keys present.
+    */
+    function hasMeta() {
+        return ! structIsEmpty( variables.meta );
+    }
+
+    /**
+    * Returns the current paging data.
+    *
+    * @returns The paging data.
+    */
+    function getPagingData() {
+        return variables.pagingData;
+    }
+
+    /**
+    * Sets the current paging data.
+    *
+    * @pagingData The paging data to associate with this resource.
+    *
+    * @returns    The resource instance.
+    */
+    function setPagingData( pagingData ) {
+        variables.pagingData = arguments.pagingData;
+        return this;
+    }
+
+    /**
+    * Returns whether any paging data has been set.
+    *
+    * @returns True if there is any paging data set.
+    */
+    function hasPagingData() {
+        return ! isNull( variables.pagingData );
     }
 
     /**
