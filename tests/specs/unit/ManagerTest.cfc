@@ -13,14 +13,14 @@ component extends="testbox.system.BaseSpec" {
 
             describe( "create data", function() {
                 it( "can create a root scope", function() {
-                    var resource = new cffractal.models.resources.Item( {}, function() {} );
+                    var resource = fractal.item( {}, function() {} );
                     var rootScope = fractal.createData( resource );
                     expect( rootScope ).toBeInstanceOf( "cffractal.models.Scope" );
                     expect( prepareMock( rootScope ).$getProperty( "identifier" ) ).toBe( "" );
                 } );
 
                 it( "can create a nested scope", function() {
-                    var resource = new cffractal.models.resources.Item( {}, function() {} );
+                    var resource = fractal.item( {}, function() {} );
                     var nestedScope = fractal.createData(
                         resource = resource,
                         identifier = "book"

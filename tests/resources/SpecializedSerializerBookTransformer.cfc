@@ -1,6 +1,6 @@
 component extends="cffractal.models.transformers.AbstractTransformer" {
 
-    variables.availableIncludes = [ "author" ];
+    variables.defaultIncludes = [ "author" ];
 
     function transform( book ) {
         return {
@@ -11,7 +11,11 @@ component extends="cffractal.models.transformers.AbstractTransformer" {
     }
 
     function includeAuthor( book ) {
-        return item( book.getAuthor(), new tests.resources.AuthorTransformer( manager ) );
+        return item( book.getAuthor(), function( author ) {
+            return {
+                "name" = author.getName()
+            };
+        }, new cffractal.models.serializers.SimpleSerializer() );
     }
 
 }

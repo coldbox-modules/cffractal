@@ -20,9 +20,9 @@ component extends="testbox.system.BaseSpec" {
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
+                        mockItem.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
-                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockItem );
                         expect( scope.toStruct() ).toBe( { "data" = data } );
@@ -41,9 +41,9 @@ component extends="testbox.system.BaseSpec" {
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
+                        mockItem.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
-                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockItem );
                         expect( scope.toStruct() ).toBe( { "data" = data } );
@@ -63,9 +63,9 @@ component extends="testbox.system.BaseSpec" {
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
+                        mockCollection.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
-                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockCollection );
                         expect( scope.toStruct() ).toBe( { "data" = data } );
@@ -85,9 +85,9 @@ component extends="testbox.system.BaseSpec" {
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
+                        mockCollection.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
-                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockCollection );
                         expect( scope.toStruct() ).toBe( { "data" = data } );
@@ -106,9 +106,9 @@ component extends="testbox.system.BaseSpec" {
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
+                        mockItem.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
-                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockItem );
                         expect( scope.toJSON() ).toBe( serializeJSON( { "data" = data } ) );    
@@ -127,9 +127,9 @@ component extends="testbox.system.BaseSpec" {
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
+                        mockItem.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
-                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockItem );
                         expect( scope.toJSON() ).toBe( serializeJSON( { "data" = data } ) );
@@ -149,9 +149,9 @@ component extends="testbox.system.BaseSpec" {
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
+                        mockCollection.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
-                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockCollection );
                         expect( scope.toJSON() ).toBe( serializeJSON( { "data" = data } ) );    
@@ -171,9 +171,9 @@ component extends="testbox.system.BaseSpec" {
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                         mockSerializer.$( "serialize", { "data" = data } );
+                        mockCollection.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
-                        mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockCollection );
                         expect( scope.toJSON() ).toBe( serializeJSON( { "data" = data } ) );

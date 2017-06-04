@@ -30,6 +30,19 @@ component {
     variables.availableIncludes = [];
 
     /**
+    * Create a new transformer instance.
+    *
+    * @manager.inject Manager@cffractal
+    * @manager The cffractal manager.  Used to retrieve the default serializer.
+    *
+    * @returns The new transformer instance.
+    */
+    function init( manager ) {
+        variables.manager = arguments.manager;
+        return this;
+    }
+
+    /**
     * @abstract
     * Defines the method for transforming a specific resource.
     *
@@ -102,8 +115,8 @@ component {
     *
     * @returns A new cffractal Item wrapping the given data and transformer.
     */
-    private function item( data, transformer ) {
-        return new cffractal.models.resources.Item( data, transformer );
+    private function item( data, transformer, serializer ) {
+        return manager.item( argumentCollection = arguments );
     }
 
     /**
@@ -116,7 +129,7 @@ component {
     *
     * @returns A new cffractal Collection wrapping the given data and transformer.
     */
-    private function collection( data, transformer ) {
-        return new cffractal.models.resources.Collection( data, transformer );
+    private function collection( data, transformer, serializer ) {
+        return manager.collection( argumentCollection = arguments );
     }
 }

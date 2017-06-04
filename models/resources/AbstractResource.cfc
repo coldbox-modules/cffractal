@@ -35,9 +35,10 @@ component {
     *
     * @returns     A Fractal resource.
     */
-    function init( data, transformer, meta = {} ) {
+    function init( data, transformer, serializer, meta = {} ) {
         variables.data = arguments.data;
         variables.transformer = arguments.transformer;
+        variables.serializer = arguments.serializer;
         variables.meta = arguments.meta;
         return this;
     }
@@ -87,6 +88,27 @@ component {
         }
 
         return transformedData;    
+    }
+
+    /**
+    * Returns the current serializer for the resource.
+    *
+    * @returns The current serializer.
+    */
+    function getSerializer() {
+        return variables.serializer;
+    }
+
+    /**
+    * Sets the serializer for the resource.
+    *
+    * @serializer The serializer to associate with this specific resource.
+    *
+    * @returns    The resource instance.
+    */
+    function setSerializer( serializer ) {
+        variables.serializer = arguments.serializer;
+        return this;
     }
 
     /**

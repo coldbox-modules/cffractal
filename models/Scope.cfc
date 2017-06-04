@@ -71,7 +71,7 @@ component {
     * @returns The transformed and serialized data.
     */
     function toStruct() {
-        var serializer = manager.getSerializer();
+        var serializer = resource.getSerializer();
 
         var serializedData = serializer.data( resource, this );
 
