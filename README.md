@@ -140,6 +140,105 @@ The current serializer for the Manager can be retrieved at any time by calling `
 
 Also, serializers can be overridden on individual resources.  The API for getting and setting serializers on resources is the same as it is for the Manager.
 
+There are three serializers included out of the box with `cffractal`:
+
+#### `SimpleSerializer`
+
+The `SimpleSerializer` returns the processed resource data directly and nests the metadata under a `meta` key.
+
+```js
+var model = {
+    "foo" = "bar",
+    "baz" = "qux"
+};
+
+var result = SimpleSerializer.data( model );
+
+/*
+{
+    "foo" = "bar",
+    "baz" = "qux",
+    "meta" = {
+        "link" = "/api/v1/foo"    
+    }
+}
+*/
+```
+
+#### `DataSerializer`
+
+The `DataSerializer` nests the processed resource data inside a `data` key and nests the metadata under a `meta` key.
+
+```js
+var model = {
+    "foo" = "bar",
+    "baz" = "qux"
+};
+
+var result = DataSerializer.data( model );
+
+/*
+{
+    "data" = {
+        "foo" = "bar",
+        "baz" = "qux"
+    },
+    "meta" = {
+        "link" = "/api/v1/foo"    
+    }
+}
+*/
+```
+
+#### `ResultsMapSerializer`
+
+The `ResultsMapSerializer` nests the processed resource data inside a `resultsMap` struct keyed by an identifier column as well as an array of identifiers nested under a `results` key. The metadata is nested under a `meta` key.
+
+If the processed resource is not an array, the data is returned unmodified.
+
+The identifier column can be specified in the constructor.
+
+> #### API
+
+> ##### `init`
+
+> Creates a new `ResultsMapSerializer`.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | identifier | string | false | "id" | The name of the primary key for the transformed data.  Used to key the results map and populate the results array. |
+
+```js
+var model = [
+    { "id" = 1, "name" = "foo" },
+    { "id" = 2, "name" = "bar" },
+    { "id" = 3, "name" = "baz" },
+    { "id" = 4, "name" = "qux" }
+];
+
+var result = ResultsMapSerializer.data( model );
+
+/*
+{
+    "results" = [
+        1,
+        2,
+        3,
+        4
+    ]
+    "resultsMap" = {
+        "1" = { "id" = 1, "name" = "foo" },
+        "2" = { "id" = 2, "name" = "bar" },
+        "3" = { "id" = 3, "name" = "baz" },
+        "4" = { "id" = 4, "name" = "qux" }
+    },
+    "meta" = {
+        "link" = "/api/v1/foo"    
+    }
+}
+*/
+```
+
 ### Resources
 
 #### Items
