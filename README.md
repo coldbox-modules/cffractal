@@ -247,6 +247,8 @@ var result = ResultsMapSerializer.data( model );
 
 #### Specifying Custom Serializers
 
+As mentioned above, individual resources can have their serializer overridden.  This is useful if you only want one scope level to be serialized in a certain fashion (say, with the `DataSerializer`), and the rest to be serialized differently (say, with the `SimpleSerializer`).
+
 ### Transformers
 
 #### Includes
