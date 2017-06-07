@@ -95,9 +95,50 @@ The return value is a Scope object.  To finish up the serialization process, we 
 
 A serialzier needs two methods:
 
-`data`
+> #### API
 
-`meta`
+> ##### `data`
+
+> Serializes the data portion of a resource.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | resource | AbstractResource | true | | The fractal resource to process and serailize. |
+> | scope | Scope | true | | The current scope instance.  Included to pass along to the resource during processing. |
+
+
+> ##### `meta`
+
+> Serializes the metadata portion of a resource.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | resource | AbstractResource | true | | The fractal resource to process and serailize. |
+> | scope | Scope | true | | The current scope instance.  Included to pass along to the resource during processing. |
+
+A default serializer is configured for the application when creating the Fractal manager.  Unless overridden, this is the serializer used for each scope in the serialization processes.
+
+The current serializer for the Manager can be retrieved at any time by calling `getSerializer`.  Additionally, a new default serializer can be set on the Manager by calling `setSerializer`.
+
+> #### API
+
+> ##### `getSerializer`
+
+> Retrieves the current default serializer.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | No arguments |
+
+> ##### `setSerializer`
+
+> Sets a new default serializer for the Manager.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | serializer | Serializer | true | | The new default serializer for the Manager. |
+
+Also, serializers can be overridden on individual resources.  The API for getting and setting serializers on resources is the same as it is for the Manager.
 
 ### Resources
 
