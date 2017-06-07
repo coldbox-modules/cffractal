@@ -12,6 +12,13 @@ component {
     }
 
     function onLoad() {
+        binder.map( "SimpleSerializer@cffractal" ).asSingleton()
+            .to( "#moduleMapping#.models.serializers.SimpleSerializer" );
+        binder.map( "DataSerializer@cffractal" ).asSingleton()
+            .to( "#moduleMapping#.models.serializers.DataSerializer" );
+        binder.map( "ResultsMapSerializer@cffractal" ).asSingleton()
+            .to( "#moduleMapping#.models.serializers.ResultsMapSerializer" );
+
         binder.map( "Manager@cffractal" )
             .to( "#moduleMapping#.models.Manager" )
             .asSingleton()
