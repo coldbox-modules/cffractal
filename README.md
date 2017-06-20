@@ -1,16 +1,73 @@
 # cffractal
 
+[![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors)
+
 [![Master Branch Build Status](https://img.shields.io/travis/elpete/cffractal/master.svg?style=flat-square&label=master)](https://travis-ci.org/elpete/cffractal)
 
 ## Transform business models to JSON data structures. Based on the [Fractal PHP library.](http://fractal.thephpleague.com/)
 
-### Elevator Pitch
+### Why CFFractal?
+
+CFFractal in two sentences:
+
+> Views take models and return HTML.
+> CFFractal takes models and returns JSON (or your favorite serialized format).
+
+You would want to use CFFractal if:
 
 + You need to transform your business models to json in many different places.
 + You need to include and exclude relationships depending on the endpoint.
 + You don't want to repeat yourself all over the place.
 
-### Simple Example
+Here's some more in-depth reasons:
+
+1) Conventions around nested resources
+
+CFFractal is able to parse your includes and excludes for you.  That means no more having to litter your transformers with `if` statements.  No more huge parameter lists.  Just one argument to pass: `includes`.  We'll handle the rest.
+
+Also, includes are in the hands of the caller.  Does the caller not want the user?  Great.  Don't include it.  Do they want 6 levels of nested relationships?  Okay.  We'll do it.  Ultimate flexibility.
+
+2) Default includes
+
+Some includes are opt-in.  Others should always be included.  CFFractal makes this easy while still delegating transformation to each resource.
+
+3) Nested includes
+
+Do you want to get your post's author's comments?  No worries!  Your includes string can get that with `includes=author.comments`.  Have more levels?  Have at it!
+
+4) Sharing resource transformations
+
+Adding a field to an entity?  If you used CFFractal, you only need to add it to your transformer.  Every included resource will get it automatically.
+
+You have a user entity that you want to serialize, but **not ever** with the password? Just exclude it in your `transform()` function.  All calls to CFFractal, including nested includes, will benefit from your attention to security for free.
+
+5) Consistency
+
+It is frustrating as a consumer of an API to have to make multiple requests where one should have sufficed.  One situation where this is sadly the case is inconsistent output between resources.  Does the `user` struct include the `last_logged_in` key when requesting from one endpoint but not another?  It is an easy mistake to make.  CFFractal helps to reduce these mistakes by creating a single source of truth for resource transformations — a `Transformer`.
+
+Another place that is easy to mess up consistency is the response output.  Is your data nested in a `data` key?  Are you separating resources into their primary keys and a map?  It's too easy to have one endpoint behave differently than another.  In CFFractal, `Serializers` define the structure of the response and can help ensure a consistent output across your API endpoints.
+
+6) Encapsulation
+
+Playing with your model formats or your data layer code?  It won't affect your API if you used CFFractal.  Your `Transformers` are your single source of truth for model transformations.  If changes need to be made, they are encapsulated in those files.  Your API output will be unchanged from the consumer's point of view.
+
+7) Flexible
+
+From [Jon Clausen](https://twitter.com/jclausen):
+
+> Having written API’s against MongoDB, ORM, and even a few that use legacy DAO/Gateway patterns, the benefit for me of the fractal transformation module is that I can use it for any of them, because of the transformer.  If the models already know how to accomplish the transformations to a degree, like our mementos in ORM, then that’s great.  
+> 
+> You don’t always have that, though, and you don’t always want a fully normalized expansion.  Sometimes you need only a small subset when dealing with secondary one-to-one relationships that need some normalization of the top level element.
+> 
+> This eliminates three methods that I always found myself writing (or copy/pasting and adapting) for every API handler:
+> 
+> 1.  The collection marshalling method
+> 2.  The single entity response marshalling method
+> 3.  The format entity method, which handles the expansion parameters in the collection
+
+### Examples
+
+#### Simple Example
 
 ```js
 var fractal = new cffractal.models.Manager(
@@ -43,7 +100,9 @@ var transformedData = fractal.createData( resource ).toJSON();
 // {"data":{"id":1,"title":"To Kill A Mockingbird","author":{"name":"Harper Lee","year":"1926"},"links":{"uri":"/books/1"}}}
 ```
 
-### Manager
+### API
+
+#### Manager
 
 The manager class is responsible for kicking off the transformation process.  This is generally the only class you need to inject in you handlers.  For convenience, this class is usually aliased as just `fractal`.
 
@@ -52,8 +111,6 @@ property name="fractal" inject="Manager@cffractal";
 ```
 
 There are three main functions to call off of fractal.  The first two are just factory functions: `item` and `collection`.  These help you create fractal resources from your models, specify transformers, and set a serializer override.  (You can read all about those terms further down.)
-
-> #### API
 
 > ##### `item`
 
@@ -77,8 +134,6 @@ There are three main functions to call off of fractal.  The first two are just f
 
 Once you have a resource, you need to create the root scope.  Scopes in `cffractal` represent the nesting level of the resource.  Since resources can include sub-resources, we need a root scope to kick off the serializing process.  You do this through the `createData` method.
 
-> #### API
-
 > ##### `createData`
 
 > Creates a scope to serialize.
@@ -91,11 +146,13 @@ Once you have a resource, you need to create the root scope.  Scopes in `cffract
 
 The return value is a Scope object.  To finish up the serialization process, we need to call `toStruct` or `toJSON` on this object.  But before we get to that, let's review the options that go in to the serialization process.
 
-### Serializers
+#### Serializers
+
+A Serializer is responsible for the shape of the response, both the data and the metadata, additional information about the item or collection (such as pagination or links).
+
+Perhaps you always want your data nested under a `data` key for consistency.  Maybe you want to separate the `results` as an array of ids from the `resultsMap` which is the data keyed by the id.  You might want a `metadata` key always present for any additional information, like pagination, that doesn't fit inside the normal data keys.  Whatever the shape, you can design a serializer that can produce it.
 
 A serialzier needs two methods:
-
-> #### API
 
 > ##### `data`
 
@@ -120,8 +177,6 @@ A default serializer is configured for the application when creating the Fractal
 
 The current serializer for the Manager can be retrieved at any time by calling `getSerializer`.  Additionally, a new default serializer can be set on the Manager by calling `setSerializer`.
 
-> #### API
-
 > ##### `getSerializer`
 
 > Retrieves the current default serializer.
@@ -140,6 +195,16 @@ The current serializer for the Manager can be retrieved at any time by calling `
 
 Also, serializers can be overridden on individual resources.  The API for getting and setting serializers on resources is the same as it is for the Manager.
 
+```js
+function includeNotes( task ) {
+    return collection(
+        data = task.getNotes(),
+        transformer = function( note ) { return note; },
+        serializer = wirebox.getInstance( "SimpleSerializer@cffractal" )
+    );
+}
+```
+
 There are three serializers included out of the box with `cffractal`:
 
 #### `SimpleSerializer`
@@ -152,17 +217,13 @@ var model = {
     "baz" = "qux"
 };
 
-var result = SimpleSerializer.data( model );
+// becomes
 
-/*
-{
+var transformed = {
     "foo" = "bar",
     "baz" = "qux",
-    "meta" = {
-        "link" = "/api/v1/foo"    
-    }
-}
-*/
+    "meta" = {}
+};
 ```
 
 #### `DataSerializer`
@@ -175,19 +236,15 @@ var model = {
     "baz" = "qux"
 };
 
-var result = DataSerializer.data( model );
+// becomes
 
-/*
-{
+var transformed = {
     "data" = {
         "foo" = "bar",
         "baz" = "qux"
     },
-    "meta" = {
-        "link" = "/api/v1/foo"    
-    }
-}
-*/
+    "meta" = {}
+};
 ```
 
 #### `ResultsMapSerializer`
@@ -216,10 +273,9 @@ var model = [
     { "id" = 4, "name" = "qux" }
 ];
 
-var result = ResultsMapSerializer.data( model );
+// becomes
 
-/*
-{
+var transformed = {
     "results" = [
         1,
         2,
@@ -232,27 +288,366 @@ var result = ResultsMapSerializer.data( model );
         "3" = { "id" = 3, "name" = "baz" },
         "4" = { "id" = 4, "name" = "qux" }
     },
-    "meta" = {
-        "link" = "/api/v1/foo"    
-    }
-}
-*/
+    "meta" = {}
+};
 ```
 
-### Resources
+#### Resources
 
-#### Items
+Resources are a combination of your model, in whatever representation it may be in, and a transformer to take that data and normalize it for your API.  Resources come in two flavors, `item`s and `collection`s.  The API is identical for each.  The difference comes down to how the data is processed and if pagination is considered.
 
-#### Collections
+You can create a resource either from the `Manager` or from inside a `Transformer`.  The API is the same.
 
-#### Specifying Custom Serializers
+> #### API
+
+> ##### `item`
+
+> Creates a new `Item` resource.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | data | any | true | | The model to transform. |
+> | transformer | any | true | | The transformer for the given model. |
+> | serializer | Serializer | false | The default serializer on the Manager. | The serializer to use when serializing the data. |
+> 
+> ##### `collection`
+
+> Creates a new `Collection` resource.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | data | any | true | | The model to transform. |
+> | transformer | any | true | | The transformer for the given model. |
+> | serializer | Serializer | false | The default serializer on the Manager. | The serializer to use when serializing the data. |
+
+##### Specifying Custom Serializers
 
 As mentioned above, individual resources can have their serializer overridden.  This is useful if you only want one scope level to be serialized in a certain fashion (say, with the `DataSerializer`), and the rest to be serialized differently (say, with the `SimpleSerializer`).
 
-### Transformers
+#### Transformers
 
-#### Includes
+Transformers are like the view for your models.  It defines how to transform your model in to a serializable representation.
 
-#### Excludes (coming soon)
+Transformers come in two flavors, closures and components.
 
-### Scope
+##### Closure Transformers
+
+Closure transformers are useful for simple transformations.  They are very convenient when you don't need any of the extra features of component transformers such as parsing includes and excludes because they are defined inline and very lightweight.
+
+```js
+fractal.item( book, function( book ) {
+    return {
+        "id" = book.getId(),
+        "title" = book.getName(),
+        "yearPublished" = book.getPublishedDate()
+    };
+} );
+```
+
+If you use a resource in more than one place or would like access to includes and excludes, you are going to want to use a component transformer.
+
+##### Component Transformers
+
+Component transformers are where the power of transformers lie and will likely be the main transformer type for your API.
+
+Component transformers should be singleton objects.  Mark them as such in your DI container of choice.  With WireBox, it is as simple as appending the `singleton` component metadata attribute.
+
+```js
+component singleton {
+    function transform( book ) {
+        return {
+            "id" = book.getId(),
+            "title" = book.getName(),
+            "yearPublished" = book.getPublishedDate()
+        };
+    }
+}
+```
+
+You might be thinking that this is no better than a closure transformer.  The fact is, even in this state, we can now reuse this transformer without duplication!  For this reason alone, you can see why most of your transformers will be components.
+
+Component transformers get even better when we talk about includes and excludes!
+
+##### Includes
+
+Includes are nested resources that can or should be included when serializing a resource.  Let's take our book example.
+
+A book is written by an author and has a publisher.  The author, in turn, has a country they live in.
+
+In our API endpoint, retrieving a book should always return information about the author.  It should optionally return information about the publisher as well as the author's country.
+
+Let's set up all the models we've talked about.  (This will be our most comprehensive example yet.)
+
+```js
+component name="Book" accessors="true" {
+
+    property name="id";
+    property name="name";
+    property name="publishedDate";
+
+    property name="authorId";
+    property name="publisherId";
+
+    // we'll assume these methods do the right thing... 😉
+    function getAuthor() { /* ... */ }
+    function getPublisher() { /* ... */ }
+
+}
+
+component name="Author" accessors="true" {
+
+    property name="id";
+    property name="firstName";
+    property name="lastName";
+
+    property name="currentCountryId";
+
+    // we'll assume these methods do the right thing... 😉
+    function getCurrentCountry() { /* ... */ }
+
+}
+
+component name="Publisher" accessors="true" {
+
+    property name="id";
+    property name="name";
+
+}
+
+component name="Country" accessors="true" {
+
+    property name="id";
+    property name="name";
+    property name="latitude";
+    property name="longitude";
+
+}
+```
+
+It doesn't matter how these models are populated or how they find their relations.  That's why the Transformer pattern is so powerful!  Let's set up our transformers now so we can see how includes work.
+
+```js
+component name="BookTransformer" singleton {
+
+    variables.defaultIncludes = [ "author" ];
+    variables.availableIncludes = [ "publisher" ];
+
+    function transform( book ) {
+        return {
+            "id" = book.getId(),
+            "title" = book.getName(),
+            "yearPublished" = dateFormat( book.getPublishedDate(), "YYYY" )
+        };
+    }
+
+    function includeAuthor( book ) {
+        return item(
+            book.getAuthor(),
+            wirebox.getInstance( "AuthorTransformer" )
+        );
+    }
+
+    function includePublisher( book ) {
+        return item(
+            book.getPublisher(),
+            wirebox.getInstance( "PublisherTransformer" )
+        );
+    }
+
+}
+
+component name="AuthorTransformer" singleton {
+
+    variables.availableIncludes = [ "country" ];
+
+    function transform( author ) {
+        return {
+            "id" = author.getId(),
+            "name" = author.getFirstName() & " " & author.getLastName();
+        };
+    }
+
+    function includeCountry( author ) {
+        return item(
+            author.getCurrentCountry(),
+            function( country ) {
+                return {
+                    "id" = country.getId(),
+                    "name" = country.getName(),
+                    "coordinate" = {
+                        "latitude" = country.getLatitude(),
+                        "longitude" = country.getLongitude()
+                    }
+                };
+            }
+        );
+    }
+
+}
+
+component name="PublisherTransformer" singleton {
+
+    function transform( publisher ) {
+        return {
+            "id" = publisher.getId(),
+            "name" = publisher.getName()
+        };
+    }
+
+}
+```
+
+Whew.  That may seem like a lot of transformers to write, but remember that this is both insulating us from changes to our model layer while at the same time reducing future duplication.  We can now write our `authors` endpoint while reusing our existing `AuthorsTransformer`.  Neat!
+
+On to includes.  There are two types of includes: `defaultIncludes` and `availableIncludes`.  Both of these arrays contain resource names.  During the transformation process, CFFractal will invoke a `include[Resource Name Here]` method on the transformer to retrieve the included data.
+
+If you always want a related resource included, you want to specify it in your `defaultIncludes` array.  Why would you go to the trouble of specifying a resource in the `defaultIncludes` array as opposed to doing it inline? Because `defaultIncludes` reuse existing transformers to do their transformation and serialization.  We once again get to reuse our transformation layer with little additional effort.
+
+If you want a resource to be available to include in your transformation if a caller desired, but not included by default, add it to your `availableIncludes` array.  This grants you the flexibility to define all the relationships and nested resources in the transformer while only loading them as needed.  How to include available includes will be seen in detail in the Scope section.
+
+You might have noticed that there is no `CountryTransformer` component.  Rather, we opted for a closure component for the `Country` resource.  This probably isn't the right choice for our situation, but we opted for it here to show you that it is a possibility.  Including it here as a closure component would mean any logic for transforming a Country outside of the `AuthorTransformer` component would have to be duplicated.
+
+In the end, we get a flexible API call.  If we set up our objects like this:
+
+```js
+var book = new Book( {
+    id = 1,
+    name = "To Kill A Mockingbird",
+    publishedDate = createDate( 1960, 07, 11 ),
+    authorId = 54,
+    publisherId = 41
+} );
+
+var author = new Author( {
+    id = 54,
+    firstName = "Harper",
+    lastName = "Lee",
+    countryId = 50
+} );
+
+var publisher = new Publisher( {
+    id = 41,
+    name = "J. B. Lippincott & Co."
+} );
+
+var country = new Country( {
+    id = 50,
+    name = "United States of America"
+    latitude = "38.895N",
+    longitude = "77.037W"
+} );
+
+var resource = fractal.item(
+    book,
+    wirebox.getInstance( "BookTransformer" )
+);
+```
+
+With just a base call to the `Manager`'s `createData` method:
+
+```js
+var transformedData = fractal.createData( resource ).toJSON();
+```
+
+We get the following response:
+
+```json
+{
+    "data": {
+        "id": 1,
+        "title": "To Kill a Mockingbird",
+        "yearPublished": "1960",
+        "author": {
+            "data": {
+                "id": 54,
+                "name": "Harper Lee"
+            }
+        }
+    }
+}
+```
+
+However, with the same resource but also adding in our includes:
+
+```js
+var transformedData = fractal.createData(
+    resource = resource,
+    includes = "author.country,publisher"
+).toJSON();
+```
+
+We get a more in-depth response:
+
+```json
+{
+    "data": {
+        "id": 1,
+        "title": "To Kill a Mockingbird",
+        "yearPublished": "1960",
+        "author": {
+            "data": {
+                "id": 54,
+                "name": "Harper Lee",
+                "country": {
+                    "data": {
+                        "id": 50,
+                        "name": "United States of America",
+                        "coordinates": {
+                            "latitude": "38.895N",
+                            "longitude": "77.037W"
+                        }
+                    }
+                }
+            }
+        },
+        "publisher": {
+            "data": {
+                "id": 41,
+                "name": "J. B. Lippincott & Co."
+            }
+        }
+    }
+}
+```
+
+##### Excludes (coming soon)
+
+#### Scope
+
+Scope is the last piece of the CFFractal puzzle.  A `Scope` is a resource combined with any includes and a scope identifier. The scope identifier represents the current nesting level of the resource transformation.  A scope identifier of `""` (an empty string) represents the root level of the resource.  As includes are processed, additional scopes are created with the correctly scoped includes to continue the transformation and serialization processes.
+
+This concept is especially important for nested includes.  In the example right before this section, there was an example of a nested include:
+
+```js
+var transformedData = fractal.createData(
+    resource = resource,
+    includes = "author.country"
+).toJSON();
+```
+
+This is asking CFFractal to include the resource's author and that author's country.  In fact, `author` doesn't even need to be in the `defaultIncludes` array to be included in this case.  Included a nested resource will include all of it's parent resources as well.  (It does, however, at least need to be in the `availableIncludes` array to do anything.)
+
+Let's step through this example to understand how it works.
+
+1. The resource tries to resolve the `"author"` include.
+2. It finds it on the `BookTransformer` and creates a new resource and embeds it in a new child scope where the scope identifier is `"author"`, the current include name. 
+3. The includes are then evaluated against the current scope identifier.  While `"country"` is not a valid include from the root scope (`"book"`), in this child scope (`"author"`) `"country"` is a valid include.
+4. `"country"` is processed under a further nested child scope with a scope identifier of `"country"`.
+5. As this is the last step of the includes chain, each child scope is transformed, serialized, and then placed inside a key matching the scope identifier in its parent scope.
+
+Scopes, while important, are mostly invisible in the CFFractal process.  The root scope is created by the initial call to `createData` and child scopes are created inside the transformation process for you.  Still, it is important to visualize the includes chain to help you when designing your transformers.
+
+### Additional Resources
+
+#### Have Questions?
+
+Come find us on the [CFML Slack]() (#box-products channel) and ask us there.  We'd be happy to help!
+
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section --><!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
