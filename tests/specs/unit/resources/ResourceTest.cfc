@@ -2,11 +2,30 @@ component extends="testbox.system.BaseSpec" {
     
     function run() {
         describe( "resource test", function() {
-            it( "casts nulls to an empty string", function() {
+            it( "preserves nulls passed through for items", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
+                var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
                 var mockTransformer = getMockBox().createMock( "cffractal.models.transformers.AbstractTransformer" );
+                mockTransformer.$( "transform" ).$args( javacast( "null", "" ) ).$results( {} );
+                mockTransformer.$( "hasIncludes", false );
                 var item = new cffractal.models.resources.Item( javacast( "null", "" ), mockTransformer, mockSerializer );
-                expect( prepareMock( item ).$getProperty( name = "data" ) ).toBe( "" );
+                
+                var transformedData = item.process( mockScope );
+
+                expect( transformedData ).toBe( {} );
+            } );
+
+            it( "preserves nulls passed through for collections", function() {
+                var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
+                var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                var mockTransformer = getMockBox().createMock( "cffractal.models.transformers.AbstractTransformer" );
+                mockTransformer.$( "transform" ).$args( javacast( "null", "" ) ).$results( [] );
+                mockTransformer.$( "hasIncludes", false );
+                var item = new cffractal.models.resources.Collection( javacast( "null", "" ), mockTransformer, mockSerializer );
+                
+                var transformedData = item.process( mockScope );
+
+                expect( transformedData ).toBe( [] );
             } );
 
             it( "processing with a transformer and includes", function() {

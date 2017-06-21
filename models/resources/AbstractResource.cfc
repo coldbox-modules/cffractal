@@ -36,7 +36,7 @@ component {
     * @returns     A Fractal resource.
     */
     function init( data, transformer, serializer, meta = {} ) {
-        variables.data = isNull( arguments.data ) ? "" : arguments.data;
+        variables.data = isNull( arguments.data ) ? javacast( "null", "" ) : arguments.data;
         variables.transformer = arguments.transformer;
         variables.serializer = arguments.serializer;
         variables.meta = arguments.meta;
@@ -71,7 +71,10 @@ component {
     * @returns The transformed data. 
     */
     function processItem( scope, item ) {
-        var transformedData = transformData( transformer, item );
+        var transformedData = transformData(
+            transformer,
+            isNull( item ) ? javacast( "null", "" ) : item
+        );
 
         if ( isClosure( transformer ) || isCustomFunction( transformer ) ) {
             return transformedData;
@@ -183,8 +186,8 @@ component {
     */
     private function transformData( transformer, item ) {
         return isClosure( transformer ) || isCustomFunction( transformer ) ?
-            transformer( item ) :
-            transformer.transform( item );
+            transformer( isNull( item ) ? javacast( "null", "" ) : item ) :
+            transformer.transform( isNull( item ) ? javacast( "null", "" ) : item );
     }
 
 }

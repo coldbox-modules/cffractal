@@ -15,6 +15,10 @@ component extends="cffractal.models.resources.AbstractResource" {
     * @returns The transformed data. 
     */
     function process( scope ) {
+        if ( isNull( data ) ) {
+            return processItem( scope, javacast( "null", "" ) );
+        }
+
         var transformedDataArray = [];
         for ( var value in data ) {
             arrayAppend(
