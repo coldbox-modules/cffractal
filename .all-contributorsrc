@@ -6,5 +6,18 @@
   ],
   "imageSize": 100,
   "commit": true,
-  "contributors": []
+  "contributors": [
+    {
+      "login": "elpete",
+      "name": "Eric Peterson",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2583646?v=3",
+      "profile": "https://github.com/elpete",
+      "contributions": [
+        "code",
+        "doc",
+        "example",
+        "test"
+      ]
+    }
+  ]
 }
