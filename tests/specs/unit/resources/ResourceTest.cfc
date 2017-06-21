@@ -2,6 +2,13 @@ component extends="testbox.system.BaseSpec" {
     
     function run() {
         describe( "resource test", function() {
+            it( "casts nulls to an empty string", function() {
+                var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
+                var mockTransformer = getMockBox().createMock( "cffractal.models.transformers.AbstractTransformer" );
+                var item = new cffractal.models.resources.Item( javacast( "null", "" ), mockTransformer, mockSerializer );
+                expect( prepareMock( item ).$getProperty( name = "data" ) ).toBe( "" );
+            } );
+
             it( "processing with a transformer and includes", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );

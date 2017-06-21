@@ -72,7 +72,7 @@ component singleton {
     * @returns     A new cffractal Item wrapping the given data and transformer.
     */
     function item( data, transformer, serializer = variables.serializer ) {
-        return new cffractal.models.resources.Item( data, transformer, serializer );
+        return new cffractal.models.resources.Item( argumentCollection = arguments );
     }
 
     /**
@@ -85,7 +85,7 @@ component singleton {
     * @returns     A new cffractal Collection wrapping the given data and transformer.
     */
     function collection( data, transformer, serializer = variables.serializer ) {
-        return new cffractal.models.resources.Collection( data, transformer, serializer );
+        return new cffractal.models.resources.Collection( argumentCollection = arguments );
     }
 
 }

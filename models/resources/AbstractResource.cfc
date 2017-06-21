@@ -36,7 +36,7 @@ component {
     * @returns     A Fractal resource.
     */
     function init( data, transformer, serializer, meta = {} ) {
-        variables.data = arguments.data;
+        variables.data = isNull( arguments.data ) ? "" : arguments.data;
         variables.transformer = arguments.transformer;
         variables.serializer = arguments.serializer;
         variables.meta = arguments.meta;
