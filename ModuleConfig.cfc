@@ -26,5 +26,8 @@ component {
                 name = "serializer",
                 ref = "#moduleMapping#.models.serializers.#settings.defaultSerializer#"
             );
+
+        binder.map( "Builder@cffractal" )
+            .to( "#moduleMapping#.models.Builder" );
     }
 }

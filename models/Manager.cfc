@@ -8,6 +8,11 @@
 component singleton {
 
     /**
+    * The WireBox injector
+    */
+    property name="wirebox" inject="wirebox";
+
+    /**
     * The serializer instance.
     */
     property name="serializer";
@@ -25,7 +30,17 @@ component singleton {
     }
 
     function builder() {
-        return new cffractal.models.Builder( this );
+        if ( structKeyExists( variables, "wirebox" ) ) {
+            return wirebox.getInstance(
+                name = "Builder@cffractal",
+                initArguments = {
+                    manager = this
+                }
+            );
+        }
+        else {
+            return new cffractal.models.Builder( this );
+        }
     }
 
     /**
