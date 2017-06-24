@@ -19,6 +19,28 @@ You would want to use CFFractal if:
 + You need to include and exclude relationships depending on the endpoint.
 + You don't want to repeat yourself all over the place.
 
+Take a look at some example code:
+
+```js
+// `books` can be anything from simple strings to structs to complex CFCs.
+
+fractal.createData(
+    resource = fractal.collection(
+        data = books,
+        transformer = getInstance( "BookTransformer" )
+    ),
+    includes = "author"
+).toStruct();
+
+// or
+
+fractal.builder()
+    .collection( books )
+    .withTransformer( "BookTransformer" )
+    .withIncludes( "author" )
+    .toStruct();
+```
+
 Here's some more in-depth reasons:
 
 1) Conventions around nested resources
@@ -636,6 +658,129 @@ Let's step through this example to understand how it works.
 5. As this is the last step of the includes chain, each child scope is transformed, serialized, and then placed inside a key matching the scope identifier in its parent scope.
 
 Scopes, while important, are mostly invisible in the CFFractal process.  The root scope is created by the initial call to `createData` and child scopes are created inside the transformation process for you.  Still, it is important to visualize the includes chain to help you when designing your transformers.
+
+#### Builder
+
+It is important to know the piece of CFFractal so you can use the full power of the library.  But it can seem a bit verbose.  To help alleviate this, CFFractal has a `Builder` class to help reduce boilerplate by leveraging conventions.  (You also might find that you just like the syntax better.)
+
+The `Builder` component turns code like this:
+
+```js
+var fractal = new cffractal.models.Manager(
+    new cffractal.models.serializers.DataSerializer()
+);
+
+var book = {
+    id = 1,
+    title = "To Kill A Mockingbird",
+    author = "Harper Lee",
+    author_birthyear = "1926"
+};
+
+var resource = fractal.item( book, function( book ) {
+    return {
+        id = book.id,
+        title = book.title,
+        author = {
+            name = book.author,
+            year = book.author_birthyear
+        },
+        links = {
+            uri = "/books/" & books.id
+        }
+    };
+} );
+
+var transformedData = fractal.createData( resource ).toJSON();
+
+// {"data":{"id":1,"title":"To Kill A Mockingbird","author":{"name":"Harper Lee","year":"1926"},"links":{"uri":"/books/1"}}}
+```
+
+into code like this:
+
+```js
+var fractal = new cffractal.models.Manager(
+    new cffractal.models.serializers.DataSerializer()
+);
+
+var book = {
+    id = 1,
+    title = "To Kill A Mockingbird",
+    author = "Harper Lee",
+    author_birthyear = "1926"
+};
+
+var result = fractal.builder()
+    .item( book )
+    .withTransformer( "BookTransformer" )
+    .withSerializer( "SimpleSerializer" )
+    .withIncludes( "author" )
+    .toStruct();
+
+// {"data":{"id":1,"title":"To Kill A Mockingbird","author":{"name":"Harper Lee","year":"1926"},"links":{"uri":"/books/1"}}}
+```
+
+The `Builder` component uses the same API under the hood, but you may find the flow more to your sensibilities.  Additionally, the `withTransformer` and `withSerializer` methods will look up simple strings as WireBox mappings, streamlining your code even more.
+
+The `Builder` has the following methods:
+
+> #### API
+
+> ##### `item`
+
+> Sets the `Item` resource to be transformed.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | data | any | true | | The model to transform. |
+> 
+> ##### `collection`
+
+> Sets the `Collection` resource to be transformed.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | data | any | true | | The model to transform. |
+
+> ##### `withTransformer`
+
+> Sets the transformer to use. If the transformer is a simple value, the Builder will treat it as a WireBox binding.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | transformer | any | true | | The transformer to use. |
+> 
+> ##### `withSerializer`
+
+> Sets the serializer to use. If the serializer is a simple value, the Builder will treat it as a WireBox binding.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | serializer | any | true | | The serializer to use. |
+> 
+> ##### `withIncludes`
+
+> Sets the includes for the transformation.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | includes | any | true | | The includes for the transformation. |
+> 
+> ##### `toStruct`
+
+> Transforms the data using the set properties through the fractal manager.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | No arguments |
+> 
+> ##### `toJSON`
+
+> Transform the data through cffractal and then serialize it to JSON.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | No arguments |
 
 ### Additional Resources
 

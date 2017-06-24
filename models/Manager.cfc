@@ -24,6 +24,10 @@ component singleton {
         return this;
     }
 
+    function builder() {
+        return new cffractal.models.Builder( this );
+    }
+
     /**
     * Sets a new serializer to use to serialize the data.
     *
