@@ -7,7 +7,7 @@ component {
 
     function configure() {
         settings = {
-            defaultSerializer = "DataSerializer"
+            defaultSerializer = "SimpleSerializer"
         };
     }
 
