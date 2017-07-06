@@ -2,7 +2,7 @@ component extends="testbox.system.BaseSpec" {
 
     function beforeAll() {
         variables.dataSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
-        variables.fractal = new cffractal.models.Manager( dataSerializer );
+        variables.fractal = new cffractal.models.Manager( dataSerializer, dataSerializer );
     }
 
     function run() {
@@ -31,11 +31,18 @@ component extends="testbox.system.BaseSpec" {
             } );
 
             describe( "serializer", function() {
-                it( "can set a custom serializer", function() {
+                it( "can set a custom item serializer", function() {
                     var simpleSerializer = new cffractal.models.serializers.SimpleSerializer();
-                    fractal.setSerializer( simpleSerializer );
-                    expect( fractal.getSerializer() )
+                    fractal.setItemSerializer( simpleSerializer );
+                    expect( fractal.getItemSerializer() )
                         .toBeInstanceOf( "cffractal.models.serializers.SimpleSerializer" );
+                } );
+
+                it( "can set a custom collection serializer", function() {
+                    var resultsMapSerializer = new cffractal.models.serializers.ResultsMapSerializer();
+                    fractal.setCollectionSerializer( resultsMapSerializer );
+                    expect( fractal.getCollectionSerializer() )
+                        .toBeInstanceOf( "cffractal.models.serializers.ResultsMapSerializer" );
                 } );
             } );
         } );

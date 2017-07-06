@@ -7,7 +7,8 @@ component {
 
     function configure() {
         settings = {
-            defaultSerializer = "SimpleSerializer"
+            defaultItemSerializer = "SimpleSerializer"
+            defaultCollectionSerializer = "ResultsMapSerializer"
         };
     }
 
@@ -23,8 +24,12 @@ component {
             .to( "#moduleMapping#.models.Manager" )
             .asSingleton()
             .initArg(
-                name = "serializer",
-                ref = "#moduleMapping#.models.serializers.#settings.defaultSerializer#"
+                name = "itemSerializer",
+                ref = "#moduleMapping#.models.serializers.#settings.defaultItemSerializer#"
+            )
+            .initArg(
+                name = "collectionSerializer",
+                ref = "#moduleMapping#.models.serializers.#settings.defaultCollectionSerializer#"
             );
 
         binder.map( "Builder@cffractal" )

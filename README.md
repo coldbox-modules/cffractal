@@ -2,7 +2,7 @@
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 
-[![Master Branch Build Status](https://img.shields.io/travis/elpete/cffractal/master.svg?style=flat-square&label=master)](https://travis-ci.org/elpete/cffractal)
+[![Master Branch Build Status](https://img.shields.io/travis/coldbox-modules/cffractal/master.svg?style=flat-square&label=master)](https://travis-ci.org/coldbox-modules/cffractal)
 
 ## Transform business models to JSON data structures. Based on the [Fractal PHP library.](http://fractal.thephpleague.com/)
 
@@ -93,7 +93,8 @@ From [Jon Clausen](https://twitter.com/jclausen):
 
 ```js
 var fractal = new cffractal.models.Manager(
-    new cffractal.models.serializers.DataSerializer()
+    new cffractal.models.serializers.SimpleSerializer(),
+    new cffractal.models.serializers.ResultsMapSerializer()
 );
 
 var book = {
@@ -132,7 +133,7 @@ The manager class is responsible for kicking off the transformation process.  Th
 property name="fractal" inject="Manager@cffractal";
 ```
 
-There are three main functions to call off of fractal.  The first two are just factory functions: `item` and `collection`.  These help you create fractal resources from your models, specify transformers, and set a serializer override.  (You can read all about those terms further down.)
+There are three main functions to call off of fractal.  The first two are just factory functions: `item` and `collection`.  These help you create fractal resources from your models, specify transformers, and set a serializer override for items and collections.  (You can read all about those terms further down.)
 
 > ##### `item`
 
@@ -140,9 +141,9 @@ There are three main functions to call off of fractal.  The first two are just f
 
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
-> | data | any | true | | The data or model to serailize with fractal. |
+> | data | any | true | | The data or model to serialize with fractal. |
 > | transformer | AbstractTransformer or closure | true | | The class or closure that will transform the given data |
-> | serializer | Serializer | false | The default serializer for the Manager | The serializer for the transformed data.  If not provided, uses the default serializer set for the Manager. |
+> | serializer | Serializer | false | The default item serializer for the Manager | The serializer for the transformed data.  If not provided, uses the default item serializer set for the Manager. |
 
 > ##### `collection`
 
@@ -150,9 +151,9 @@ There are three main functions to call off of fractal.  The first two are just f
 
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- |
-> | data | any | true | | The data or model to serailize with fractal. |
+> | data | any | true | | The data or model to serialize with fractal. |
 > | transformer | AbstractTransformer or closure | true | | The class or closure that will transform the given data |
-> | serializer | Serializer | false | The default serializer for the Manager | The serializer for the transformed data.  If not provided, uses the default serializer set for the Manager. |
+> | serializer | Serializer | false | The default collection serializer for the Manager | The serializer for the transformed data.  If not provided, uses the default collection serializer set for the Manager. |
 
 Once you have a resource, you need to create the root scope.  Scopes in `cffractal` represent the nesting level of the resource.  Since resources can include sub-resources, we need a root scope to kick off the serializing process.  You do this through the `createData` method.
 
@@ -199,23 +200,39 @@ A default serializer is configured for the application when creating the Fractal
 
 The current serializer for the Manager can be retrieved at any time by calling `getSerializer`.  Additionally, a new default serializer can be set on the Manager by calling `setSerializer`.
 
-> ##### `getSerializer`
+> ##### `getItemSerializer`
 
-> Retrieves the current default serializer.
+> Retrieves the current default item serializer.
 
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
 > | No arguments |
 
-> ##### `setSerializer`
+> ##### `setItemSerializer`
 
-> Sets a new default serializer for the Manager.
+> Sets a new default item serializer for the Manager.
 
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
-> | serializer | Serializer | true | | The new default serializer for the Manager. |
+> | serializer | Serializer | true | | The new default item serializer for the Manager. |
 
-Also, serializers can be overridden on individual resources.  The API for getting and setting serializers on resources is the same as it is for the Manager.
+> ##### `getCollectionSerializer`
+
+> Retrieves the current default collection serializer.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | No arguments |
+
+> ##### `setCollectionSerializer`
+
+> Sets a new default collection serializer for the Manager.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | serializer | Serializer | true | | The new default collection serializer for the Manager. |
+
+Also, serializers can be overridden on individual resources.  The API for getting and setting serializers on resources is the same as it is for the Manager, but is just `getSerializer` and `setSerializer`, respectively.
 
 ```js
 function includeNotes( task ) {
@@ -667,7 +684,8 @@ The `Builder` component turns code like this:
 
 ```js
 var fractal = new cffractal.models.Manager(
-    new cffractal.models.serializers.DataSerializer()
+    new cffractal.models.serializers.SimpleSerializer(),
+    new cffractal.models.serializers.ResultsMapSerializer()
 );
 
 var book = {
@@ -700,7 +718,8 @@ into code like this:
 
 ```js
 var fractal = new cffractal.models.Manager(
-    new cffractal.models.serializers.DataSerializer()
+    new cffractal.models.serializers.SimpleSerializer(),
+    new cffractal.models.serializers.ResultsMapSerializer()
 );
 
 var book = {

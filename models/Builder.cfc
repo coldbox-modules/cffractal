@@ -14,7 +14,6 @@ component {
     */
     function init( manager ) {
         variables.manager = arguments.manager;
-        variables.serializer = manager.getSerializer();
         variables.includes = "";
         return this;
     }
@@ -101,7 +100,7 @@ component {
             resource = invoke( manager, resourceType, {
                 data = data,
                 transformer = transformer,
-                serializer = serializer
+                serializer = getSerializer()
             } ),
             includes = includes
         ).toStruct();
@@ -114,6 +113,17 @@ component {
     */
     function toJSON() {
         return serializeJSON( toStruct() );
+    }
+
+    private function getSerializer() {
+        if ( ! isNull( serializer ) ) {
+            return serializer;
+        }
+
+        return resourceType == "item" ?
+            manager.getItemSerializer() :
+            manager.getCollectionSerializer();
+
     }
 
 }

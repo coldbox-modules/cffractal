@@ -6,7 +6,8 @@ component extends="testbox.system.BaseSpec" {
                 var builder = prepareMock(
                     new cffractal.models.Builder(
                         new cffractal.models.Manager(
-                            new cffractal.models.serializers.SimpleSerializer()
+                            new cffractal.models.serializers.SimpleSerializer(),
+                            new cffractal.models.serializers.DataSerializer()
                         )
                     )
                 );

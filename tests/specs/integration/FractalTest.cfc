@@ -4,7 +4,7 @@ component extends="testbox.system.BaseSpec" {
         describe( "all the pieces working together", function() {
             beforeEach( function() {
                 variables.dataSerializer = new cffractal.models.serializers.DataSerializer();
-                variables.fractal = new cffractal.models.Manager( dataSerializer );
+                variables.fractal = new cffractal.models.Manager( dataSerializer, dataSerializer );
             } );
 
             describe( "converting models", function() {

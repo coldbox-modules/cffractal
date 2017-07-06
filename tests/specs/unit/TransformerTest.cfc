@@ -1,7 +1,10 @@
 component extends="testbox.system.BaseSpec" {
     
     function beforeAll() {
+        variables.mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
         variables.mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
+        mockFractal.$property( propertyName = "itemSerializer", mock = mockSerializer );
+        mockFractal.$property( propertyName = "collectionSerializer", mock = mockSerializer );
         variables.transformer = new cffractal.models.transformers.AbstractTransformer( mockFractal );
     }
 
@@ -33,8 +36,6 @@ component extends="testbox.system.BaseSpec" {
             } );
 
             it( "returns true if there are any default or available includes", function() {
-                var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
-                mockFractal.$property( propertyName = "serializer", mock = mockSerializer );
                 prepareMock( transformer );
                 expect( transformer.hasIncludes() ).toBeFalse();
                 transformer.$property(

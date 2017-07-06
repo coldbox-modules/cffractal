@@ -20,12 +20,14 @@ component singleton {
     /**
     * Create a new Manager instance.
     *
-    * @serializer The serializer to use to serialize the data.
+    * @itemSerializer       The serializer to use to serialize items.
+    * @collectionSerializer The serializer to use to serialize collections.
     *
-    * @returns    The Fractal Manager.
+    * @returns              The Fractal Manager.
     */
-    function init( serializer ) {
-        variables.serializer = arguments.serializer;
+    function init( itemSerializer, collectionSerializer ) {
+        variables.itemSerializer = arguments.itemSerializer;
+        variables.collectionSerializer = arguments.collectionSerializer;
         return this;
     }
 
@@ -44,24 +46,45 @@ component singleton {
     }
 
     /**
-    * Sets a new serializer to use to serialize the data.
+    * Sets a new serializer to use to serialize items.
     *
-    * @serializer The serializer to use to serialize the data.
+    * @serializer The serializer to use to serialize items.
     *
     * @returns The Fractal Manager.
     */
-    function setSerializer( serializer ) {
-        variables.serializer = arguments.serializer;
+    function setCollectionSerializer( serializer ) {
+        variables.collectionSerializer = arguments.serializer;
         return this;
     }
 
     /**
-    * Gets the currently set serializer.
+    * Gets the currently set serializer for items.
     *
-    * @returns The current serializer.
+    * @returns The current serializer for items.
     */
-    function getSerializer() {
-        return variables.serializer;
+    function getCollectionSerializer() {
+        return variables.collectionSerializer;
+    }
+
+    /**
+    * Sets a new serializer to use to serialize collections.
+    *
+    * @serializer The serializer to use to serialize collections.
+    *
+    * @returns The Fractal Manager.
+    */
+    function setItemSerializer( serializer ) {
+        variables.itemSerializer = arguments.serializer;
+        return this;
+    }
+
+    /**
+    * Gets the currently set serializer for collections.
+    *
+    * @returns The current serializer for collections.
+    */
+    function getItemSerializer() {
+        return variables.itemSerializer;
     }
 
     /**
@@ -90,7 +113,7 @@ component singleton {
     *
     * @returns     A new cffractal Item wrapping the given data and transformer.
     */
-    function item( data, transformer, serializer = variables.serializer ) {
+    function item( data, transformer, serializer = variables.itemSerializer ) {
         return new cffractal.models.resources.Item( argumentCollection = arguments );
     }
 
@@ -103,7 +126,7 @@ component singleton {
     *
     * @returns     A new cffractal Collection wrapping the given data and transformer.
     */
-    function collection( data, transformer, serializer = variables.serializer ) {
+    function collection( data, transformer, serializer = variables.collectionSerializer ) {
         return new cffractal.models.resources.Collection( argumentCollection = arguments );
     }
 
