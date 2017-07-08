@@ -25,7 +25,7 @@ component extends="testbox.system.BaseSpec" {
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockItem );
-                        expect( scope.toStruct() ).toBe( { "data" = data } );
+                        expect( scope.convert() ).toBe( { "data" = data } );
                     } );
 
                     it( "with a custom transformer", function() {
@@ -46,7 +46,7 @@ component extends="testbox.system.BaseSpec" {
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockItem );
-                        expect( scope.toStruct() ).toBe( { "data" = data } );
+                        expect( scope.convert() ).toBe( { "data" = data } );
                     } );
                 } );
 
@@ -68,7 +68,7 @@ component extends="testbox.system.BaseSpec" {
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockCollection );
-                        expect( scope.toStruct() ).toBe( { "data" = data } );
+                        expect( scope.convert() ).toBe( { "data" = data } );
                     } );
 
                     it( "with a custom transformer", function() {
@@ -90,7 +90,7 @@ component extends="testbox.system.BaseSpec" {
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockCollection );
-                        expect( scope.toStruct() ).toBe( { "data" = data } );
+                        expect( scope.convert() ).toBe( { "data" = data } );
                     } );
                 } );
             } );

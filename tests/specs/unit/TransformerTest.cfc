@@ -62,7 +62,7 @@ component extends="testbox.system.BaseSpec" {
                 prepareMock( transformer );
                 transformer.$( "includeAuthor" ).$args( mockItem ).$results( { "foo" = "bar" } );
                 var mockChildScope = getMockBox().createMock( "cffractal.models.Scope" );
-                mockChildScope.$( "toStruct", { "foo" = "bar" } );
+                mockChildScope.$( "convert", { "foo" = "bar" } );
                 mockScope.$( "embedChildScope" ).$args( "author", { "foo" = "bar" } ).$results( mockChildScope );
                 transformer.$property(
                     propertyName = "availableIncludes",

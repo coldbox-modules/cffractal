@@ -70,7 +70,7 @@ component {
     *
     * @returns The transformed and serialized data.
     */
-    function toStruct() {
+    function convert() {
         var serializer = resource.getSerializer();
 
         var serializedData = serializer.data( resource, this );
@@ -98,7 +98,7 @@ component {
     * @returns The transformed and serialized data as json.
     */
     function toJSON() {        
-        return serializeJSON( toStruct() );
+        return serializeJSON( convert() );
     }
 
     /**

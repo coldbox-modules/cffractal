@@ -19,7 +19,7 @@ component extends="testbox.system.BaseSpec" {
                 builder
                     .item( { id = 1, name = "John" } )
                     .withTransformer( "MyWireBoxSlug" )
-                    .toStruct();
+                    .convert();
 
                 var wireboxCallLog = mockWireBox.$callLog();
                 expect( wireboxCallLog ).toBeStruct();

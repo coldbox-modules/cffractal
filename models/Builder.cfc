@@ -95,7 +95,7 @@ component {
     *
     * @returns The transformed data.
     */
-    function toStruct() {
+    function convert() {
         return manager.createData(
             resource = invoke( manager, resourceType, {
                 data = data,
@@ -103,7 +103,7 @@ component {
                 serializer = getSerializer()
             } ),
             includes = includes
-        ).toStruct();
+        ).convert();
     }
 
     /**
@@ -112,7 +112,7 @@ component {
     * @returns The transformed data as JSON.
     */
     function toJSON() {
-        return serializeJSON( toStruct() );
+        return serializeJSON( convert() );
     }
 
     private function getSerializer() {

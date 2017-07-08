@@ -30,7 +30,7 @@ fractal.createData(
         transformer = getInstance( "BookTransformer" )
     ),
     includes = "author"
-).toStruct();
+).convert();
 
 // or
 
@@ -38,7 +38,7 @@ fractal.builder()
     .collection( books )
     .withTransformer( "BookTransformer" )
     .withIncludes( "author" )
-    .toStruct();
+    .convert();
 ```
 
 Here's some more in-depth reasons:
@@ -167,7 +167,7 @@ Once you have a resource, you need to create the root scope.  Scopes in `cffract
 > | includes | string | false | "" (empty string) | A list of includes identifiers for the serialization. |
 > | identifier | string | false | "" (empty string) | The identifier for the current scope.  Defaults to "" (empty string), also know as the root scope. |
 
-The return value is a Scope object.  To finish up the serialization process, we need to call `toStruct` or `toJSON` on this object.  But before we get to that, let's review the options that go in to the serialization process.
+The return value is a Scope object.  To finish up the serialization process, we need to call `convert` or `toJSON` on this object.  But before we get to that, let's review the options that go in to the serialization process.
 
 #### Serializers
 
@@ -734,7 +734,7 @@ var result = fractal.builder()
     .withTransformer( "BookTransformer" )
     .withSerializer( "SimpleSerializer" )
     .withIncludes( "author" )
-    .toStruct();
+    .convert();
 
 // {"data":{"id":1,"title":"To Kill A Mockingbird","author":{"name":"Harper Lee","year":"1926"},"links":{"uri":"/books/1"}}}
 ```
@@ -785,7 +785,7 @@ The `Builder` has the following methods:
 > | --- | --- | --- | --- | --- | 
 > | includes | any | true | | The includes for the transformation. |
 > 
-> ##### `toStruct`
+> ##### `convert`
 
 > Transforms the data using the set properties through the fractal manager.
 
