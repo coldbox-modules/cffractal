@@ -5,6 +5,8 @@ component {
     */
     property name="wirebox" inject="wirebox";
 
+    variables.meta = {};
+
     /**
     * Creates a new builder instance for fluent fractal transformations.
     *
@@ -91,17 +93,38 @@ component {
     }
 
     /**
+    * Sets the pagination struct for the resource.
+    *
+    * @pagination The pagination struct.
+    *
+    * @returns    The fractal builder.
+    */
+    function withPagination( pagination ) {
+        withMeta( "pagination", pagination );
+        return this;
+    }
+
+    /**
+    * Adds a key / value pair to the metadata for the resource.
+    *
+    * @key     The metadata key.
+    * @value   The metadata value.
+    *
+    * @returns The fractal builder.
+    */
+    function withMeta( key, value ) {
+        meta[ key ] = value;
+        return this;
+    }
+
+    /**
     * Transforms the data using the set properties through the fractal manager.
     *
     * @returns The transformed data.
     */
     function convert() {
         return manager.createData(
-            resource = invoke( manager, resourceType, {
-                data = data,
-                transformer = transformer,
-                serializer = getSerializer()
-            } ),
+            resource = createResource(),
             includes = includes
         ).convert();
     }
@@ -115,6 +138,41 @@ component {
         return serializeJSON( convert() );
     }
 
+    /**
+    * Creates a resource instance using the builder state,
+    * complete with metadata.
+    *
+    * @returns The newly created resource instance.
+    */
+    private function createResource() {
+        return addMetadata(
+            invoke( manager, resourceType, {
+                data = data,
+                transformer = transformer,
+                serializer = getSerializer()
+            } )
+        );
+    }
+
+    /**
+    * Adds metadata to a resource instance,
+    *
+    * @resource A resource instance
+    *
+    * @returns  The resource instance with added metadata.
+    */
+    private function addMetadata( resource ) {
+        structEach( meta, function( key, value ) {
+            resource.addMeta( key, value );
+        } );
+        return resource;
+    }
+
+    /**
+    * Returns the specified serailzer or a default serializer, as needed.
+    *
+    * @returns  The specified or default serializer.
+    */
     private function getSerializer() {
         if ( ! isNull( serializer ) ) {
             return serializer;
@@ -123,7 +181,6 @@ component {
         return resourceType == "item" ?
             manager.getItemSerializer() :
             manager.getCollectionSerializer();
-
     }
 
 }

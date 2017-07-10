@@ -243,8 +243,7 @@ component extends="testbox.system.BaseSpec" {
                     } );
 
                     describe( "pagination", function() {
-                        // not sure how to do this yet.
-                        xit( "returns pagination data in a meta field", function() {
+                        it( "returns pagination data in a meta field", function() {
                             var books = [
                                 new tests.resources.Book( {
                                     id = 1,
@@ -261,7 +260,12 @@ component extends="testbox.system.BaseSpec" {
                             var result = fractal.builder()
                                 .collection( books )
                                 .withTransformer( new tests.resources.BookTransformer( fractal ) )
-                                .withPagination()
+                                .withPagination( {
+                                    "maxrows": 50,
+                                    "page": 2,
+                                    "pages": 3,
+                                    "totalRecords": 112
+                                } )
                                 .convert();
 
                             expect( result ).toBe( {
@@ -283,6 +287,53 @@ component extends="testbox.system.BaseSpec" {
                                         "page": 2,
                                         "pages": 3,
                                         "totalRecords": 112
+                                    }
+                                }
+                            } );
+                        } );
+                    } );
+
+                    describe( "meta", function() {
+                        it( "returns meta data in a meta field", function() {
+                            var books = [
+                                new tests.resources.Book( {
+                                    id = 1,
+                                    title = "To Kill a Mockingbird",
+                                    year = "1960"
+                                } ),
+                                new tests.resources.Book( {
+                                    id = 2,
+                                    title = "A Tale of Two Cities",
+                                    year = "1859"
+                                } )
+                            ];
+
+                            var result = fractal.builder()
+                                .collection( books )
+                                .withTransformer( new tests.resources.BookTransformer( fractal ) )
+                                .withMeta( "links", {
+                                    "next": "https://example.com/api/v1/books/?page=3",
+                                    "previous": "https://example.com/api/v1/books/?page=1"
+                                } )
+                                .convert();
+
+                            expect( result ).toBe( {
+                                "data": [
+                                    {
+                                        "id": 1,
+                                        "title": "To Kill a Mockingbird",
+                                        "year": 1960
+                                    },
+                                    {
+                                        "id": 2,
+                                        "title": "A Tale of Two Cities",
+                                        "year": 1859
+                                    }
+                                ],
+                                "meta": {
+                                    "links": {
+                                        "next": "https://example.com/api/v1/books/?page=3",
+                                        "previous": "https://example.com/api/v1/books/?page=1"
                                     }
                                 }
                             } );
