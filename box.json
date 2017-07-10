@@ -1,8 +1,8 @@
 {
     "name":"cffractal",
-    "version":"3.0.0",
+    "version":"3.1.0",
     "author":"Eric Peterson",
-    "location":"coldbox-modules/cffractal#v3.0.0",
+    "location":"coldbox-modules/cffractal#v3.1.0",
     "homepage":"https://github.com/coldbox-modules/cffractal",
     "documentation":"https://github.com/coldbox-modules/cffractal",
     "repository":{
