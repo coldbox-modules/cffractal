@@ -84,7 +84,7 @@ component {
         }
 
         if ( resource.hasMeta() ) {
-            structAppend( serializedData, serializer.meta( resource, this ) );
+            structAppend( serializedData, serializer.meta( resource, this ), true );
         }
 
         return serializedData;

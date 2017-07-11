@@ -25,7 +25,7 @@ component singleton {
     * @response The metadata nested under a "meta" key.
     */
     function meta( resource, scope ) {
-        return { "meta" = resource.getMeta() };
+        return resource.getMeta();
     }
 
 }
