@@ -93,8 +93,8 @@ From [Jon Clausen](https://twitter.com/jclausen):
 
 ```js
 var fractal = new cffractal.models.Manager(
-    new cffractal.models.serializers.SimpleSerializer(),
-    new cffractal.models.serializers.ResultsMapSerializer()
+    itemSerializer = new cffractal.models.serializers.SimpleSerializer(),
+    collectionSerializer = new cffractal.models.serializers.ResultsMapSerializer()
 );
 
 var book = {
@@ -340,19 +340,19 @@ You can create a resource either from the `Manager` or from inside a `Transforme
 > #### API
 
 > ##### `item`
-
+>
 > Creates a new `Item` resource.
-
+>
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
 > | data | any | true | | The model to transform. |
 > | transformer | any | true | | The transformer for the given model. |
 > | serializer | Serializer | false | The default serializer on the Manager. | The serializer to use when serializing the data. |
-> 
+ 
 > ##### `collection`
-
+>
 > Creates a new `Collection` resource.
-
+>
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
 > | data | any | true | | The model to transform. |
@@ -362,6 +362,107 @@ You can create a resource either from the `Manager` or from inside a `Transforme
 ##### Specifying Custom Serializers
 
 As mentioned above, individual resources can have their serializer overridden.  This is useful if you only want one scope level to be serialized in a certain fashion (say, with the `DataSerializer`), and the rest to be serialized differently (say, with the `SimpleSerializer`).
+
+You can retrieve and set the custom serializers right from the resource.
+
+> ##### `getSerializer`
+>
+> Returns the current serializer for the resource.
+>
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | No arguments |
+ 
+> ##### `setSerializer`
+>
+> Sets the serializer for the resource.
+>
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | serializer | Serializer | true | | The serializer to associate with this specific resource. |
+
+##### Metadata
+
+CFFractal has a convention for metadata that allows the resource to add metadata items individually that are later combined through a serializer.  For instance, the `SimpleSerializer` adds all metadata fields directly on the transformed object.  The `DataSerializer` instead nests all of the metadata under a `meta` key. (See the serializer section for more details.)
+
+You can add metadata directly on a resource instance.  The following metadata functions are available:
+
+> ##### `addMeta`
+>
+> Adds some data under a given identifier in the metadata.
+>
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | key | string | true | | The key to nest the data under in the metadata scope. |
+> | value | any | true | | The data to store under the given key. |
+ 
+> ##### `hasMeta`
+>
+> Returns whether the resource has any metadata associated with it.
+>
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | No arguments. |
+
+> ##### `getMeta`
+>
+> Returns the current metadata scope.
+>
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | No arguments. |
+
+##### Post-Transformation Callbacks
+
+A powerful feature of CFFractal is the ability to add post-transformation callbacks that will fire after transforming each item.  For an `item` resource, that means it will fire the callback once.  For a `collection` resource, the callback will be fired for each item in the collection.
+
+Here's an example of a post-transformation function:
+
+```js
+// handlers/api/v1/books.cfc
+component {
+
+    this.API_BASE_URL = "/api/v1/books";
+
+    function index( event, rc, prc ) {
+        var books = fractal.collection(
+            BookService.getAll(),
+            function( book ) {
+                return {
+                    "id" = book.getId(),
+                    "title" = book.getName(),
+                    "yearPublished" = dateFormat( book.getPublishedDate(), "YYYY" )
+                };
+            }
+        );
+        
+        books.addPostTransformationCallback( function( transformed, original, collection ) {
+            transformed.href = this.API_BASE_URL & "/" & transformed.id;
+            return transformed;
+        } );
+
+        var scope = fractal.createData( books );
+
+        prc.response.setData(
+            scope.convert();
+        );
+    }
+
+}
+```
+
+Using a post-transformation callback, we are able to encapsulate data about the API version without coupling it to the transformer itself.  Sweet!
+
+There are countless more usages here.  **The key thing to note is that the value returned from the callback becomes the new transformed item.**  The function API is as follows:
+
+> ##### `addPostTransformationCallback`
+>
+> Add a post transformation callback to run after transforming each item.
+> The value returned from the callback becomes the transformed item.
+>
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | callback | Callable | true | | A callback to run after the resource has been transformed. The callback will be passed the transformed data, the original data, and the resource object as arguments. |
 
 #### Transformers
 
@@ -684,8 +785,8 @@ The `Builder` component turns code like this:
 
 ```js
 var fractal = new cffractal.models.Manager(
-    new cffractal.models.serializers.SimpleSerializer(),
-    new cffractal.models.serializers.ResultsMapSerializer()
+    itemSerializer = new cffractal.models.serializers.SimpleSerializer(),
+    collectionSerializer = new cffractal.models.serializers.ResultsMapSerializer()
 );
 
 var book = {
@@ -718,8 +819,8 @@ into code like this:
 
 ```js
 var fractal = new cffractal.models.Manager(
-    new cffractal.models.serializers.SimpleSerializer(),
-    new cffractal.models.serializers.ResultsMapSerializer()
+    itemSerializer = new cffractal.models.serializers.SimpleSerializer(),
+    collectionSerializer = new cffractal.models.serializers.ResultsMapSerializer()
 );
 
 var book = {
@@ -746,57 +847,82 @@ The `Builder` has the following methods:
 > #### API
 
 > ##### `item`
-
+>
 > Sets the `Item` resource to be transformed.
-
+>
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
 > | data | any | true | | The model to transform. |
-> 
+
 > ##### `collection`
-
+>
 > Sets the `Collection` resource to be transformed.
-
+>
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
 > | data | any | true | | The model to transform. |
 
 > ##### `withTransformer`
-
+>
 > Sets the transformer to use. If the transformer is a simple value, the Builder will treat it as a WireBox binding.
-
+>
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
 > | transformer | any | true | | The transformer to use. |
-> 
+
 > ##### `withSerializer`
-
+>
 > Sets the serializer to use. If the serializer is a simple value, the Builder will treat it as a WireBox binding.
-
+>
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
 > | serializer | any | true | | The serializer to use. |
-> 
+
 > ##### `withIncludes`
-
+>
 > Sets the includes for the transformation.
-
+>
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
 > | includes | any | true | | The includes for the transformation. |
-> 
+
+> ##### `withMeta`
+>
+> Adds a key / value pair to the metadata for the resource.
+>
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | key | string | true | | The metadata key. |
+> | value | any | true | | The metadata value. |
+
+> ##### `withPagination`
+>
+> Sets the pagination metadata for the resource.
+>
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | pagination | any | true | | The pagination metadata. |
+
+> ##### `withItemCallback`
+>
+> Add a callback to be called after each item is transformed.
+>
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | callback | Callable | true | | The callback to run after each item has been transformed. The callback will be passed the transformed data, the original data, and the resource object as arguments. |
+
 > ##### `convert`
-
+>
 > Transforms the data using the set properties through the fractal manager.
-
+>
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
 > | No arguments |
-> 
+
 > ##### `toJSON`
-
+>
 > Transform the data through cffractal and then serialize it to JSON.
-
+>
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
 > | No arguments |
