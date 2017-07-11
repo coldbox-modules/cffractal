@@ -21,9 +21,9 @@ component extends="testbox.system.BaseSpec" {
                 var mockTransformer = getMockBox().createMock( "cffractal.models.transformers.AbstractTransformer" );
                 mockTransformer.$( "transform" ).$args( javacast( "null", "" ) ).$results( [] );
                 mockTransformer.$( "hasIncludes", false );
-                var item = new cffractal.models.resources.Collection( javacast( "null", "" ), mockTransformer, mockSerializer );
+                var collection = new cffractal.models.resources.Collection( javacast( "null", "" ), mockTransformer, mockSerializer );
                 
-                var transformedData = item.process( mockScope );
+                var transformedData = collection.process( mockScope );
 
                 expect( transformedData ).toBe( [] );
             } );

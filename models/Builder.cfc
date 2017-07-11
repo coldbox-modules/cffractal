@@ -5,7 +5,15 @@ component {
     */
     property name="wirebox" inject="wirebox";
 
+    /**
+    * The metadata struct to add to the resource.
+    */
     variables.meta = {};
+
+    /**
+    * The post-transformation callbacks to add to the resource.
+    */
+    variables.postTransformationCallbacks = [];
 
     /**
     * Creates a new builder instance for fluent fractal transformations.
@@ -93,9 +101,9 @@ component {
     }
 
     /**
-    * Sets the pagination struct for the resource.
+    * Sets the pagination metadata for the resource.
     *
-    * @pagination The pagination struct.
+    * @pagination The pagination metadata.
     *
     * @returns    The fractal builder.
     */
@@ -118,15 +126,30 @@ component {
     }
 
     /**
+    * Add a callback to be called after each item is transformed.
+    *
+    * @callback The callback to run after each item has been transformed.
+    *           The callback will be passed the transformed data, the
+    *           original data, and the resource object as arguments.
+    *
+    * @returns  The fractal builder
+    */
+    function withItemCallback( callback ) {
+        arrayAppend( postTransformationCallbacks, callback );
+        return this;
+    }
+
+    /**
     * Transforms the data using the set properties through the fractal manager.
     *
     * @returns The transformed data.
     */
     function convert() {
-        return manager.createData(
-            resource = createResource(),
-            includes = includes
-        ).convert();
+        var resource = createResource();
+        for ( var callback in postTransformationCallbacks ) {
+            resource.addPostTransformationCallback( callback );
+        }
+        return manager.createData( resource, includes ).convert();
     }
 
     /**

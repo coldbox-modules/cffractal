@@ -293,6 +293,49 @@ component extends="testbox.system.BaseSpec" {
                         } );
                     } );
 
+                    describe( "postTransformationCallbacks", function() {
+                        it( "can run a callback for each item in a collection", function() {
+                            var books = [
+                                new tests.resources.Book( {
+                                    id = 1,
+                                    title = "To Kill a Mockingbird",
+                                    year = "1960"
+                                } ),
+                                new tests.resources.Book( {
+                                    id = 2,
+                                    title = "A Tale of Two Cities",
+                                    year = "1859"
+                                } )
+                            ];
+
+                            var result = fractal.builder()
+                                .collection( books )
+                                .withTransformer( new tests.resources.BookTransformer( fractal ) )
+                                .withItemCallback( function( transformed, original, resource ) {
+                                    transformed.href = "/api/v1/books/#transformed.id#";
+                                    return transformed;
+                                } )
+                                .convert();
+
+                            expect( result ).toBe( {
+                                "data": [
+                                    {
+                                        "id": 1,
+                                        "title": "To Kill a Mockingbird",
+                                        "year": 1960,
+                                        "href": "/api/v1/books/1"
+                                    },
+                                    {
+                                        "id": 2,
+                                        "title": "A Tale of Two Cities",
+                                        "year": 1859,
+                                        "href": "/api/v1/books/2"
+                                    }
+                                ]
+                            } );
+                        } );
+                    } );
+
                     describe( "meta", function() {
                         it( "returns meta data in a meta field", function() {
                             var books = [

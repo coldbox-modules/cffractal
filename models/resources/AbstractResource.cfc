@@ -27,6 +27,12 @@ component {
     property name="pagingData";
 
     /**
+    * An array of post-transformation callbacks to run
+    * on each item after it has been transformed.
+    */
+    variables.postTransformationCallbacks = [];
+
+    /**
     * Creates a new cffractal resource.
     *
     * @data        The data to be transformed into serializable data.
@@ -77,20 +83,24 @@ component {
         );
 
         if ( isClosure( transformer ) || isCustomFunction( transformer ) ) {
-            return transformedData;
+            return isNull( transformedData ) ? javacast( "null", "" ) : transformedData;
         }
 
         if ( ! transformer.hasIncludes() ) {
-            return transformedData;
+            return isNull( transformedData ) ? javacast( "null", "" ) : transformedData;
         }
 
         var includedData = transformer.processIncludes( scope, item );
 
         for ( var includedDataSet in includedData ) {
-            structAppend( transformedData, includedDataSet, true /* overwrite */ );
+            structAppend(
+                isNull( transformedData ) ? {} : transformedData,
+                includedDataSet,
+                true /* overwrite */
+            );
         }
 
-        return transformedData;    
+        return isNull( transformedData ) ? javacast( "null", "" ) : transformedData;
     }
 
     /**
@@ -126,13 +136,13 @@ component {
     /**
     * Adds some data under a given identifier in the metadata.
     *
-    * @identifier The identifier to nest the data under in the metadata scope.
-    * @data       The data to store under the given identifier.
+    * @key     The key to nest the data under in the metadata scope.
+    * @value   The data to store under the given key.
     *
-    * @returns    The resource instance.
+    * @returns The resource instance.
     */
-    function addMeta( identifier, data ) {
-        variables.meta[ identifier ] = data;
+    function addMeta( key, value ) {
+        variables.meta[ key ] = value;
         return this;
     }
 
@@ -173,6 +183,21 @@ component {
     */
     function hasPagingData() {
         return ! isNull( variables.pagingData );
+    }
+
+    /**
+    * Add a post transformation callback to run after transforming each item.
+    * The value returned from the callback becomes the transformed item.
+    *
+    * @callback A callback to run after the resource has been transformed.
+    *           The callback will be passed the transformed data, the
+    *           original data, and the resource object as arguments.
+    *
+    * @returns  The resource instance.
+    */
+    function addPostTransformationCallback( callback ) {
+        arrayAppend( postTransformationCallbacks, callback );
+        return this;
     }
 
     /**

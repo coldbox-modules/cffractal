@@ -15,7 +15,20 @@ component extends="cffractal.models.resources.AbstractResource" {
     * @returns The transformed data. 
     */
     function process( scope ) {
-        return processItem( scope, isNull( data ) ? javacast( "null", "" ) : data );
+        var transformedItem = processItem(
+            scope,
+            isNull( data ) ? javacast( "null", "" ) : data
+        );
+
+        arrayEach( postTransformationCallbacks, function( callback ) {
+            transformedItem = callback(
+                isNull( transformedItem ) ? javacast( "null", "" ) : transformedItem,
+                isNull( data ) ? javacast( "null", "" ) : data,
+                this
+            );
+        } );
+
+        return isNull( transformedItem ) ? javacast( "null", "" ) : transformedItem;
     }
 
     /**
