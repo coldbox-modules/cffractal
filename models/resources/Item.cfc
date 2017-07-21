@@ -21,14 +21,17 @@ component extends="cffractal.models.resources.AbstractResource" {
         );
 
         arrayEach( postTransformationCallbacks, function( callback ) {
-            transformedItem = callback(
-                isNull( transformedItem ) ? javacast( "null", "" ) : transformedItem,
-                isNull( data ) ? javacast( "null", "" ) : data,
-                this
+            transformedItem = paramNull(
+                callback(
+                    transformedItem,
+                    isNull( data ) ? javacast( "null", "" ) : data,
+                    this
+                ),
+                scope.getNullDefaultValue()
             );
         } );
 
-        return isNull( transformedItem ) ? javacast( "null", "" ) : transformedItem;
+        return transformedItem;
     }
 
     /**

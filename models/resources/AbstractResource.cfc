@@ -77,10 +77,15 @@ component {
     * @returns The transformed data. 
     */
     function processItem( scope, item ) {
-        var transformedData = transformData(
-            transformer,
-            isNull( item ) ? javacast( "null", "" ) : item
-        );
+        if ( isNull( item ) ) {
+            return scope.getNullDefaultValue();
+        }
+
+        var transformedData = transformData( transformer, item );
+
+        if ( isNull( transformedData ) ) {
+            return scope.getNullDefaultValue();
+        }
 
         if ( isClosure( transformer ) || isCustomFunction( transformer ) ) {
             return isNull( transformedData ) ? javacast( "null", "" ) : transformedData;
@@ -90,7 +95,10 @@ component {
             return isNull( transformedData ) ? javacast( "null", "" ) : transformedData;
         }
 
-        var includedData = transformer.processIncludes( scope, item );
+        var includedData = transformer.processIncludes(
+            scope,
+            item
+        );
 
         for ( var includedDataSet in includedData ) {
             structAppend(
@@ -213,6 +221,16 @@ component {
         return isClosure( transformer ) || isCustomFunction( transformer ) ?
             transformer( isNull( item ) ? javacast( "null", "" ) : item ) :
             transformer.transform( isNull( item ) ? javacast( "null", "" ) : item );
+    }
+
+    /**
+    * Returns the original value if it is not null.
+    * Otherwise, returns the manager null default value.
+    *
+    * @returns The original value, if not null, or the manager default null value.
+    */
+    private function paramNull( value, defaultValue ) {
+        return isNull( value ) ? defaultValue : value;
     }
 
 }

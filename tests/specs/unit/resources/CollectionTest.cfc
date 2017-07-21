@@ -17,6 +17,7 @@ component extends="testbox.system.BaseSpec" {
             it( "can add postTransformationCallbacks", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$( "getNullDefaultValue", {} );
                 var collection = new cffractal.models.resources.Collection( [
                     { "foo" = "bar" },
                     { "foo" = "baz" },
@@ -41,9 +42,10 @@ component extends="testbox.system.BaseSpec" {
                 expect( callbackCalled ).toBeTrue( "Callback was never called" );
             } );
 
-            it( "it processes nulls in postTransformationCallbacks correctly", function() {
+            it( "it never calls the postTransformationCallbacks if the data is null", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$( "getNullDefaultValue", {} );
                 var collection = new cffractal.models.resources.Collection(
                     javacast( "null", "" ),
                     function( item ) {
@@ -52,18 +54,16 @@ component extends="testbox.system.BaseSpec" {
                     mockSerializer
                 );
 
-                var callbackCalled = false;
+                var callbackNeverCalled = true;
 
                 collection.addPostTransformationCallback( function( itemStruct, itemInstance ) {
-                    expect( isNull( itemStruct ) ).toBeTrue();
-                    expect( isNull( itemInstance ) ).toBeTrue();
-                    callbackCalled = true;
+                    callbackNeverCalled = false;
                     return {};
                 } );
                 
                 collection.process( mockScope );
 
-                expect( callbackCalled ).toBeTrue( "Callback was never called" );
+                expect( callbackNeverCalled ).toBeTrue( "Callback should never have been called" );
             } );
 
             describe( "can get the transformer from an collection resource", function() {

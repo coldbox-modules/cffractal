@@ -5,7 +5,7 @@
 *              the api transformation process.  It creates the root
 *              scope and serializes the transformed value.
 */
-component singleton {
+component singleton accessors="true" {
 
     /**
     * The WireBox injector
@@ -13,21 +13,33 @@ component singleton {
     property name="wirebox" inject="wirebox";
 
     /**
+    * The default item serializer.
+    */
+    property name="itemSerializer";
+
+    /**
+    * The default collection serializer.
+    */
+    property name="collectionSerializer";
+
+    /**
     * The serializer instance.
     */
-    property name="serializer";
+    property name="nullDefaultValue";
 
     /**
     * Create a new Manager instance.
     *
     * @itemSerializer       The serializer to use to serialize items.
     * @collectionSerializer The serializer to use to serialize collections.
+    * @nullDefaultValue     The default value to use when encountering nulls.
     *
     * @returns              The Fractal Manager.
     */
-    function init( itemSerializer, collectionSerializer ) {
+    function init( itemSerializer, collectionSerializer, nullDefaultValue = "" ) {
         variables.itemSerializer = arguments.itemSerializer;
         variables.collectionSerializer = arguments.collectionSerializer;
+        variables.nullDefaultValue = arguments.nullDefaultValue;
         return this;
     }
 
@@ -43,48 +55,6 @@ component singleton {
         else {
             return new cffractal.models.Builder( this );
         }
-    }
-
-    /**
-    * Sets a new serializer to use to serialize items.
-    *
-    * @serializer The serializer to use to serialize items.
-    *
-    * @returns The Fractal Manager.
-    */
-    function setCollectionSerializer( serializer ) {
-        variables.collectionSerializer = arguments.serializer;
-        return this;
-    }
-
-    /**
-    * Gets the currently set serializer for items.
-    *
-    * @returns The current serializer for items.
-    */
-    function getCollectionSerializer() {
-        return variables.collectionSerializer;
-    }
-
-    /**
-    * Sets a new serializer to use to serialize collections.
-    *
-    * @serializer The serializer to use to serialize collections.
-    *
-    * @returns The Fractal Manager.
-    */
-    function setItemSerializer( serializer ) {
-        variables.itemSerializer = arguments.serializer;
-        return this;
-    }
-
-    /**
-    * Gets the currently set serializer for collections.
-    *
-    * @returns The current serializer for collections.
-    */
-    function getItemSerializer() {
-        return variables.itemSerializer;
     }
 
     /**

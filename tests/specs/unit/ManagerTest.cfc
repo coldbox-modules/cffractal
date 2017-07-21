@@ -45,6 +45,22 @@ component extends="testbox.system.BaseSpec" {
                         .toBeInstanceOf( "cffractal.models.serializers.ResultsMapSerializer" );
                 } );
             } );
+
+            describe( "null default value", function() {
+                it( "defaults to an empty string", function() {
+                    expect( fractal.getNullDefaultValue() ).toBe( "" );
+                } );
+
+                it( "can set a new null default value", function() {
+                    fractal.setNullDefaultValue( {} );
+                    expect( fractal.getNullDefaultValue() ).toBe( {} );
+                } );
+
+                it( "can set a the null default value as null", function() {
+                    fractal.setNullDefaultValue( javacast( "null", "" ) );
+                    expect( fractal.getNullDefaultValue() ).toBeNull();
+                } );
+            } );
         } );
     }
 

@@ -14,6 +14,7 @@ component extends="testbox.system.BaseSpec" {
             it( "can add postTransformationCallbacks", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$( "getNullDefaultValue", {} );
                 var item = new cffractal.models.resources.Item( {
                     "foo" = "bar"
                 }, function( item ) {
@@ -36,9 +37,10 @@ component extends="testbox.system.BaseSpec" {
                 expect( callbackCalled ).toBeTrue( "Callback was never called" );
             } );
 
-            it( "it processes nulls in postTransformationCallbacks correctly", function() {
+            it( "it processes nulls in postTransformationCallbacks correctly using the manager null default value", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$( "getNullDefaultValue", {} );
                 var item = new cffractal.models.resources.Item( 
                     javacast( "null", "" ),
                     function( item ) {

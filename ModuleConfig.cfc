@@ -30,6 +30,10 @@ component {
             .initArg(
                 name = "collectionSerializer",
                 ref = "#moduleMapping#.models.serializers.#settings.defaultCollectionSerializer#"
+            )
+            .initArg(
+                name = "nullDefaultValue",
+                value = settings.nullDefaultValue
             );
 
         binder.map( "Builder@cffractal" )

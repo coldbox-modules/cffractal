@@ -4,7 +4,118 @@ component extends="testbox.system.BaseSpec" {
         describe( "all the pieces working together", function() {
             beforeEach( function() {
                 variables.dataSerializer = new cffractal.models.serializers.DataSerializer();
-                variables.fractal = new cffractal.models.Manager( dataSerializer, dataSerializer );
+                variables.fractal = new cffractal.models.Manager( dataSerializer, dataSerializer, {} );
+            } );
+
+            describe( "null default values", function() {
+                it( "returns the null default value if the resource is null for items", function() {
+                    var resource = fractal.item( javacast( "null", "" ), function( doesntMatter ) {
+                        return {
+                            "should" = "never",
+                            "get" = "called"
+                        };
+                    } );
+
+                    var scope = fractal.createData( resource );
+                    expect( scope.convert() ).toBe( {"data":{}} );
+                } );
+
+                it( "returns an empty array if the resource is null for collections", function() {
+                    var resource = fractal.collection( javacast( "null", "" ), function( doesntMatter ) {
+                        return {
+                            "should" = "never",
+                            "get" = "called"
+                        };
+                    } );
+
+                    var scope = fractal.createData( resource );
+                    expect( scope.convert() ).toBe( {"data":[]} );
+                } );
+
+                it( "returns the null default value if the transformed result is null", function() {
+                    var book = new tests.resources.Book( {
+                        id = 1,
+                        title = "To Kill a Mockingbird",
+                        year = "1960"
+                    } );
+
+                    var resource = fractal.item( book, function( book ) {
+                        return javacast( "null", "" );
+                    } );
+
+                    var scope = fractal.createData( resource );
+                    expect( scope.convert() ).toBe( {"data":{}} );
+                } );
+
+                it( "returns the null default value if the result from a postTransformationCallback is null for items", function() {
+                    var book = new tests.resources.Book( {
+                        id = 1,
+                        title = "To Kill a Mockingbird",
+                        year = "1960"
+                    } );
+
+                    var resource = fractal.item( book, function( book ) {
+                        return {
+                            "id" = book.getId(),
+                            "title" = book.getTitle(),
+                            "year" = book.getYear()
+                        };
+                    } );
+
+                    resource.addPostTransformationCallback( function( book ) {
+                        return javacast( "null", "" );
+                    } );
+
+                    var scope = fractal.createData( resource );
+                    expect( scope.convert() ).toBe( {"data":{}} );
+                } );
+
+                it( "returns the null default value if the result from a postTransformationCallback is null for collections", function() {
+                    var books = [
+                        new tests.resources.Book( {
+                            id = 1,
+                            title = "To Kill a Mockingbird",
+                            year = "1960"
+                        } ),
+                        new tests.resources.Book( {
+                            id = 2,
+                            title = "A Tale of Two Cities",
+                            year = "1859"
+                        } )
+                    ];
+                    var resource = fractal.collection( books, function( book ) {
+                        return {
+                            "id" = book.getId(),
+                            "title" = book.getTitle(),
+                            "year" = book.getYear()
+                        };
+                    } );
+
+                    resource.addPostTransformationCallback( function( book ) {
+                        return javacast( "null", "" );
+                    } );
+
+                    var scope = fractal.createData( resource );
+                    expect( scope.convert() ).toBe( {"data":[{},{}]} );
+                } );
+
+                it( "returns the null default value for an include that returns null", function() {
+                    var book = new tests.resources.Book( {
+                        id = 1,
+                        title = "To Kill a Mockingbird",
+                        year = "1960",
+                        author = new tests.resources.Author( {
+                            id = 1,
+                            name = "Harper Lee",
+                            birthdate = createDate( 1926, 04, 28 )
+                        } )
+                    } );
+
+                    var resource = fractal.item( book, new tests.resources.BookWithNullIncludesTransformer( fractal ) );
+
+                    var scope = fractal.createData( resource = resource, includes = "author" );
+                    expect( scope.convert() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{}}}} );
+                } );
             } );
 
             describe( "converting models", function() {

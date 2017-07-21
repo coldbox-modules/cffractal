@@ -5,7 +5,7 @@
 *              transformation process for a single specific resource
 *              and serializing the result.
 */
-component {
+component accessors="true" {
 
     /**
     * A reference to the Fractal Manager.
@@ -99,6 +99,15 @@ component {
     */
     function toJSON() {        
         return serializeJSON( convert() );
+    }
+
+    /**
+    * Returns the manager's null default value.
+    *
+    * @returns The null default value.
+    */
+    function getNullDefaultValue() {
+        return variables.manager.getNullDefaultValue();
     }
 
     /**

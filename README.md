@@ -464,6 +464,39 @@ There are countless more usages here.  **The key thing to note is that the value
 > | --- | --- | --- | --- | --- | 
 > | callback | Callable | true | | A callback to run after the resource has been transformed. The callback will be passed the transformed data, the original data, and the resource object as arguments. |
 
+
+##### Null Default Values
+
+If the data of a resource is null or any item or include in the resource is null, CFFractal returns the Manager's `nullDefaultValue`.  This value can be set and retrieved from the Manager as follows:
+
+> ##### `getNullDefaultValue`
+>
+> Returns the current null default value.
+>
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | No arguments |
+ 
+> ##### `setNullDefaultValue`
+>
+> Sets the null default value for the manager.
+>
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | nullDefaultValue | any | true | | The null default value for all resources. |
+
+Additionally, this will be automatically configured for you in ColdBox to an empty string (`""`).  This can be overridden using the `nullDefaultValue` setting in your `config/ColdBox.cfc`:
+
+```js
+function configure() {
+    moduleSettings = {
+        cffractal = {
+            nullDefaultValue = {}
+        }
+    };
+}
+```
+
 #### Transformers
 
 Transformers are like the view for your models.  It defines how to transform your model in to a serializable representation.
