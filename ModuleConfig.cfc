@@ -8,7 +8,8 @@ component {
     function configure() {
         settings = {
             defaultItemSerializer = "SimpleSerializer",
-            defaultCollectionSerializer = "ResultsMapSerializer"
+            defaultCollectionSerializer = "ResultsMapSerializer",
+            nullDefaultValue = {}
         };
     }
 
