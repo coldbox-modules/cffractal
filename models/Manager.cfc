@@ -104,7 +104,7 @@ component singleton accessors="true" {
     * Overload to the accessor, to ensure a struct default will not be copied by reference
     **/
     function getNullDefaultValue() {
-        return duplicate( variables.nullDefaultValue );
+        return !isNull( variables.nullDefaultValue ) ? duplicate( variables.nullDefaultValue ) : javacast( "null", 0 );
     }
 
 }
