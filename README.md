@@ -523,10 +523,10 @@ If you use a resource in more than one place or would like access to includes an
 
 Component transformers are where the power of transformers lie and will likely be the main transformer type for your API.
 
-Component transformers should be singleton objects.  Mark them as such in your DI container of choice.  With WireBox, it is as simple as appending the `singleton` component metadata attribute.
+Component transformers should be singleton objects that extend `cffractal.models.transformers.AbstractTransformer`.  Mark them as such in your DI container of choice.  With WireBox, it is as simple as appending the `singleton` component metadata attribute.
 
 ```js
-component singleton {
+component extends="cffractal.models.transformers.AbstractTransformer" singleton {
     function transform( book ) {
         return {
             "id" = book.getId(),
@@ -600,7 +600,7 @@ component name="Country" accessors="true" {
 It doesn't matter how these models are populated or how they find their relations.  That's why the Transformer pattern is so powerful!  Let's set up our transformers now so we can see how includes work.
 
 ```js
-component name="BookTransformer" singleton {
+component name="BookTransformer" extends="cffractal.models.transformers.AbstractTransformer" singleton {
 
     variables.defaultIncludes = [ "author" ];
     variables.availableIncludes = [ "publisher" ];
@@ -629,7 +629,7 @@ component name="BookTransformer" singleton {
 
 }
 
-component name="AuthorTransformer" singleton {
+component name="AuthorTransformer" extends="cffractal.models.transformers.AbstractTransformer" singleton {
 
     variables.availableIncludes = [ "country" ];
 
@@ -658,7 +658,7 @@ component name="AuthorTransformer" singleton {
 
 }
 
-component name="PublisherTransformer" singleton {
+component name="PublisherTransformer" extends="cffractal.models.transformers.AbstractTransformer" singleton {
 
     function transform( publisher ) {
         return {
