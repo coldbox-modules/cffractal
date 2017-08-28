@@ -99,5 +99,12 @@ component singleton accessors="true" {
     function collection( data, transformer, serializer = variables.collectionSerializer ) {
         return new cffractal.models.resources.Collection( argumentCollection = arguments );
     }
+    
+    /**
+    * Overload to the accessor, to ensure a struct default will not be copied by reference
+    **/
+    function getNullDefaultValue() {
+        return !isNull( variables.nullDefaultValue ) ? duplicate( variables.nullDefaultValue ) : javacast( "null", 0 );
+    }
 
 }
