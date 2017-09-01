@@ -49,7 +49,7 @@ component {
     * @returns The fractal builder.
     */
     function collection( data ) {
-        variables.data = arguments.data;
+        variables.data = !isNull( arguments.data ) ? arguments.data : [];
         variables.resourceType = "collection";
         return this;
     }
