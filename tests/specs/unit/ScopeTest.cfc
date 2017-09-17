@@ -111,7 +111,7 @@ component extends="testbox.system.BaseSpec" {
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockItem );
-                        expect( scope.toJSON() ).toBe( serializeJSON( { "data" = data } ) );    
+                        expect( scope.toJSON() ).toBe( serializeJSON( { "data" = data } ) );
                     } );
 
                     it( "with a custom transformer", function() {
@@ -154,7 +154,7 @@ component extends="testbox.system.BaseSpec" {
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
 
                         var scope = new cffractal.models.Scope( mockFractal, mockCollection );
-                        expect( scope.toJSON() ).toBe( serializeJSON( { "data" = data } ) );    
+                        expect( scope.toJSON() ).toBe( serializeJSON( { "data" = data } ) );
                     } );
 
                     it( "with a custom transformer", function() {
@@ -213,7 +213,7 @@ component extends="testbox.system.BaseSpec" {
 
                     scope.parseIncludesPublic( "author,publisher" );
 
-                    expect( scope.$getProperty( "includes" ) ).toBe( [ "author", "publisher" ] );    
+                    expect( scope.$getProperty( "includes" ) ).toBe( [ "author", "publisher" ] );
                 } );
 
                 it( "automatically includes parent scopes", function() {
@@ -243,6 +243,15 @@ component extends="testbox.system.BaseSpec" {
                     var scope = new cffractal.models.Scope( mockFractal, mockItem, "author.country", "author" );
 
                     expect( scope.requestedInclude( "country" ) ).toBeTrue();
+                } );
+
+                it( "can handle deeply nested includes", function() {
+                    var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
+                    var mockItem = getMockBox().createMock( "cffractal.models.resources.Item" );
+
+                    var scope = new cffractal.models.Scope( mockFractal, mockItem, "author.country.provinces.districts.localities", "author.country.provinces" );
+
+                    expect( scope.requestedInclude( "districts" ) ).toBeTrue();
                 } );
             } );
         } );

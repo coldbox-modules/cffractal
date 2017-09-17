@@ -9,12 +9,7 @@ component extends="cffractal.models.transformers.AbstractTransformer" {
     }
 
     function includeCountry( author ) {
-        return item( author.getCountry(), function( country ) {
-            return {
-                "id" = country.getId(),
-                "name" = country.getName()
-            };
-        } );
+        return item( author.getCountry(), new tests.resources.CountryTransformer( manager ) );
     }
 
 }

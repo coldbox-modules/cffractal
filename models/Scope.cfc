@@ -59,6 +59,7 @@ component accessors="true" {
     * @returns    A scoped resource instance.
     */
     function embedChildScope( identifier, resource ) {
+        arguments.identifier = combineIdentifiers( variables.identifier, arguments.identifier );
         arguments.includes = arrayToList( includes );
         return manager.createData( argumentCollection = arguments );
     }
@@ -76,7 +77,7 @@ component accessors="true" {
         var serializedData = serializer.data( resource, this );
 
         if ( identifier != "" ) {
-            return { "#identifier#" = serializedData };
+            return { "#listLast( identifier, "." )#" = serializedData };
         }
 
         if ( resource.hasPagingData() ) {
@@ -97,7 +98,7 @@ component accessors="true" {
     *
     * @returns The transformed and serialized data as json.
     */
-    function toJSON() {        
+    function toJSON() {
         return serializeJSON( convert() );
     }
 
@@ -167,6 +168,14 @@ component accessors="true" {
             }
         }
         arrayAppend( includes, parentIncludes, true );
+    }
+
+    private function combineIdentifiers( identifierA, identifierB ) {
+        var combinedIdentifier = identifierA & "." & identifierB;
+        if ( left( combinedIdentifier, 1 ) == "." ) {
+            return mid( combinedIdentifier, 2, len( combinedIdentifier ) - 1 );
+        }
+        return combinedIdentifier;
     }
 
 }

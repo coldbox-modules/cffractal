@@ -249,14 +249,18 @@ component extends="testbox.system.BaseSpec" {
                                     birthdate = createDate( 1926, 04, 28 ),
                                     country = new tests.resources.Country( {
                                         id = 1,
-                                        name = "United States"
+                                        name = "United States",
+                                        planet = new tests.resources.Planet( {
+                                            id = 1,
+                                            name = "Earth"
+                                        } )
                                     } )
                                 } )
                             } );
 
                             var resource = fractal.item( book, new tests.resources.BookTransformer( fractal ) );
 
-                            var scope = fractal.createData( resource, "author,author.country" );
+                            var scope = fractal.createData( resource, "author.country" );
                             var expectedData = {
                                 "data" = {
                                     "year" = 1960,
@@ -269,6 +273,56 @@ component extends="testbox.system.BaseSpec" {
                                                 "data" = {
                                                     "id" = 1,
                                                     "name" = "United States"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            };
+                            expect( scope.convert() ).toBe( expectedData );
+                        } );
+
+                        it( "can parse an item with a deep nested includes", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 ),
+                                    country = new tests.resources.Country( {
+                                        id = 1,
+                                        name = "United States",
+                                        planet = new tests.resources.Planet( {
+                                            id = 1,
+                                            name = "Earth"
+                                        } )
+                                    } )
+                                } )
+                            } );
+
+                            var resource = fractal.item( book, new tests.resources.BookTransformer( fractal ) );
+
+                            var scope = fractal.createData( resource, "author.country.planet" );
+                            var expectedData = {
+                                "data" = {
+                                    "year" = 1960,
+                                    "title" = "To Kill a Mockingbird",
+                                    "id" = 1,
+                                    "author" = {
+                                        "data" = {
+                                            "name" = "Harper Lee",
+                                            "country" = {
+                                                "data" = {
+                                                    "id" = 1,
+                                                    "name" = "United States",
+                                                    "planet" = {
+                                                        "data" = {
+                                                            "id" = 1,
+                                                            "name" = "Earth"
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
