@@ -14,6 +14,12 @@ component {
     property name="wirebox" inject="wirebox";
 
     /**
+    * Define includes properties to allow for accessors
+    **/
+    property name="defaultIncludes";
+    property name="availableIncludes";
+    
+    /**
     * The array of default includes.
     * These includes are always return whether requested or not.
     * These are normally set by setting the `variables.defaultIncludes`
@@ -38,8 +44,19 @@ component {
     * @returns The new transformer instance.
     */
     function init( manager ) {
-        variables.manager = arguments.manager;
+        if( !isNull( arguments.manager ) ){
+            variables.manager = arguments.manager;
+        }
         return this;
+    }
+
+    /**
+    * DI Completion interception
+    **/
+    function onDIComplete(){
+        if( isNull( variables.manager ) ){
+            variables.manager = wirebox.getInstance( "Manager@cffractal" );
+        }
     }
 
     /**
