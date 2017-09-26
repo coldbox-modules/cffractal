@@ -39,7 +39,7 @@ component extends="testbox.system.BaseSpec" {
 
                         var result = fractal.builder()
                             .item( book )
-                            .withTransformer( new tests.resources.BookTransformer( fractal ) )
+                            .withTransformer( new tests.resources.BookTransformer().setManager( fractal ) )
                             .convert();
 
                         expect( result ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}} );
@@ -55,7 +55,7 @@ component extends="testbox.system.BaseSpec" {
                         var result = fractal.builder()
                             .item( book )
                             .withSerializer( new cffractal.models.serializers.SimpleSerializer() )
-                            .withTransformer( new tests.resources.BookTransformer( fractal ) )
+                            .withTransformer( new tests.resources.BookTransformer().setManager( fractal ) )
                             .convert();
 
                         expect( result ).toBe( {"year":1960,"title":"To Kill a Mockingbird","id":1} );
@@ -77,7 +77,7 @@ component extends="testbox.system.BaseSpec" {
                             var result = fractal.builder()
                                 .item( book )
                                 .withIncludes( "author" )
-                                .withTransformer( new tests.resources.BookTransformer( fractal ) )
+                                .withTransformer( new tests.resources.BookTransformer().setManager( fractal ) )
                                 .convert();
 
                             expect( result ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}} );
@@ -97,7 +97,7 @@ component extends="testbox.system.BaseSpec" {
 
                             var result = fractal.builder()
                                 .item( book )
-                                .withTransformer( new tests.resources.DefaultIncludesBookTransformer( fractal ) )
+                                .withTransformer( new tests.resources.DefaultIncludesBookTransformer().setManager( fractal ) )
                                 .convert();
 
                             expect( result ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}} );
@@ -122,7 +122,7 @@ component extends="testbox.system.BaseSpec" {
                             var result = fractal.builder()
                                 .item( book )
                                 .withIncludes( "author,author.country" )
-                                .withTransformer( new tests.resources.BookTransformer( fractal ) )
+                                .withTransformer( new tests.resources.BookTransformer().setManager( fractal ) )
                                 .convert();
 
                             var expectedData = {
@@ -165,7 +165,7 @@ component extends="testbox.system.BaseSpec" {
                             var result = fractal.builder()
                                 .item( book )
                                 .withIncludes( "author.country" )
-                                .withTransformer( new tests.resources.BookTransformer( fractal ) )
+                                .withTransformer( new tests.resources.BookTransformer().setManager( fractal ) )
                                 .convert();
 
                             var expectedData = {
@@ -236,7 +236,7 @@ component extends="testbox.system.BaseSpec" {
 
                         var result = fractal.builder()
                             .collection( books )
-                            .withTransformer( new tests.resources.BookTransformer( fractal ) )
+                            .withTransformer( new tests.resources.BookTransformer().setManager( fractal ) )
                             .convert();
 
                         expect( result ).toBe( {"data":[{"year":1960,"title":"To Kill a Mockingbird","id":1},{"year":1859,"title":"A Tale of Two Cities","id":2}]} );
@@ -259,7 +259,7 @@ component extends="testbox.system.BaseSpec" {
 
                             var result = fractal.builder()
                                 .collection( books )
-                                .withTransformer( new tests.resources.BookTransformer( fractal ) )
+                                .withTransformer( new tests.resources.BookTransformer().setManager( fractal ) )
                                 .withPagination( {
                                     "maxrows": 50,
                                     "page": 2,
@@ -310,7 +310,7 @@ component extends="testbox.system.BaseSpec" {
 
                             var result = fractal.builder()
                                 .collection( books )
-                                .withTransformer( new tests.resources.BookTransformer( fractal ) )
+                                .withTransformer( new tests.resources.BookTransformer().setManager( fractal ) )
                                 .withItemCallback( function( transformed, original, resource ) {
                                     transformed.href = "/api/v1/books/#transformed.id#";
                                     return transformed;
@@ -353,7 +353,7 @@ component extends="testbox.system.BaseSpec" {
 
                             var result = fractal.builder()
                                 .collection( books )
-                                .withTransformer( new tests.resources.BookTransformer( fractal ) )
+                                .withTransformer( new tests.resources.BookTransformer().setManager( fractal ) )
                                 .withMeta( "links", {
                                     "next": "https://example.com/api/v1/books/?page=3",
                                     "previous": "https://example.com/api/v1/books/?page=1"

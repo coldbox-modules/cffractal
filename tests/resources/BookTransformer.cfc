@@ -11,7 +11,7 @@ component extends="cffractal.models.transformers.AbstractTransformer" {
     }
 
     function includeAuthor( book ) {
-        return item( book.getAuthor(), new tests.resources.AuthorTransformer( manager ) );
+        return item( book.getAuthor(), new tests.resources.AuthorTransformer().setManager( manager ) );
     }
 
 }
