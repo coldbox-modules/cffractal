@@ -24,7 +24,7 @@ component extends="testbox.system.BaseSpec" {
             describe( "resource creation", function() {
                 it( "can create new items", function() {
                     makePublic( transformer, "item", "itemPublic" );
-                    var item = transformer.itemPublic( {}, function() {} );
+                    var item = transformer.setManager( mockFractal ).itemPublic( {}, function() {} );
                     expect( item ).toBeInstanceOf( "cffractal.models.resources.Item" );
                 } );
 
