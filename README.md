@@ -783,6 +783,10 @@ We get a more in-depth response:
 }
 ```
 
+##### Custom Managers
+
+By default the "Manager" of your transformer defaults to `Manager@cffractal`.  A `setManager()` method is available in your transformers, which allows you to specific a custom manager.  This manager, however, must implement the methods found in `cffractal.models.Manager`.
+
 ##### Excludes (coming soon)
 
 #### Scope

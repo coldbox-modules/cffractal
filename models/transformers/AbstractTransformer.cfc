@@ -12,6 +12,7 @@ component {
     * retrieve new transformers for includes.
     */
     property name="wirebox" inject="wirebox";
+    property name="manager" inject="Manager@cffractal";
 
     /**
     * Define includes properties to allow for accessors
@@ -36,30 +37,6 @@ component {
     variables.availableIncludes = [];
 
     /**
-    * Create a new transformer instance.
-    *
-    * @manager.inject Manager@cffractal
-    * @manager The cffractal manager.  Used to retrieve the default serializer.
-    *
-    * @returns The new transformer instance.
-    */
-    function init( manager ) {
-        if( !isNull( arguments.manager ) ){
-            variables.manager = arguments.manager;
-        }
-        return this;
-    }
-
-    /**
-    * DI Completion interception
-    **/
-    function onDIComplete(){
-        if( isNull( variables.manager ) ){
-            variables.manager = wirebox.getInstance( "Manager@cffractal" );
-        }
-    }
-
-    /**
     * @abstract
     * Defines the method for transforming a specific resource.
     *
@@ -72,6 +49,14 @@ component {
             type = "MethodNotImplemented",
             message = "The method `transform()` must be implemented in a subclass."
         );
+    }
+
+    /**
+    * Allows the user to set a custom fractal Manager
+    **/
+    function setManager( required any manager ){
+        variables.manager = arguments.manager;
+        return this;
     }
 
     /**
