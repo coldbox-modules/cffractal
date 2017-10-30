@@ -19,7 +19,12 @@ component {
     **/
     property name="defaultIncludes";
     property name="availableIncludes";
-    
+
+    /**
+    * The key used to define the root level key for the serialized data.
+    */
+    variables.resourceKey = "data";
+
     /**
     * The array of default includes.
     * These includes are always return whether requested or not.
@@ -84,9 +89,32 @@ component {
         for ( var include in allIncludes ) {
             var resource = invoke( this, "include#include#", { 1 = data } );
             var childScope = scope.embedChildScope( include, resource );
-            arrayAppend( includedData, childScope.convert() );
+            arrayAppend( includedData, childScope.convert( serialize = false ) );
         }
         return includedData;
+    }
+
+    /**
+    * Returns the resource key.
+    * The resource key is used to define the root level key for the serialized data.
+    *
+    * @returns The current resource key.
+    */
+    function getResourceKey() {
+        return variables.resourceKey;
+    }
+
+    /**
+    * Returns the resource key.
+    * The resource key is used to define the root level key for the serialized data.
+    *
+    * @resourceKey The new key to use.
+    *
+    * @returns The Transformer instance.
+    */
+    function setResourceKey( resourceKey ) {
+        variables.resourceKey = arguments.resourceKey;
+        return this;
     }
 
     /**

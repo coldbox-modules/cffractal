@@ -16,7 +16,7 @@ component extends="testbox.system.BaseSpec" {
                 var mockItem = getMockBox().createMock( "cffractal.models.resources.Item" );
                 mockItem.$( "getMeta", pagingData );
                 var serializer = new cffractal.models.serializers.DataSerializer();
-                expect( serializer.meta( mockItem, mockScope ) )
+                expect( serializer.meta( mockItem, mockScope, {} ) )
                     .toBe( { "meta" = pagingData } );
             } );
         } );

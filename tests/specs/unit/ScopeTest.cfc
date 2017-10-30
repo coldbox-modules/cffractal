@@ -19,7 +19,7 @@ component extends="testbox.system.BaseSpec" {
                         mockItem.$property( propertyName = "meta", mock = {} );
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
-                        mockSerializer.$( "serialize", { "data" = data } );
+                        mockSerializer.$( "data", { "data" = data } );
                         mockItem.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
@@ -31,6 +31,7 @@ component extends="testbox.system.BaseSpec" {
                     it( "with a custom transformer", function() {
                         var data = { "foo" = "bar" };
                         var mockTransformer = getMockBox().createMock( "cffractal.models.transformers.AbstractTransformer" );
+                        mockTransformer.$property( propertyName = "resourceKey", mock = "data" );
                         mockTransformer.$( "transform", data );
                         mockTransformer.$( "hasIncludes", false );
 
@@ -40,7 +41,7 @@ component extends="testbox.system.BaseSpec" {
                         mockItem.$property( propertyName = "meta", mock = {} );
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
-                        mockSerializer.$( "serialize", { "data" = data } );
+                        mockSerializer.$( "data", { "data" = data } );
                         mockItem.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
@@ -62,7 +63,7 @@ component extends="testbox.system.BaseSpec" {
                         mockCollection.$property( propertyName = "meta", mock = {} );
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
-                        mockSerializer.$( "serialize", { "data" = data } );
+                        mockSerializer.$( "data", { "data" = data } );
                         mockCollection.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
@@ -74,6 +75,7 @@ component extends="testbox.system.BaseSpec" {
                     it( "with a custom transformer", function() {
                         var data = [ { "foo" = "bar" }, { "baz" = "ban" } ];
                         var mockTransformer = getMockBox().createMock( "cffractal.models.transformers.AbstractTransformer" );
+                        mockTransformer.$property( propertyName = "resourceKey", mock = "data" );
                         mockTransformer.$( "transform" ).$args( { "foo" = "bar" } ).$results( { "foo" = "bar" } );
                         mockTransformer.$( "transform" ).$args( { "baz" = "ban" } ).$results( { "baz" = "ban" } );
                         mockTransformer.$( "hasIncludes", false );
@@ -84,7 +86,7 @@ component extends="testbox.system.BaseSpec" {
                         mockCollection.$property( propertyName = "meta", mock = {} );
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
-                        mockSerializer.$( "serialize", { "data" = data } );
+                        mockSerializer.$( "data", { "data" = data } );
                         mockCollection.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
@@ -105,7 +107,7 @@ component extends="testbox.system.BaseSpec" {
                         mockItem.$property( propertyName = "meta", mock = {} );
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
-                        mockSerializer.$( "serialize", { "data" = data } );
+                        mockSerializer.$( "data", { "data" = data } );
                         mockItem.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
@@ -117,6 +119,7 @@ component extends="testbox.system.BaseSpec" {
                     it( "with a custom transformer", function() {
                         var data = { "foo" = "bar" };
                         var mockTransformer = getMockBox().createMock( "cffractal.models.transformers.AbstractTransformer" );
+                        mockTransformer.$property( propertyName = "resourceKey", mock = "data" );
                         mockTransformer.$( "transform", data );
                         mockTransformer.$( "hasIncludes", false );
 
@@ -126,7 +129,7 @@ component extends="testbox.system.BaseSpec" {
                         mockItem.$property( propertyName = "meta", mock = {} );
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
-                        mockSerializer.$( "serialize", { "data" = data } );
+                        mockSerializer.$( "data", { "data" = data } );
                         mockItem.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
@@ -148,7 +151,7 @@ component extends="testbox.system.BaseSpec" {
                         mockCollection.$property( propertyName = "meta", mock = {} );
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
-                        mockSerializer.$( "serialize", { "data" = data } );
+                        mockSerializer.$( "data", { "data" = data } );
                         mockCollection.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
@@ -160,6 +163,7 @@ component extends="testbox.system.BaseSpec" {
                     it( "with a custom transformer", function() {
                         var data = [ { "foo" = "bar" }, { "baz" = "ban" } ];
                         var mockTransformer = getMockBox().createMock( "cffractal.models.transformers.AbstractTransformer" );
+                        mockTransformer.$property( propertyName = "resourceKey", mock = "data" );
                         mockTransformer.$( "transform" ).$args( { "foo" = "bar" } ).$results( { "foo" = "bar" } );
                         mockTransformer.$( "transform" ).$args( { "baz" = "ban" } ).$results( { "baz" = "ban" } );
                         mockTransformer.$( "hasIncludes", false );
@@ -170,7 +174,7 @@ component extends="testbox.system.BaseSpec" {
                         mockCollection.$property( propertyName = "meta", mock = {} );
 
                         var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
-                        mockSerializer.$( "serialize", { "data" = data } );
+                        mockSerializer.$( "data", { "data" = data } );
                         mockCollection.$property( propertyName = "serializer", mock = mockSerializer );
 
                         var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
