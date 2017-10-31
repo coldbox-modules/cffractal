@@ -89,7 +89,7 @@ component {
         for ( var include in allIncludes ) {
             var resource = invoke( this, "include#include#", { 1 = data } );
             var childScope = scope.embedChildScope( include, resource );
-            arrayAppend( includedData, childScope.convert( serialize = false ) );
+            arrayAppend( includedData, childScope.convert() );
         }
         return includedData;
     }

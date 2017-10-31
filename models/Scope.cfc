@@ -71,7 +71,7 @@ component accessors="true" {
     *
     * @returns The transformed and serialized data.
     */
-    function convert( serialize = false ) {
+    function convert() {
         var serializer = resource.getSerializer();
 
         if ( identifier != "" ) {
