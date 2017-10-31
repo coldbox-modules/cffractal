@@ -105,20 +105,13 @@ component accessors="true" {
             item
         );
 
-        try {
-            for ( var includedDataSet in includedData ) {
-                structAppend(
-                    isNull( transformedData ) ? {} : transformedData,
-                    includedDataSet,
-                    true /* overwrite */
-                );
-            }
+        for ( var includedDataSet in includedData ) {
+            structAppend(
+                isNull( transformedData ) ? {} : transformedData,
+                includedDataSet,
+                true /* overwrite */
+            );
         }
-        catch ( any e ) {
-            writeDump( transformedData );
-            writeDump( var = includedData, abort = true );
-        }
-
 
         return isNull( transformedData ) ? javacast( "null", "" ) : transformedData;
     }
