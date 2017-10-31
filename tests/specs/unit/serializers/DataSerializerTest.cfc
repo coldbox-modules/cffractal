@@ -14,7 +14,7 @@ component extends="testbox.system.BaseSpec" {
                 var pagingData = { "pagination" = { "maxrows" = 50, "page" = 1, "pages" = 3, "totalRecords" = 112 } };
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
                 var mockItem = getMockBox().createMock( "cffractal.models.resources.Item" );
-                mockItem.$( "getMeta", pagingData );
+                mockItem.$( "getMeta", pagingData, false );
                 var serializer = new cffractal.models.serializers.DataSerializer();
                 expect( serializer.meta( mockItem, mockScope, {} ) )
                     .toBe( { "meta" = pagingData } );

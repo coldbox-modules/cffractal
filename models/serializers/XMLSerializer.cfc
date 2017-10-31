@@ -7,9 +7,8 @@ component singleton {
 
     property name="rootName";
 
-    function init( rootName = "root", addDataKey = true ) {
+    function init( rootName = "root" ) {
         variables.rootName = arguments.rootName;
-        variables.addDataKey = arguments.addDataKey;
         return this;
     }
 
@@ -24,7 +23,7 @@ component singleton {
     function data( resource, scope ) {
         var xmlDoc = XMLNew();
         xmlDoc.xmlRoot = XMLElemNew( xmlDoc, variables.rootName );
-        populateNode( xmlDoc.xmlRoot, resource.process( scope ) );
+        populateNode( xmlDoc.xmlRoot, resource.process( scope ), xmlDoc );
         return ToString( xmlDoc );
     }
 
@@ -68,17 +67,16 @@ component singleton {
     function meta( resource, scope, data ) {
         var xmlDoc = XMLParse( data );
         var metaNode = XMLElemNew( xmlDoc, "meta" );
-        populateNode( metaNode, resource.getMeta() );
+        populateNode( metaNode, resource.getMeta(), xmlDoc );
         arrayAppend( xmlDoc.XmlRoot.XmlChildren, metaNode );
         return ToString( xmlDoc );
     }
 
-    private function populateNode( parent, contents ) {
-        var root = xmlSearch( parent, "/*/.." )[ 1 ];
+    private function populateNode( parent, contents, root ) {
         if ( isArray( contents ) ) {
             arrayEach( contents, function( item ) {
                 var newNode = XMLElemNew( root, "item" );
-                populateNode( newNode, item );
+                populateNode( newNode, item, root );
                 arrayAppend( parent.XmlChildren, newNode );
             } );
         }
@@ -87,7 +85,7 @@ component singleton {
             arraySort( keys, "textnocase" );
             arrayEach( keys, function( key ) {
                 var newNode = XMLElemNew( root, key );
-                populateNode( newNode, contents[ key ] );
+                populateNode( newNode, contents[ key ], root );
                 arrayAppend( parent.XmlChildren, newNode );
             } );
         }
