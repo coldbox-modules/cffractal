@@ -74,18 +74,20 @@ component accessors="true" {
     function convert() {
         var serializer = resource.getSerializer();
 
+        if ( identifier != "" ) {
+            return serializer.scopeData( resource.process( this ), identifier );
+        }
+
         var serializedData = serializer.data( resource, this );
 
-        if ( identifier != "" ) {
-            return { "#listLast( identifier, "." )#" = serializedData };
-        }
+        serializedData = serializer.scopeRootKey( serializedData, resource.getTransformerResourceKey() );
 
         if ( resource.hasPagingData() ) {
             resource.addMeta( "pagination", resource.getPagingData() );
         }
 
         if ( resource.hasMeta() ) {
-            structAppend( serializedData, serializer.meta( resource, this ), true );
+            serializer.meta( resource, this, serializedData );
         }
 
         return serializedData;

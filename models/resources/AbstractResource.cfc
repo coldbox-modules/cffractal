@@ -4,10 +4,10 @@
 * @description Defines the common methods for processing
 *              resources into serializable data.
 */
-component {
+component accessors="true" {
 
     /**
-    * The item to transform into serializable data. 
+    * The item to transform into serializable data.
     */
     property name="data";
 
@@ -17,10 +17,15 @@ component {
     property name="transformer";
 
     /**
+    * The serializer used for this resource.
+    */
+    property name="serializer";
+
+    /**
     * The collection of metadata for this resource. Default: {}.
     */
     property name="meta";
-    
+
     /**
     * The paging data for this resource.
     */
@@ -57,7 +62,7 @@ component {
     * @scope   A Fractal scope instance.  Used to determinal requested
     *          includes and handle nesting identifiers.
     *
-    * @returns The transformed data. 
+    * @returns The transformed data.
     */
     function process( scope ) {
         throw(
@@ -74,7 +79,7 @@ component {
     *          includes and handle nesting identifiers.
     * @item    A single item instance to transform.
     *
-    * @returns The transformed data. 
+    * @returns The transformed data.
     */
     function processItem( scope, item ) {
         if ( isNull( item ) ) {
@@ -112,36 +117,6 @@ component {
     }
 
     /**
-    * Returns the current serializer for the resource.
-    *
-    * @returns The current serializer.
-    */
-    function getSerializer() {
-        return variables.serializer;
-    }
-
-    /**
-    * Sets the serializer for the resource.
-    *
-    * @serializer The serializer to associate with this specific resource.
-    *
-    * @returns    The resource instance.
-    */
-    function setSerializer( serializer ) {
-        variables.serializer = arguments.serializer;
-        return this;
-    }
-
-    /**
-    * Returns the current metadata scope.
-    *
-    * @returns The metadata scope.
-    */
-    function getMeta() {
-        return variables.meta;
-    }
-
-    /**
     * Adds some data under a given identifier in the metadata.
     *
     * @key     The key to nest the data under in the metadata scope.
@@ -161,27 +136,6 @@ component {
     */
     function hasMeta() {
         return ! structIsEmpty( variables.meta );
-    }
-
-    /**
-    * Returns the current paging data.
-    *
-    * @returns The paging data.
-    */
-    function getPagingData() {
-        return variables.pagingData;
-    }
-
-    /**
-    * Sets the current paging data.
-    *
-    * @pagingData The paging data to associate with this resource.
-    *
-    * @returns    The resource instance.
-    */
-    function setPagingData( pagingData ) {
-        variables.pagingData = arguments.pagingData;
-        return this;
     }
 
     /**
@@ -206,6 +160,12 @@ component {
     function addPostTransformationCallback( callback ) {
         arrayAppend( postTransformationCallbacks, callback );
         return this;
+    }
+
+    function getTransformerResourceKey() {
+        return isClosure( variables.transformer ) ?
+            "data" :
+            variables.transformer.getResourceKey();
     }
 
     /**

@@ -1,5 +1,6 @@
 component extends="cffractal.models.transformers.AbstractTransformer" {
 
+    variables.resourceKey = "book";
     variables.defaultIncludes = [ "author" ];
 
     function transform( book ) {

@@ -18,6 +18,30 @@ component singleton {
     }
 
     /**
+    * Decides how to nest the data under the given identifier.
+    *
+    * @data       The serialized data.
+    * @identifier The current identifier for the serialization process.
+    *
+    * @returns    The scoped, serialized data.
+    */
+    function scopeData( data, identifier ) {
+        return { "#listLast( identifier, "." )#" = data };
+    }
+
+    /**
+    * Decides which key to use (if any) for the root of the serialized data.
+    *
+    * @data       The serialized data.
+    * @identifier The current identifier for the serialization process.
+    *
+    * @returns    The scoped, serialized data.
+    */
+    function scopeRootKey( data, identifier ) {
+        return data;
+    }
+
+    /**
     * Returns the metadata nested under a meta key.
     *
     * @data     The metadata for the response.

@@ -175,7 +175,7 @@ A Serializer is responsible for the shape of the response, both the data and the
 
 Perhaps you always want your data nested under a `data` key for consistency.  Maybe you want to separate the `results` as an array of ids from the `resultsMap` which is the data keyed by the id.  You might want a `metadata` key always present for any additional information, like pagination, that doesn't fit inside the normal data keys.  Whatever the shape, you can design a serializer that can produce it.
 
-A serialzier needs two methods:
+A serializer needs four methods:
 
 > ##### `data`
 
@@ -183,7 +183,7 @@ A serialzier needs two methods:
 
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
-> | resource | AbstractResource | true | | The fractal resource to process and serailize. |
+> | resource | AbstractResource | true | | The fractal resource to process and serialize. |
 > | scope | Scope | true | | The current scope instance.  Included to pass along to the resource during processing. |
 
 
@@ -193,12 +193,32 @@ A serialzier needs two methods:
 
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
-> | resource | AbstractResource | true | | The fractal resource to process and serailize. |
+> | resource | AbstractResource | true | | The fractal resource to process and serialize. |
 > | scope | Scope | true | | The current scope instance.  Included to pass along to the resource during processing. |
 
-A default serializer is configured for the application when creating the Fractal manager.  Unless overridden, this is the serializer used for each scope in the serialization processes.
+ 
+> ##### `scopeData`
 
-The current serializer for the Manager can be retrieved at any time by calling `getSerializer`.  Additionally, a new default serializer can be set on the Manager by calling `setSerializer`.
+> Decides how to nest the data under the given identifier.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | data | any | true | | The serialized data. |
+> | identifier | string | true | | The current identifier for the serialization process. |
+
+
+> ##### `scopeRootKey`
+
+> Decides which key to use (if any) for the root of the serialized data.
+
+> | Name | Type | Required | Default | Description |
+> | --- | --- | --- | --- | --- | 
+> | data | any | true | | The serialized data. |
+> | identifier | string | true | | The current identifier for the serialization process. |
+
+A default serializer is configured for the application when creating the Fractal manager for both `items` and `collections`.  These can be configured separately  Unless overridden, this is the serializer used for each scope in the serialization processes.
+
+The current serializer for the Manager can be retrieved at any time by calling `getItemSerializer` and `getCollectionSerializer`.  Additionally, a new default serializer can be set on the Manager by calling either `setItemSerializer` or `setCollectionSerializer`.
 
 > ##### `getItemSerializer`
 
@@ -267,7 +287,7 @@ var transformed = {
 
 #### `DataSerializer`
 
-The `DataSerializer` nests the processed resource data inside a `data` key and nests the metadata under a `meta` key.
+The `DataSerializer` nests the processed resource data inside a `data` key and nests the metadata under a `meta` key. (These keys can be customized when initializing the object by passing in a `dataKey` and/or a `metaKey` value.)
 
 ```js
 var model = {
@@ -293,6 +313,56 @@ The `ResultsMapSerializer` nests the processed resource data inside a `resultsMa
 If the processed resource is not an array, the data is returned unmodified.
 
 The identifier column can be specified in the constructor.
+
+```js
+var items = [
+    { "id" = "F29958B1-5A2B-4785-BE0A11297D0B5373", "name" = "foo" },
+    { "id" = "42A6EB0A-1196-4A76-8B9BE67422A54B26", "name" = "bar" }
+];
+
+// becomes
+
+var transformed = {
+    "results" = [
+        "F29958B1-5A2B-4785-BE0A11297D0B5373",
+        "42A6EB0A-1196-4A76-8B9BE67422A54B26"
+    ],
+    "resultsMap" = {
+        "F29958B1-5A2B-4785-BE0A11297D0B5373" = {
+            "id" = "F29958B1-5A2B-4785-BE0A11297D0B5373",
+            "name" = "foo"
+        },
+        "42A6EB0A-1196-4A76-8B9BE67422A54B26" = {
+            "id" = "42A6EB0A-1196-4A76-8B9BE67422A54B26",
+            "name" = "bar"
+        }
+    },
+    "meta" = {}
+};
+```
+
+#### `XMLSerializer`
+
+The `XMLSerializer` marshalls the data in to XML.  It nests all items under a `rootKey` which can be specified in the constructor (default is `root`). Data is returned under either a `data` key or the root transformer's `resourceKey`, if defined. Meta is returned under a `meta` key. (This can be configured in the constructor with the `metaKey` argument.)
+
+```cfc
+var model = {
+    "foo" = "bar",
+    "baz" = "qux"
+};
+
+// becomes
+
+var transformed = "
+    <root>
+        <data>
+            <foo>bar</foo>
+            <baz>qux</baz>
+        </data>
+        <meta></meta>
+    </root>
+";
+```
 
 > #### API
 
