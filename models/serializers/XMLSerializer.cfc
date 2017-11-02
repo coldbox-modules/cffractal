@@ -1,14 +1,23 @@
 /**
-* @name        SimpleSerializer
+* @name        XMLSerializer
 * @package     cffractal.models.serializers
-* @description Does no further transformation to the data.
+* @description Marshalls the data to XML.
 */
 component singleton {
 
-    property name="rootName";
+    /**
+    * The key to use at the root of the XML object.
+    */
+    property name="rootKey";
 
-    function init( rootName = "root" ) {
-        variables.rootName = arguments.rootName;
+    /**
+    * The key to use when scoping the metadata.
+    */
+    property name="metaKey";
+
+    function init( rootKey = "root", metaKey = "meta" ) {
+        variables.rootKey = arguments.rootKey;
+        variables.metaKey = arguments.metaKey;
         return this;
     }
 
@@ -22,7 +31,7 @@ component singleton {
     */
     function data( resource, scope ) {
         var xmlDoc = XMLNew();
-        xmlDoc.xmlRoot = XMLElemNew( xmlDoc, variables.rootName );
+        xmlDoc.xmlRoot = XMLElemNew( xmlDoc, variables.rootKey );
         populateNode( xmlDoc.xmlRoot, resource.process( scope ), xmlDoc );
         return ToString( xmlDoc );
     }
@@ -66,7 +75,7 @@ component singleton {
     */
     function meta( resource, scope, data ) {
         var xmlDoc = XMLParse( data );
-        var metaNode = XMLElemNew( xmlDoc, "meta" );
+        var metaNode = XMLElemNew( xmlDoc, variables.metaKey );
         populateNode( metaNode, resource.getMeta(), xmlDoc );
         arrayAppend( xmlDoc.XmlRoot.XmlChildren, metaNode );
         return ToString( xmlDoc );
@@ -90,7 +99,7 @@ component singleton {
             } );
         }
         else {
-            parent.XmlText = contents;
+            parent.XmlText = encodeForXML( contents );
         }
     }
 

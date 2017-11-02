@@ -12,6 +12,11 @@ component singleton {
     property name="identitifer";
 
     /**
+    * The key to use when scoping the metadata.
+    */
+    property name="metaKey";
+
+    /**
     * Creates a new ResultMapSerializer with the given identifier.
     *
     * @identifier The key name for the identifing piece of data.
@@ -19,8 +24,9 @@ component singleton {
     *
     * @returns    The serializer instance.
     */
-    function init( identifier = "id" ) {
+    function init( identifier = "id", metaKey = "meta" ) {
         variables.identifier = arguments.identifier;
+        variables.metaKey = arguments.metaKey;
         return this;
     }
 
@@ -85,7 +91,7 @@ component singleton {
     * @response The metadata nested under a "meta" key.
     */
     function meta( resource, scope ) {
-        return { "meta" = resource.getMeta() };
+        return { "#variables.metaKey#" = resource.getMeta() };
     }
 
 }

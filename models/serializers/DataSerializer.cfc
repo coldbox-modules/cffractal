@@ -6,6 +6,22 @@
 component singleton {
 
     /**
+    * The key to use when scoping the data.
+    */
+    property name="metaKey";
+
+    /**
+    * The key to use when scoping the metadata.
+    */
+    property name="metaKey";
+
+    function init( dataKey = "data", metaKey = "meta" ) {
+        variables.dataKey = arguments.dataKey;
+        variables.metaKey = arguments.metaKey;
+        return this;
+    }
+
+    /**
     * Nests the data underneath a 'data' key.
     *
     * @resource The resource to serialize.
@@ -26,7 +42,7 @@ component singleton {
     * @returns    The scoped, serialized data.
     */
     function scopeData( data, identifier ) {
-        return { "#listLast( identifier, "." )#" = { "data" = data } };
+        return { "#listLast( identifier, "." )#" = { "#variables.dataKey#" = data } };
     }
 
     /**
@@ -49,7 +65,7 @@ component singleton {
     * @response The metadata nested under a "meta" key.
     */
     function meta( resource, scope, data ) {
-        structAppend( data, { "meta" = resource.getMeta() }, true );
+        structAppend( data, { "#variables.metaKey#" = resource.getMeta() }, true );
         return data;
     }
 
