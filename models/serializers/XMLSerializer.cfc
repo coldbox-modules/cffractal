@@ -56,7 +56,10 @@ component singleton {
     *
     * @returns    The scoped, serialized data.
     */
-    function scopeRootKey( data, identifier ) {
+    function scopeRootKey( data, identifier = "" ) {
+        if ( identifier == "" ) {
+            return data;
+        }
         var xmlDoc = XMLParse( data );
         var currentChildren = xmlDoc.xmlRoot.XmlChildren;
         var xmlData = XMLElemNew( xmlDoc, identifier );
