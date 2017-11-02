@@ -8,7 +8,7 @@ component singleton {
     /**
     * The key to use when scoping the data.
     */
-    property name="metaKey";
+    property name="dataKey";
 
     /**
     * The key to use when scoping the metadata.
