@@ -21,6 +21,8 @@ component {
             .to( "#moduleMapping#.models.serializers.DataSerializer" );
         binder.map( "ResultsMapSerializer@cffractal" ).asSingleton()
             .to( "#moduleMapping#.models.serializers.ResultsMapSerializer" );
+        binder.map( "XMLSerializer@cffractal" ).asSingleton()
+            .to( "#moduleMapping#.models.serializers.XMLSerializer" );
 
         binder.map( "Manager@cffractal" )
             .to( "#moduleMapping#.models.Manager" )
