@@ -24,7 +24,7 @@
         "coldbox":"tests/resources/app/coldbox"
     },
     "scripts":{
-        "postVersion":"package set location='coldbox-modules/cffractal#v`package version`'",
+        "postVersion":"package set location='coldbox-modules/cffractal#v`package version`'"
     },
     "ignore":[
         "**/.*",
