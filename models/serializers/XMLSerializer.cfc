@@ -102,7 +102,7 @@ component singleton {
             } );
         }
         else {
-            parent.XmlText = encodeForXML( contents );
+            parent.XmlText = contents;
         }
     }
 
