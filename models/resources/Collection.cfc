@@ -20,8 +20,9 @@ component extends="cffractal.models.resources.AbstractResource" {
         }
 
         var transformedDataArray = [];
-        for ( var value in data ) {
-            var transformedItem = processItem( scope, value );
+
+        arrayEach( data, function( value ){
+        	var transformedItem = processItem( scope, value );
             for ( var callback in postTransformationCallbacks ) {
                 transformedItem = paramNull(
                     callback(
@@ -36,7 +37,8 @@ component extends="cffractal.models.resources.AbstractResource" {
                 transformedDataArray,
                 transformedItem
             );
-        }
+        } );
+
         return transformedDataArray;
     }
 
