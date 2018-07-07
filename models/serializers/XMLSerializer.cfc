@@ -15,9 +15,16 @@ component singleton {
     */
     property name="metaKey";
 
-    function init( rootKey = "root", metaKey = "meta" ) {
+
+    /**
+    * Do we alpha-sort the keys for XML output (default) or preserve the incoming order
+    */
+    property name="sortKeys";
+    
+    function init( rootKey = "root", metaKey = "meta", sortKeys = true ) {
         variables.rootKey = arguments.rootKey;
         variables.metaKey = arguments.metaKey;
+        variables.sortKeys = arguments.sortKeys;
         return this;
     }
 
@@ -94,7 +101,7 @@ component singleton {
         }
         else if ( isStruct( contents ) ) {
             var keys = structKeyArray( contents );
-            arraySort( keys, "textnocase" );
+            if (variables.sortKeys) arraySort( keys, "textnocase" );
             arrayEach( keys, function( key ) {
                 var newNode = XMLElemNew( root, key );
                 populateNode( newNode, contents[ key ], root );
