@@ -37,6 +37,26 @@ component extends="testbox.system.BaseSpec" {
                 expect( scope.convert() ).toMatch( '<root><book><id>1</id><title>To Kill a Mockingbird</title><year>1960</year></book></root>' );
             } );
 
+            describe( "has serialization options", function() {
+                beforeEach( function() {
+                    variables.XMLSerializer = new cffractal.models.serializers.XMLSerializer( sortKeys = false );
+                    variables.fractal = new cffractal.models.Manager( XMLSerializer, XMLSerializer, {} );
+                });
+
+                it( "can preserve the order of the keys", function() {
+                    var book = new tests.resources.Book( {
+                        id = 1,
+                        title = "To Kill a Mockingbird",
+                        year = "1960"
+                    } );
+
+                    var resource = fractal.item( book, new tests.resources.BookTransformer( sortKeys = false ).setManager( fractal ) );
+
+                    var scope = fractal.createData( resource );
+                    expect( scope.convert() ).toMatch( '<root><book><year>1960</year><title>To Kill a Mockingbird</title><id>1</id></book></root>' );
+                } );  
+            });
+
             describe( "includes", function() {
                 it( "ignores includes by default", function() {
                     var book = new tests.resources.Book( {
