@@ -364,6 +364,10 @@ var transformed = "
 ";
 ```
 
+##### Key Order in XML
+
+By default, `XMLSerializer` explicitly sorts all keys alphabetically since the various CF engines behave differently with respect to struct key order. If you are using ordered structs or a `LinkedHashMap` and you need the output to reflect the incoming order of the keys, you can disable the alpha sort by passing `sortKeys = false` to the constructor of `XMLSerializer` and managing the order of the keys in your transformer.  
+
 > #### API
 
 > ##### `init`
