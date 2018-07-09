@@ -3,12 +3,12 @@ component extends="cffractal.models.transformers.AbstractTransformer" {
     variables.resourceKey = "book";
     variables.availableIncludes = [ "author" ];
 
-    function init(boolean sortKeys = true) {
+    function init( sortKeys = true ) {
         variables.sortKeys = arguments.sortKeys;
     }
 
     function transform( book ) {
-        if (sortKeys) {
+        if ( sortKeys ) {
             return {
                 "id" = book.getId(),
                 "title" = book.getTitle(),
@@ -25,7 +25,10 @@ component extends="cffractal.models.transformers.AbstractTransformer" {
     }
 
     function includeAuthor( book ) {
-        return item( book.getAuthor(), new tests.resources.AuthorTransformer().setManager( manager ) );
+        return item(
+            book.getAuthor(),
+            new tests.resources.AuthorTransformer().setManager( manager )
+        );
     }
 
 }
