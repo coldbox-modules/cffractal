@@ -1,31 +1,31 @@
 language: java
 sudo: required
-jdk:
+jdk: 
 - oraclejdk8
-cache:
-  directories:
-  - "$HOME/.CommandBox"
-env:
-  matrix:
-  - ENGINE=lucee@4.5
-  - ENGINE=lucee@5
-  - ENGINE=adobe@2016
-  - ENGINE=adobe@11
-  - ENGINE=adobe@10
-before_install:
+cache: 
+   directories: 
+   - $HOME/.CommandBox
+env: 
+   matrix: 
+   - ENGINE=lucee@5
+   - ENGINE=lucee@4.5
+   - ENGINE=adobe@2018
+   - ENGINE=adobe@2016
+   - ENGINE=adobe@11
+   - ENGINE=adobe@10
+before_install: 
 - sudo apt-key adv --keyserver keys.gnupg.net --recv 6DA70622
-- sudo echo "deb http://downloads.ortussolutions.com/debs/noarch /" | sudo tee -a
-  /etc/apt/sources.list.d/commandbox.list
-install:
+- sudo echo "deb http://downloads.ortussolutions.com/debs/noarch /" | sudo tee -a /etc/apt/sources.list.d/commandbox.list
+install: 
 - sudo apt-get update && sudo apt-get --assume-yes install commandbox
 - box install
-before_script:
+before_script: 
 - box server start cfengine=$ENGINE port=8500
-script:
+script: 
 - box testbox run runner='http://127.0.0.1:8500/tests/runner.cfm'
-after_success:
-  - box install commandbox-semantic-release
-  - box config set endpoints.forgebox.APIToken=${FORGEBOX_TOKEN}
-  - box semantic-release
-notifications:
-  email: false
+after_success: 
+- box install commandbox-semantic-release
+- box config set endpoints.forgebox.APIToken=${FORGEBOX_TOKEN}
+- box semantic-release
+notifications: 
+   email: false
