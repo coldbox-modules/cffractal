@@ -28,10 +28,38 @@ component extends="testbox.system.BaseSpec" {
                     expect( item ).toBeInstanceOf( "cffractal.models.resources.Item" );
                 } );
 
+                it( "can add postTransformationCallbacks when creating items", function() {
+                    makePublic( transformer, "item", "itemPublic" );
+                    var item = prepareMock(
+                        transformer.itemPublic(
+                            data = {},
+                            transformer = function() {},
+                            itemCallback = function() {}
+                        )
+                    );
+                    var callbacks = item.$getProperty( "postTransformationCallbacks" );
+                    expect( callbacks ).toBeArray();
+                    expect( callbacks ).toHaveLength( 1 );
+                } );
+
                 it( "can create new collections", function() {
                     makePublic( transformer, "collection", "collectionPublic" );
                     var collection = transformer.collectionPublic( [ {}, {} ], function() {} );
                     expect( collection ).toBeInstanceOf( "cffractal.models.resources.Collection" );
+                } );
+
+                it( "can add postTransformationCallbacks when creating collections", function() {
+                    makePublic( transformer, "collection", "collectionPublic" );
+                    var collection = prepareMock(
+                        transformer.collectionPublic(
+                            data = [ {}, {} ],
+                            transformer = function() {},
+                            itemCallback = function() {}
+                        )
+                    );
+                    var callbacks = collection.$getProperty( "postTransformationCallbacks" );
+                    expect( callbacks ).toBeArray();
+                    expect( callbacks ).toHaveLength( 1 );
                 } );
             } );
 

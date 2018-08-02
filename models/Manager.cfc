@@ -80,23 +80,39 @@ component singleton accessors="true" {
     * @data        The data or component to transform.
     * @transformer The transformer callback or component to use
     *              transforming the above data.
+    * @serializer   A custom serializer for this resource.
+                    Defaults to the manager default for a item.
+    * @itemCallback An optional callback to call after each item is serialized.
     *
-    * @returns     A new cffractal Item wrapping the given data and transformer.
+    * @returns      A new cffractal Item wrapping the given data and transformer.
     */
-    function item( data, transformer, serializer = variables.itemSerializer ) {
+    function item(
+        data,
+        transformer,
+        serializer = variables.itemSerializer,
+        itemCallback
+    ) {
         return new cffractal.models.resources.Item( argumentCollection = arguments );
     }
 
     /**
     * Returns a new collection resource with the given data and transformer.
     *
-    * @data        The data or component to transform.
-    * @transformer The transformer callback or component to use
-    *              transforming the above data.
+    * @data         The data or component to transform.
+    * @transformer  The transformer callback or component to use
+    *               transforming the above data.
+    * @serializer   A custom serializer for this resource.
+    *               Defaults to the manager default for a collection.
+    * @itemCallback An optional callback to call after each item is serialized.
     *
-    * @returns     A new cffractal Collection wrapping the given data and transformer.
+    * @returns      A new cffractal Collection wrapping the given data and transformer.
     */
-    function collection( data, transformer, serializer = variables.collectionSerializer ) {
+    function collection(
+        data,
+        transformer,
+        serializer = variables.collectionSerializer,
+        itemCallback
+    ) {
         return new cffractal.models.resources.Collection( argumentCollection = arguments );
     }
     

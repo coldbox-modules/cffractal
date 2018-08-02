@@ -422,6 +422,7 @@ You can create a resource either from the `Manager` or from inside a `Transforme
 > | data | any | true | | The model to transform. |
 > | transformer | any | true | | The transformer for the given model. |
 > | serializer | Serializer | false | The default serializer on the Manager. | The serializer to use when serializing the data. |
+> | itemCallback | function | false | | An optional callback to call after each item is serialized. |
  
 > ##### `collection`
 >
@@ -432,6 +433,7 @@ You can create a resource either from the `Manager` or from inside a `Transforme
 > | data | any | true | | The model to transform. |
 > | transformer | any | true | | The transformer for the given model. |
 > | serializer | Serializer | false | The default serializer on the Manager. | The serializer to use when serializing the data. |
+> | itemCallback | function | false | | An optional callback to call after each item is serialized. |
 
 ##### Specifying Custom Serializers
 
