@@ -46,11 +46,14 @@ component accessors="true" {
     *
     * @returns     A Fractal resource.
     */
-    function init( data, transformer, serializer, meta = {} ) {
+    function init( data, transformer, serializer, meta = {}, itemCallback ) {
         variables.data = isNull( arguments.data ) ? javacast( "null", "" ) : arguments.data;
         variables.transformer = arguments.transformer;
         variables.serializer = arguments.serializer;
         variables.meta = arguments.meta;
+        if ( ! isNull( itemCallback ) ) {
+            addPostTransformationCallback( itemCallback );
+        }
         return this;
     }
 

@@ -146,13 +146,15 @@ component {
     * Returns a new item resource with the given data and transformer.
     * Used primarily inside a includes method.
     *
-    * @data        The data or component to transform.
-    * @transformer The transformer callback or component to use
-    *              transforming the above data.
+    * @data         The data or component to transform.
+    * @transformer  The transformer callback or component to use
+    *               transforming the above data.
+    * @serializer   A custom serializer for this resource.
+    * @itemCallback An optional callback to call after each item is serialized.
     *
-    * @returns A new cffractal Item wrapping the given data and transformer.
+    * @returns      A new cffractal Item wrapping the given data and transformer.
     */
-    private function item( data, transformer, serializer ) {
+    private function item( data, transformer, serializer, itemCallback ) {
         return manager.item( argumentCollection = arguments );
     }
 
@@ -160,13 +162,15 @@ component {
     * Returns a new collection resource with the given data and transformer.
     * Used primarily inside a includes method.
     *
-    * @data        The data or component to transform.
-    * @transformer The transformer callback or component to use
-    *              transforming the above data.
+    * @data         The data or component to transform.
+    * @transformer  The transformer callback or component to use
+    *               transforming the above data.
+    * @serializer   A custom serializer for this resource.
+    * @itemCallback An optional callback to call after each item is serialized.
     *
-    * @returns A new cffractal Collection wrapping the given data and transformer.
+    * @returns      A new cffractal Collection wrapping the given data and transformer.
     */
-    private function collection( data, transformer, serializer ) {
+    private function collection( data, transformer, serializer, itemCallback ) {
         return manager.collection( argumentCollection = arguments );
     }
 }
