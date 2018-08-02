@@ -65,6 +65,45 @@ component {
     }
 
     /**
+    * Allows the user to set a custom serializer for the transformer.
+    * This method sets both the itemSerializer and the collectionSerializer.
+    *
+    * @serializer The default custom serializer to use for items and
+    *             collections created by this transformer.
+    *
+    * @returns    The transfomer instance.
+    */
+    function setSerializer( required any serializer ) {
+        setItemSerializer( serializer );
+        setCollectionSerializer( serializer );
+        return this;
+    }
+
+    /**
+    * Allows the user to set a custom item serializer for the transformer.
+    *
+    * @serializer The default custom serializer to use for items created by this transformer.
+    *
+    * @returns    The transfomer instance.
+    */
+    function setItemSerializer( required any serializer ) {
+        variables.itemSerializer = arguments.serializer;
+        return this;
+    }
+
+    /**
+    * Allows the user to set a custom collection serializer for the transformer.
+    *
+    * @serializer The default custom serializer to use for collections created by this transformer.
+    *
+    * @returns    The transfomer instance.
+    */
+    function setCollectionSerializer( required any serializer ) {
+        variables.collectionSerializer = arguments.serializer;
+        return this;
+    }
+
+    /**
     * Determines if a transformer has any available or default includes.
     *
     * @returns True if a transformer has any available or default includes.
@@ -155,6 +194,9 @@ component {
     * @returns      A new cffractal Item wrapping the given data and transformer.
     */
     private function item( data, transformer, serializer, itemCallback ) {
+        if ( isNull( arguments.serializer ) && ! isNull( variables.itemSerializer ) ) {
+            arguments.serializer = variables.itemSerializer;
+        }
         return manager.item( argumentCollection = arguments );
     }
 
@@ -171,6 +213,10 @@ component {
     * @returns      A new cffractal Collection wrapping the given data and transformer.
     */
     private function collection( data, transformer, serializer, itemCallback ) {
+        if ( isNull( arguments.serializer ) && ! isNull( variables.collectionSerializer ) ) {
+            writeDump( var = 'here', top = 2 );
+            arguments.serializer = variables.collectionSerializer;
+        }
         return manager.collection( argumentCollection = arguments );
     }
 }
