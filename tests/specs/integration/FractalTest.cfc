@@ -202,6 +202,25 @@ component extends="testbox.system.BaseSpec" {
                             expect( scope.convert() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}} );
                         } );
 
+                        it( "can handle primitives returned directly from an include", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } ),
+                                isClassic = false
+                            } );
+
+                            var resource = fractal.item( book, new tests.resources.BookTransformer().setManager( fractal ) );
+
+                            var scope = fractal.createData( resource = resource, includes = "isClassic" );
+                            expect( scope.convert() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"isClassic":false}} );
+                        } );
+
                         it( "can parse an item with a default includes", function() {
                             var book = new tests.resources.Book( {
                                 id = 1,

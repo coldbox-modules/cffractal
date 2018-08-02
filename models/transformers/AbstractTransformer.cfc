@@ -88,6 +88,13 @@ component {
         var includedData = [];
         for ( var include in allIncludes ) {
             var resource = invoke( this, "include#include#", { 1 = data } );
+            if ( isSimpleValue( resource ) ) {
+                resource = item(
+                    resource,
+                    function( item ) { return item; },
+                    new cffractal.models.serializers.SimpleSerializer()
+                );
+            }
             var childScope = scope.embedChildScope( include, resource );
             arrayAppend( includedData, childScope.convert() );
         }

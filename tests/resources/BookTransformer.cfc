@@ -1,7 +1,7 @@
 component extends="cffractal.models.transformers.AbstractTransformer" {
 
     variables.resourceKey = "book";
-    variables.availableIncludes = [ "author" ];
+    variables.availableIncludes = [ "author", "isClassic" ];
 
     function init( sortKeys = true ) {
         variables.sortKeys = arguments.sortKeys;
@@ -29,6 +29,10 @@ component extends="cffractal.models.transformers.AbstractTransformer" {
             book.getAuthor(),
             new tests.resources.AuthorTransformer().setManager( manager )
         );
+    }
+
+    function includeIsClassic( book ) {
+        return book.getIsClassic();
     }
 
 }

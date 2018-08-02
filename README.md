@@ -857,6 +857,105 @@ We get a more in-depth response:
 }
 ```
 
+Includes can also handle simple data columns that are optional in your default payload.
+Your `include` method can return the simple value directly.
+
+Let's say in our example above we wanted `pulbishedDate` to be an available include, that is,
+not included by default in our payload.
+
+```js
+component name="Book" accessors="true" {
+
+    property name="id";
+    property name="name";
+    property name="publishedDate";
+
+    property name="authorId";
+    property name="publisherId";
+
+    // we'll assume these methods do the right thing... 😉
+    function getAuthor() { /* ... */ }
+    function getPublisher() { /* ... */ }
+
+}
+
+component name="BookTransformer" extends="cffractal.models.transformers.AbstractTransformer" singleton {
+
+    variables.defaultIncludes = [ "author" ];
+    variables.availableIncludes = [ "publisher", "yearPublished" ];
+
+    function transform( book ) {
+        return {
+            "id" = book.getId(),
+            "title" = book.getName()
+        };
+    }
+
+    function includeAuthor( book ) {
+        return item(
+            book.getAuthor(),
+            wirebox.getInstance( "AuthorTransformer" )
+        );
+    }
+
+    function includePublisher( book ) {
+        return item(
+            book.getPublisher(),
+            wirebox.getInstance( "PublisherTransformer" )
+        );
+    }
+
+    function includeYearPublished( book ) {
+        return dateFormat( book.getPublishedDate(), "dd mmm yyyy" );
+    }
+
+}
+```
+
+Now our default response looks like this:
+
+```json
+{
+    "data": {
+        "id": 1,
+        "title": "To Kill a Mockingbird",
+        "author": {
+            "data": {
+                "id": 54,
+                "name": "Harper Lee"
+            }
+        }
+    }
+}
+```
+
+And passing `yearPublished` as an include gives us this:
+
+```js
+var transformedData = fractal.createData(
+    resource = resource,
+    includes = "yearPublished"
+).toJSON();
+```
+
+We get a more in-depth response:
+
+```json
+{
+    "data": {
+        "id": 1,
+        "title": "To Kill a Mockingbird",
+        "yearPublished": "1960",
+        "author": {
+            "data": {
+                "id": 54,
+                "name": "Harper Lee"
+            }
+        }
+    }
+}
+```
+
 ##### Custom Managers
 
 By default the "Manager" of your transformer defaults to `Manager@cffractal`.  A `setManager()` method is available in your transformers, which allows you to specific a custom manager.  This manager, however, must implement the methods found in `cffractal.models.Manager`.
