@@ -421,7 +421,7 @@ You can create a resource either from the `Manager` or from inside a `Transforme
 > | --- | --- | --- | --- | --- | 
 > | data | any | true | | The model to transform. |
 > | transformer | any | true | | The transformer for the given model. |
-> | serializer | Serializer | false | The default serializer on the Manager. | The serializer to use when serializing the data. |
+> | serializer | Serializer | false | The default item serializer on the Transformer or Manager. | The serializer to use when serializing the data. |
 > | itemCallback | function | false | | An optional callback to call after each item is serialized. |
  
 > ##### `collection`
@@ -432,7 +432,7 @@ You can create a resource either from the `Manager` or from inside a `Transforme
 > | --- | --- | --- | --- | --- | 
 > | data | any | true | | The model to transform. |
 > | transformer | any | true | | The transformer for the given model. |
-> | serializer | Serializer | false | The default serializer on the Manager. | The serializer to use when serializing the data. |
+> | serializer | Serializer | false | The default collection serializer on the Transformer or Manager. | The serializer to use when serializing the data. |
 > | itemCallback | function | false | | An optional callback to call after each item is serialized. |
 
 ##### Specifying Custom Serializers
@@ -456,6 +456,12 @@ You can retrieve and set the custom serializers right from the resource.
 > | Name | Type | Required | Default | Description |
 > | --- | --- | --- | --- | --- | 
 > | serializer | Serializer | true | | The serializer to associate with this specific resource. |
+
+Default serializers can also be set on the `Transformer` level.  If one is set, it will be passed to the `Manager`
+if no resource level serializer is passed.  This allows you to specify a serializer for an entire transformer.
+The methods to set a serializer for a `Transformer` is the same as on the `Manager`.  You can set the item and 
+collection serializers individually (`setItemSerializer` and `setCollectionSerializer`) or you can set both at
+the same time (`setSerializer`).
 
 ##### Metadata
 

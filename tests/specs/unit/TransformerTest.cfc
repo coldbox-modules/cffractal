@@ -1,15 +1,16 @@
 component extends="testbox.system.BaseSpec" {
-    
-    function beforeAll() {
-        variables.mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
-        variables.mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
-        mockFractal.$property( propertyName = "itemSerializer", mock = mockSerializer );
-        mockFractal.$property( propertyName = "collectionSerializer", mock = mockSerializer );
-        variables.transformer = new cffractal.models.transformers.AbstractTransformer( mockFractal );
-    }
 
     function run() {
         describe( "abstract transformers", function() {
+            beforeEach( function() {
+                variables.mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
+                variables.mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
+                mockFractal.$property( propertyName = "itemSerializer", mock = mockSerializer );
+                mockFractal.$property( propertyName = "collectionSerializer", mock = mockSerializer );
+                variables.transformer = new cffractal.models.transformers.AbstractTransformer();
+                transformer.setManager( mockFractal );
+            } );
+
             it( "can be instantiated", function() {
                 expect( transformer )
                     .toBeInstanceOf( "cffractal.models.transformers.AbstractTransformer" );
@@ -24,7 +25,7 @@ component extends="testbox.system.BaseSpec" {
             describe( "resource creation", function() {
                 it( "can create new items", function() {
                     makePublic( transformer, "item", "itemPublic" );
-                    var item = transformer.setManager( mockFractal ).itemPublic( {}, function() {} );
+                    var item = transformer.itemPublic( {}, function() {} );
                     expect( item ).toBeInstanceOf( "cffractal.models.resources.Item" );
                 } );
 
@@ -40,6 +41,17 @@ component extends="testbox.system.BaseSpec" {
                     var callbacks = item.$getProperty( "postTransformationCallbacks" );
                     expect( callbacks ).toBeArray();
                     expect( callbacks ).toHaveLength( 1 );
+                } );
+
+                it( "creates an item with the transformer serializer if one has been specified", function() {
+                    makePublic( transformer, "item", "itemPublic" );
+                    var itemA = transformer.itemPublic( {}, function() {} );
+                    expect( itemA.getSerializer() ).toBe( mockSerializer );
+
+                    var otherMockSerializer = getMockBox().createMock( "cffractal.models.serializers.SimpleSerializer" );
+                    transformer.setSerializer( otherMockSerializer );
+                    var itemB = transformer.itemPublic( {}, function() {} );
+                    expect( itemB.getSerializer() ).toBe( otherMockSerializer );
                 } );
 
                 it( "can create new collections", function() {
@@ -60,6 +72,37 @@ component extends="testbox.system.BaseSpec" {
                     var callbacks = collection.$getProperty( "postTransformationCallbacks" );
                     expect( callbacks ).toBeArray();
                     expect( callbacks ).toHaveLength( 1 );
+                } );
+
+                it( "creates an collection with the transformer serializer if one has been specified", function() {
+                    makePublic( transformer, "collection", "collectionPublic" );
+                    var collectionA = transformer.collectionPublic( [ {}, {} ], function() {} );
+                    expect( collectionA.getSerializer() ).toBe( mockSerializer );
+
+                    var otherMockSerializer = getMockBox().createMock( "cffractal.models.serializers.SimpleSerializer" );
+                    transformer.setSerializer( otherMockSerializer );
+                    var collectionB = transformer.collectionPublic( [ {}, {} ], function() {} );
+                    expect( collectionB.getSerializer() ).toBe( otherMockSerializer );
+                } );
+
+                it( "can set a itemSerializer and a collectionSerializer separately for a transformer", function() {
+                    makePublic( transformer, "item", "itemPublic" );
+                    makePublic( transformer, "collection", "collectionPublic" );
+
+                    var itemA = transformer.itemPublic( {}, function() {} );
+                    var collectionA = transformer.collectionPublic( [ {}, {} ], function() {} );
+
+                    expect( itemA.getSerializer() ).toBe( mockSerializer );
+                    expect( collectionA.getSerializer() ).toBe( mockSerializer );
+
+                    var otherMockSerializer = getMockBox().createMock( "cffractal.models.serializers.SimpleSerializer" );
+                    transformer.setItemSerializer( otherMockSerializer );
+
+                    var itemB = transformer.itemPublic( {}, function() {} );
+                    var collectionB = transformer.collectionPublic( [ {}, {} ], function() {} );
+
+                    expect( itemB.getSerializer() ).toBe( otherMockSerializer );
+                    expect( collectionB.getSerializer() ).toBe( mockSerializer );
                 } );
             } );
 
