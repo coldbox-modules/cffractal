@@ -4,7 +4,7 @@ component accessors="true" {
     property name="title";
     property name="year";
     property name="author";
-    property name="isClassic";
+    property name="isClassic" default="false";
 
     function init( struct args = {} ) {
         for ( var arg in args ) {

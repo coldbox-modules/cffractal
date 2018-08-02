@@ -5,7 +5,7 @@
 *              resources, including processing includes,
 *              and creating new resources.
 */
-component {
+component accessors="true" {
 
     /**
     * A WireBox instance for ColdBox users to easily
@@ -171,7 +171,7 @@ component {
     *
     * @returns An array of includes to fetch for the transformer.
     */
-    private array function filterIncludes( scope ) {
+    public array function filterIncludes( scope ) {
         var filteredIncludes = variables.defaultIncludes;
         for ( var include in variables.availableIncludes ) {
             if ( scope.requestedInclude( include ) ) {

@@ -99,6 +99,12 @@ component accessors="true" {
             return isNull( transformedData ) ? javacast( "null", "" ) : transformedData;
         }
 
+        transformedData = removeUnusedAvailableIncludes(
+            transformedData,
+            transformer.getAvailableIncludes(),
+            transformer.filterIncludes( scope )
+        );
+
         if ( ! transformer.hasIncludes() ) {
             return isNull( transformedData ) ? javacast( "null", "" ) : transformedData;
         }
@@ -194,6 +200,24 @@ component accessors="true" {
     */
     private function paramNull( value, defaultValue ) {
         return isNull( value ) ? defaultValue : value;
+    }
+
+    /**
+    * Removes any unused available includes keys from the transformed data.
+    *
+    * @transformedData   The current transformed data structure.
+    * @availableIncludes The available includes for the transformer.
+    * @includes          The current filtered includes list.
+    *
+    * @returns           The transformed data without any unsued available includes keys.
+    */
+    private function removeUnusedAvailableIncludes( transformedData, availableIncludes, includes ) {
+        for ( var availableInclude in availableIncludes ) {
+            if ( ! includes.contains( availableInclude ) ) {
+                structDelete( transformedData, availableInclude );
+            }
+        }
+        return transformedData;
     }
 
 }

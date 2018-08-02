@@ -12,7 +12,8 @@ component extends="cffractal.models.transformers.AbstractTransformer" {
             return {
                 "id" = book.getId(),
                 "title" = book.getTitle(),
-                "year" = book.getYear()
+                "year" = book.getYear(),
+                "isClassic" = book.getIsClassic()
             };
         }
         else {
@@ -20,6 +21,7 @@ component extends="cffractal.models.transformers.AbstractTransformer" {
             hashMap[ "year" ] = "1960";
             hashMap[ "title" ] = "To Kill a Mockingbird";
             hashMap[ "id" ] = 1;
+            hashMap[ "isClassic" ] = book.getIsClassic();
             return hashMap;
         }
     }
