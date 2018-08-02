@@ -946,14 +946,74 @@ var transformedData = fractal.createData(
 ).toJSON();
 ```
 
-We get a more in-depth response:
-
 ```json
 {
     "data": {
         "id": 1,
         "title": "To Kill a Mockingbird",
         "yearPublished": "1960",
+        "author": {
+            "data": {
+                "id": 54,
+                "name": "Harper Lee"
+            }
+        }
+    }
+}
+```
+
+CFFractal will also strip out any unspecified `availableIncludes` from your serialized output.  With regards to the
+example above, if you did not specify `yearPublished` in the `includes`, but your `transform` method returned it
+anyway, CFFractal would remove the column before returning it to you.  That means that even with the following transformer:
+
+```js
+component name="BookTransformer" extends="cffractal.models.transformers.AbstractTransformer" singleton {
+
+    variables.defaultIncludes = [ "author" ];
+    variables.availableIncludes = [ "publisher", "yearPublished" ];
+
+    function transform( book ) {
+        return {
+            "id" = book.getId(),
+            "title" = book.getName(),
+            "yearPublished" = dateFormat( book.getPublishedDate(), "dd mmm yyyy" )
+        };
+    }
+
+    function includeAuthor( book ) {
+        return item(
+            book.getAuthor(),
+            wirebox.getInstance( "AuthorTransformer" )
+        );
+    }
+
+    function includePublisher( book ) {
+        return item(
+            book.getPublisher(),
+            wirebox.getInstance( "PublisherTransformer" )
+        );
+    }
+
+    function includeYearPublished( book ) {
+        return dateFormat( book.getPublishedDate(), "dd mmm yyyy" );
+    }
+
+}
+```
+
+And calling CFFractal with no includes:
+
+```js
+var transformedData = fractal.createData( resource ).toJSON();
+```
+
+You would _**not**_ see the `yearPublished` key in the response:
+
+```json
+{
+    "data": {
+        "id": 1,
+        "title": "To Kill a Mockingbird",
         "author": {
             "data": {
                 "id": 54,
