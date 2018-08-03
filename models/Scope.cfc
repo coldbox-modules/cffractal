@@ -70,6 +70,7 @@ component accessors="true" {
     function embedChildScope( identifier, resource ) {
         arguments.identifier = combineIdentifiers( variables.identifier, arguments.identifier );
         arguments.includes = arrayToList( includes );
+        arguments.excludes = arrayToList( excludes );
         return manager.createData( argumentCollection = arguments );
     }
 
@@ -125,9 +126,9 @@ component accessors="true" {
     /**
     * Returns if an include is requested.
     *
-    * @needle          The include to see if it is requested.
+    * @needle  The include to see if it is requested.
     *
-    * @returns         True, if the include is requested.
+    * @returns True, if the include is requested.
     */
     function requestedInclude( needle ) {
         if ( identifier != "" ) {
@@ -136,6 +137,27 @@ component accessors="true" {
 
         for ( var include in includes ) {
             if ( compareNoCase( needle, include ) == 0 ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+    * Returns if an exclude is requested.
+    *
+    * @needle  The exclude to see if it is requested.
+    *
+    * @returns True, if the exclude is requested.
+    */
+    function requestedExclude( needle ) {
+        if ( identifier != "" ) {
+            needle = "#identifier#.#needle#";
+        }
+
+        for ( var exclude in excludes ) {
+            if ( compareNoCase( needle, exclude ) == 0 ) {
                 return true;
             }
         }

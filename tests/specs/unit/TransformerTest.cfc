@@ -128,8 +128,9 @@ component extends="testbox.system.BaseSpec" {
 
             it( "can process the includes of a transformer", function() {
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$property( propertyName = "identifier", mock = "" );
+                mockScope.$property( propertyName = "excludes", mock = [] );
                 mockScope.$( "requestedInclude" ).$args( "author" ).$results( true );
-                mockScope.$( "getExcludes", [] );
                 var mockItem = getMockBox().createMock( "cffractal.models.resources.Item" );
                 prepareMock( transformer );
                 transformer.$( "includeAuthor" ).$args( mockItem ).$results( { "foo" = "bar" } );

@@ -3,6 +3,11 @@ component extends="cffractal.models.transformers.AbstractTransformer" {
     variables.resourceKey = "book";
     variables.defaultIncludes = [ "author" ];
 
+    function init( withDefaultCountry = false ) {
+        variables.withDefaultCountry = arguments.withDefaultCountry;
+        return this;
+    }
+
     function transform( book ) {
         return {
             "id" = book.getId(),
@@ -12,11 +17,10 @@ component extends="cffractal.models.transformers.AbstractTransformer" {
     }
 
     function includeAuthor( book ) {
-        return item( book.getAuthor(), function( author ) {
-            return {
-                "name" = author.getName()
-            };
-        } );
+        return item(
+            book.getAuthor(),
+            new tests.resources.DefaultIncludesAuthorTransformer( withDefaultCountry ).setManager( manager )
+        );
     }
 
 }

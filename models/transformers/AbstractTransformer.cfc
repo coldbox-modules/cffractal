@@ -180,7 +180,7 @@ component accessors="true" {
         }
         var excludes = scope.getExcludes();
         return arrayFilter( filteredIncludes, function( include ) {
-            return ! arrayContains( excludes, include );
+            return ! scope.requestedExclude( include );
         } );
     }
 

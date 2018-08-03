@@ -248,7 +248,15 @@ component extends="testbox.system.BaseSpec" {
                                 author = new tests.resources.Author( {
                                     id = 1,
                                     name = "Harper Lee",
-                                    birthdate = createDate( 1926, 04, 28 )
+                                    birthdate = createDate( 1926, 04, 28 ),
+                                    country = new tests.resources.Country( {
+                                        id = 1,
+                                        name = "United States",
+                                        planet = new tests.resources.Planet( {
+                                            id = 1,
+                                            name = "Earth"
+                                        } )
+                                    } )
                                 } )
                             } );
 
@@ -431,6 +439,47 @@ component extends="testbox.system.BaseSpec" {
                                 excludes = "author"
                             );
                             expect( scope.convert() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}} );
+                        } );
+
+                        it( "can ignore a nested default include", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 ),
+                                    country = new tests.resources.Country( {
+                                        id = 1,
+                                        name = "United States",
+                                        planet = new tests.resources.Planet( {
+                                            id = 1,
+                                            name = "Earth"
+                                        } )
+                                    } )
+                                } )
+                            } );
+
+                            var resource = fractal.item( book, new tests.resources.DefaultIncludesBookTransformer( withDefaultCountry = true ).setManager( fractal ) );
+
+                            var scope = fractal.createData(
+                                resource = resource,
+                                excludes = "author.country"
+                            );
+                            var expectedData = {
+                                "data" = {
+                                    "year" = 1960,
+                                    "title" = "To Kill a Mockingbird",
+                                    "id" = 1,
+                                    "author" = {
+                                        "data" = {
+                                            "name" = "Harper Lee"
+                                        }
+                                    }
+                                }
+                            };
+                            expect( scope.convert() ).toBe( expectedData );
                         } );
                     } );
                 } );
