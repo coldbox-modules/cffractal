@@ -481,6 +481,27 @@ component extends="testbox.system.BaseSpec" {
                             };
                             expect( scope.convert() ).toBe( expectedData );
                         } );
+
+                        it( "removes the excluded keys from the serialized output with a closure transformer", function() {
+                            var planet = new tests.resources.Planet( {
+                                id = 1,
+                                name = "Mercury"
+                            } );
+
+                            var resource = fractal.item( planet, function( planet ) {
+                                return {
+                                    id = planet.getId(),
+                                    name = planet.getName()
+                                };
+                            } );
+
+                            var scope = fractal.createData(
+                                resource = resource,
+                                excludes = "name"
+                            );
+
+                            expect( scope.convert() ).toBe( { "data" = { "id" = 1 } } );
+                        } );
                     } );
                 } );
 

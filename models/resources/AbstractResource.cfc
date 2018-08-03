@@ -95,6 +95,11 @@ component accessors="true" {
             return scope.getNullDefaultValue();
         }
 
+        transformedData = removeExcludes(
+            transformedData,
+            scope.getExcludes()
+        );
+
         if ( isClosure( transformer ) || isCustomFunction( transformer ) ) {
             return isNull( transformedData ) ? javacast( "null", "" ) : transformedData;
         }
@@ -200,6 +205,21 @@ component accessors="true" {
     */
     private function paramNull( value, defaultValue ) {
         return isNull( value ) ? defaultValue : value;
+    }
+
+    /**
+    * Removes any excluded keys from the transformed data.
+    *
+    * @transformedData   The current transformed data structure.
+    * @excludes          The current filtered excludes list.
+    *
+    * @returns           The transformed data without any excluded keys.
+    */
+    private function removeExcludes( transformedData, excludes ) {
+        for ( var exclude in excludes ) {
+            structDelete( transformedData, exclude );
+        }
+        return transformedData;
     }
 
     /**

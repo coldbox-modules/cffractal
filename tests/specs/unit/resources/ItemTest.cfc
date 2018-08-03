@@ -14,6 +14,7 @@ component extends="testbox.system.BaseSpec" {
             it( "can add postTransformationCallbacks", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$property( propertyName = "excludes", mock = [] );
                 mockScope.$( "getNullDefaultValue", {} );
                 var item = new cffractal.models.resources.Item( {
                     "foo" = "bar"
@@ -31,7 +32,7 @@ component extends="testbox.system.BaseSpec" {
                     callbackCalled = true;
                     return itemStruct;
                 } );
-                
+
                 item.process( mockScope );
 
                 expect( callbackCalled ).toBeTrue( "Callback was never called" );
@@ -41,7 +42,7 @@ component extends="testbox.system.BaseSpec" {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
                 mockScope.$( "getNullDefaultValue", {} );
-                var item = new cffractal.models.resources.Item( 
+                var item = new cffractal.models.resources.Item(
                     javacast( "null", "" ),
                     function( item ) {
                         return isNull( item ) ? javacast( "null", "" ) : item;
@@ -55,7 +56,7 @@ component extends="testbox.system.BaseSpec" {
                     callbackCalled = true;
                     return {};
                 } );
-                
+
                 item.process( mockScope );
 
                 expect( callbackCalled ).toBeTrue( "Callback was never called" );
