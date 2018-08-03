@@ -97,7 +97,7 @@ component accessors="true" {
 
         transformedData = removeExcludes(
             transformedData,
-            scope.getExcludes()
+            scope.filteredExcludes()
         );
 
         if ( isClosure( transformer ) || isCustomFunction( transformer ) ) {

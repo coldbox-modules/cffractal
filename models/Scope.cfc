@@ -166,6 +166,26 @@ component accessors="true" {
     }
 
     /**
+     * Return the excludes for the specified level.
+     *
+     * @returns The excludes minus the identifier (if any).
+     */
+    function filteredExcludes() {
+        var collection = [];
+        for ( var exclude in excludes ) {
+            if ( identifier == "" ) {
+                arrayAppend( collection, exclude );
+            }
+            else {
+                arrayAppend( collection, replaceNoCase( exclude, identifier & ".", "" ) );
+            }
+        }
+        return arrayFilter( collection, function( item ) {
+            return item != "";
+        } );
+    }
+
+    /**
     * Parse the list of includes, including parent includes not specified.
     *
     * @includes A list of includes.
