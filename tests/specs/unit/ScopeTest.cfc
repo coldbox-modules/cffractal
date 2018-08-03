@@ -244,7 +244,12 @@ component extends="testbox.system.BaseSpec" {
                     var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
                     var mockItem = getMockBox().createMock( "cffractal.models.resources.Item" );
 
-                    var scope = new cffractal.models.Scope( mockFractal, mockItem, "author.country", "author" );
+                    var scope = new cffractal.models.Scope(
+                        manager = mockFractal,
+                        resource = mockItem,
+                        includes = "author.country",
+                        identifier = "author"
+                    );
 
                     expect( scope.requestedInclude( "country" ) ).toBeTrue();
                 } );
@@ -253,7 +258,12 @@ component extends="testbox.system.BaseSpec" {
                     var mockFractal = getMockBox().createMock( "cffractal.models.Manager" );
                     var mockItem = getMockBox().createMock( "cffractal.models.resources.Item" );
 
-                    var scope = new cffractal.models.Scope( mockFractal, mockItem, "author.country.provinces.districts.localities", "author.country.provinces" );
+                    var scope = new cffractal.models.Scope(
+                        manager = mockFractal,
+                        resource = mockItem,
+                        includes = "author.country.provinces.districts.localities",
+                        identifier = "author.country.provinces"
+                    );
 
                     expect( scope.requestedInclude( "districts" ) ).toBeTrue();
                 } );

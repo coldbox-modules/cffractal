@@ -178,7 +178,10 @@ component accessors="true" {
                 arrayAppend( filteredIncludes, include );
             }
         }
-        return filteredIncludes;
+        var excludes = scope.getExcludes();
+        return arrayFilter( filteredIncludes, function( include ) {
+            return ! arrayContains( excludes, include );
+        } );
     }
 
     /**

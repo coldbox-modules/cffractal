@@ -23,6 +23,11 @@ component accessors="true" {
     property name="includes";
 
     /**
+    * The array of requested excludes.
+    */
+    property name="excludes";
+
+    /**
     * The resource identifier for the specific resource.
     * Used to determine the correct nesting level.
     */
@@ -36,15 +41,19 @@ component accessors="true" {
     * @includes   A list of includes for the scope.  Includes are
     *             comma separated and use dots to designate
     *             nested resources to be included.
+    * @excludes   A list of excludes for the scope.  Excludes are
+    *             comma separated and use dots to designate
+    *             nested resources to be excluded.
     * @identifier Optional. The resource identifier for the specific resource. Default: "".
     *
     * @returns    A scoped resource instance.
     */
-    function init( manager, resource, includes = "", identifier = "" ) {
+    function init( manager, resource, includes = "", excludes = "", identifier = "" ) {
         variables.manager = arguments.manager;
         variables.resource = arguments.resource;
         variables.identifier = arguments.identifier;
 
+        parseExcludes( arguments.excludes );
         parseIncludes( arguments.includes );
 
         return this;
@@ -130,6 +139,7 @@ component accessors="true" {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -138,11 +148,23 @@ component accessors="true" {
     *
     * @includes A list of includes.
     *
-    * @returns  The Fractal manager.
+    * @returns  The Scope instance.
     */
     private function parseIncludes( includes ) {
         variables.includes = listToArray( arguments.includes );
         addParentIncludes();
+        return this;
+    }
+
+    /**
+    * Parse the list of excludes,.
+    *
+    * @excludes A list of excludes.
+    *
+    * @returns  The Scope instance.
+    */
+    private function parseExcludes( excludes ) {
+        variables.excludes = listToArray( arguments.excludes );
         return this;
     }
 

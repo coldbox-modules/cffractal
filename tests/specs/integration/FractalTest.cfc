@@ -410,6 +410,29 @@ component extends="testbox.system.BaseSpec" {
                             expect( scope.convert() ).toBe( expectedData );
                         } );
                     } );
+
+                    describe( "excludes", function() {
+                        it( "can ignore a default include", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var resource = fractal.item( book, new tests.resources.DefaultIncludesBookTransformer().setManager( fractal ) );
+
+                            var scope = fractal.createData(
+                                resource = resource,
+                                excludes = "author"
+                            );
+                            expect( scope.convert() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}} );
+                        } );
+                    } );
                 } );
 
                 describe( "converting collections", function() {
