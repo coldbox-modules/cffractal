@@ -189,6 +189,29 @@ component extends="testbox.system.BaseSpec" {
                             expect( result ).toBe( expectedData );
                         } );
                     } );
+
+                    describe( "excludes", function() {
+                        it( "can ignore a default include", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var result = fractal.builder()
+                                .item( book )
+                                .withTransformer( new tests.resources.DefaultIncludesBookTransformer().setManager( fractal ) )
+                                .withExcludes( "author" )
+                                .convert();
+
+                            expect( result ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}} );
+                        } );
+                    } );
                 } );
 
                 describe( "converting collections", function() {
@@ -212,7 +235,7 @@ component extends="testbox.system.BaseSpec" {
                                 return {
                                     "id" = book.getId(),
                                     "title" = book.getTitle(),
-                                    "year" = book.getYear()    
+                                    "year" = book.getYear()
                                 };
                             } )
                             .convert();
