@@ -1,16 +1,17 @@
 component extends="testbox.system.BaseSpec" {
-    
+
     function run() {
         describe( "resource test", function() {
             it( "processing with a transformer and includes", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$property( propertyName = "excludes", mock = [] );
                 var mockTransformer = getMockBox().createMock( "cffractal.models.transformers.AbstractTransformer" );
                 mockTransformer.$( "transform", { "foo" = "bar" } );
                 mockTransformer.$( "hasIncludes", true );
                 mockTransformer.$( "processIncludes" ).$args( mockScope, { "foo" = "bar" } ).$results( [ { "baz" = "bam" } ] );
                 var item = new cffractal.models.resources.Item( { "foo" = "bar" }, mockTransformer, mockSerializer );
-                
+
                 var transformedData = item.process( mockScope );
 
                 expect( transformedData ).toBe( { "foo" = "bar", "baz" = "bam" } );
@@ -29,12 +30,13 @@ component extends="testbox.system.BaseSpec" {
             it( "can specify a specific serializer", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$property( propertyName = "excludes", mock = [] );
                 var mockTransformer = getMockBox().createMock( "cffractal.models.transformers.AbstractTransformer" );
                 mockTransformer.$( "transform", { "foo" = "bar" } );
                 mockTransformer.$( "hasIncludes", true );
                 mockTransformer.$( "processIncludes" ).$args( mockScope, { "foo" = "bar" } ).$results( [ { "baz" = "bam" } ] );
                 var item = new cffractal.models.resources.Item( { "foo" = "bar" }, mockTransformer, mockSerializer );
-                
+
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.SimpleSerializer" );
                 expect( item.getSerializer() ).toBeInstanceOf( "cffractal.models.serializers.DataSerializer" );
                 item.setSerializer( mockSerializer );

@@ -25,6 +25,7 @@ component {
     function init( manager ) {
         variables.manager = arguments.manager;
         variables.includes = "";
+        variables.excludes = "";
         return this;
     }
 
@@ -101,6 +102,18 @@ component {
     }
 
     /**
+    * Sets the excludes for the transformation.
+    *
+    * @excludes The excludes for the transformation.
+    *
+    * @returns  The fractal builder.
+    */
+    function withExcludes( excludes ) {
+        variables.excludes = arguments.excludes;
+        return this;
+    }
+
+    /**
     * Sets the pagination metadata for the resource.
     *
     * @pagination The pagination metadata.
@@ -149,7 +162,7 @@ component {
         for ( var callback in postTransformationCallbacks ) {
             resource.addPostTransformationCallback( callback );
         }
-        return manager.createData( resource, includes ).convert();
+        return manager.createData( resource, includes, excludes ).convert();
     }
 
     /**

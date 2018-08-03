@@ -23,6 +23,11 @@ component accessors="true" {
     property name="includes";
 
     /**
+    * The array of requested excludes.
+    */
+    property name="excludes";
+
+    /**
     * The resource identifier for the specific resource.
     * Used to determine the correct nesting level.
     */
@@ -36,15 +41,19 @@ component accessors="true" {
     * @includes   A list of includes for the scope.  Includes are
     *             comma separated and use dots to designate
     *             nested resources to be included.
+    * @excludes   A list of excludes for the scope.  Excludes are
+    *             comma separated and use dots to designate
+    *             nested resources to be excluded.
     * @identifier Optional. The resource identifier for the specific resource. Default: "".
     *
     * @returns    A scoped resource instance.
     */
-    function init( manager, resource, includes = "", identifier = "" ) {
+    function init( manager, resource, includes = "", excludes = "", identifier = "" ) {
         variables.manager = arguments.manager;
         variables.resource = arguments.resource;
         variables.identifier = arguments.identifier;
 
+        parseExcludes( arguments.excludes );
         parseIncludes( arguments.includes );
 
         return this;
@@ -61,6 +70,7 @@ component accessors="true" {
     function embedChildScope( identifier, resource ) {
         arguments.identifier = combineIdentifiers( variables.identifier, arguments.identifier );
         arguments.includes = arrayToList( includes );
+        arguments.excludes = arrayToList( excludes );
         return manager.createData( argumentCollection = arguments );
     }
 
@@ -116,9 +126,9 @@ component accessors="true" {
     /**
     * Returns if an include is requested.
     *
-    * @needle          The include to see if it is requested.
+    * @needle  The include to see if it is requested.
     *
-    * @returns         True, if the include is requested.
+    * @returns True, if the include is requested.
     */
     function requestedInclude( needle ) {
         if ( identifier != "" ) {
@@ -130,7 +140,49 @@ component accessors="true" {
                 return true;
             }
         }
+
         return false;
+    }
+
+    /**
+    * Returns if an exclude is requested.
+    *
+    * @needle  The exclude to see if it is requested.
+    *
+    * @returns True, if the exclude is requested.
+    */
+    function requestedExclude( needle ) {
+        if ( identifier != "" ) {
+            needle = "#identifier#.#needle#";
+        }
+
+        for ( var exclude in excludes ) {
+            if ( compareNoCase( needle, exclude ) == 0 ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Return the excludes for the specified level.
+     *
+     * @returns The excludes minus the identifier (if any).
+     */
+    function filteredExcludes() {
+        var collection = [];
+        for ( var exclude in excludes ) {
+            if ( identifier == "" ) {
+                arrayAppend( collection, exclude );
+            }
+            else {
+                arrayAppend( collection, replaceNoCase( exclude, identifier & ".", "" ) );
+            }
+        }
+        return arrayFilter( collection, function( item ) {
+            return item != "";
+        } );
     }
 
     /**
@@ -138,11 +190,23 @@ component accessors="true" {
     *
     * @includes A list of includes.
     *
-    * @returns  The Fractal manager.
+    * @returns  The Scope instance.
     */
     private function parseIncludes( includes ) {
         variables.includes = listToArray( arguments.includes );
         addParentIncludes();
+        return this;
+    }
+
+    /**
+    * Parse the list of excludes,.
+    *
+    * @excludes A list of excludes.
+    *
+    * @returns  The Scope instance.
+    */
+    private function parseExcludes( excludes ) {
+        variables.excludes = listToArray( arguments.excludes );
         return this;
     }
 

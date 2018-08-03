@@ -15,7 +15,7 @@ component extends="testbox.system.BaseSpec" {
                 expect( transformer )
                     .toBeInstanceOf( "cffractal.models.transformers.AbstractTransformer" );
             } );
-            
+
             it( "throws if the `transform()` method has not been implemented", function() {
                 expect( function() {
                     transformer.transform();
@@ -128,6 +128,8 @@ component extends="testbox.system.BaseSpec" {
 
             it( "can process the includes of a transformer", function() {
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$property( propertyName = "identifier", mock = "" );
+                mockScope.$property( propertyName = "excludes", mock = [] );
                 mockScope.$( "requestedInclude" ).$args( "author" ).$results( true );
                 var mockItem = getMockBox().createMock( "cffractal.models.resources.Item" );
                 prepareMock( transformer );

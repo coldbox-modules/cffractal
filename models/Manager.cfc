@@ -60,16 +60,19 @@ component singleton accessors="true" {
     /**
     * Creates a scope for a given resource and identifier.
     *
-    * @resource        A Fractal resource.
-    * @includes        A list of includes for the scope.  Includes are
-    *                  comma separated and use dots to designate
-    *                  nested resources to be included.
+    * @resource   A Fractal resource.
+    * @includes   A list of includes for the scope.  Includes are
+    *             comma separated and use dots to designate
+    *             nested resources to be included.
+    * @excludes   A list of excludes for the scope.  Excludes are
+    *             comma separated and use dots to designate
+    *             nested resources to be excluded.
     * @identifier The scope identifier defining the nesting level.
-    *                  Defaults to the root level.
+    *             Defaults to the root level.
     *
-    * @returns         A Fractal scope primed with the given resource and identifier.
+    * @returns    A Fractal scope primed with the given resource and identifier.
     */
-    function createData( resource, includes = "", identifier = "" ) {
+    function createData( resource, includes = "", excludes = "", identifier = "" ) {
         arguments.manager = this;
         return new cffractal.models.Scope( argumentCollection = arguments );
     }
@@ -115,7 +118,7 @@ component singleton accessors="true" {
     ) {
         return new cffractal.models.resources.Collection( argumentCollection = arguments );
     }
-    
+
     /**
     * Overload to the accessor, to ensure a struct default will not be copied by reference
     **/
