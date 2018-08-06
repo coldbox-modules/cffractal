@@ -129,11 +129,12 @@ component extends="testbox.system.BaseSpec" {
             it( "can process the includes of a transformer", function() {
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
                 mockScope.$property( propertyName = "identifier", mock = "" );
+                mockScope.$property( propertyName = "includes", mock = [ "author" ] );
                 mockScope.$property( propertyName = "excludes", mock = [] );
                 mockScope.$( "requestedInclude" ).$args( "author" ).$results( true );
                 var mockItem = getMockBox().createMock( "cffractal.models.resources.Item" );
                 prepareMock( transformer );
-                transformer.$( "includeAuthor" ).$args( mockItem ).$results( { "foo" = "bar" } );
+                transformer.$( "includeAuthor", { "foo" = "bar" } );
                 var mockChildScope = getMockBox().createMock( "cffractal.models.Scope" );
                 mockChildScope.$( "convert", { "foo" = "bar" } );
                 mockScope.$( "embedChildScope" ).$args( "author", { "foo" = "bar" } ).$results( mockChildScope );

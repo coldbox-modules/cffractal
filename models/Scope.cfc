@@ -60,6 +60,67 @@ component accessors="true" {
     }
 
     /**
+     * Return the includes for the scope.
+     *
+     * @scoped  If true, only pass the current level of includes with no nesting,
+     *
+     * @returns An array of includes.
+     */
+    function getIncludes( scoped = false ) {
+        if ( ! scoped ) {
+            return variables.includes;
+        }
+
+        var scopedIncludes = [];
+        for ( var include in variables.includes ) {
+            var scopedInclude = include;
+            if ( identifier != "" && find( ".", scopedInclude ) <= 0 ) {
+                continue;
+            }
+            if ( identifier != "" ) {
+                scopedInclude = replaceNoCase( scopedInclude, identifier & ".", "" );
+            }
+            if ( scopedInclude != "" && find( ".", scopedInclude ) <= 0  ) {
+                arrayAppend( scopedIncludes, listFirst( scopedInclude, "." ) );
+            }
+        }
+        return scopedIncludes;
+    }
+
+    /**
+     * Return the excludes for the scope.
+     *
+     * @scoped  If true, only pass the current level of excludes with no nesting,
+     *
+     * @returns An array of excludes.
+     */
+    function getExcludes( scoped = false ) {
+        if ( ! scoped ) {
+            return variables.excludes;
+        }
+
+        var scopedExcludes = [];
+        for ( var exclude in variables.excludes ) {
+            if ( identifier == "" ) {
+                if ( find( ".", exclude ) <= 0 ) {
+                    arrayAppend( scopedExcludes, exclude );
+                }
+            }
+            else {
+                if ( find( ".", exclude ) <= 0 ) {
+                    continue;
+                }
+                var scopedExclude = replaceNoCase( exclude, identifier & ".", "" );
+                if ( find( ".", scopedExclude ) <= 0 ) {
+                    arrayAppend( scopedExcludes, scopedExclude );
+                }
+            }
+        }
+
+        return scopedExcludes;
+    }
+
+    /**
     * Create a new Scope with a given scope identifier.
     *
     * @identifier The resource identifier for the specific resource.
@@ -222,18 +283,19 @@ component accessors="true" {
         var parentIncludes = [];
         for ( var include in includes ) {
             var scopes = listToArray( include, "." );
-            for ( var i = 1; i <= arrayLen( scopes ); i++ ) {
-                var selectedScopes = [];
-                for ( var j = 1; j <= i; j++ ) {
-                    arrayAppend( selectedScopes, scopes[ j ] );
-                }
-                var scopeString = arrayToList( selectedScopes, "." );
-                if ( ! requestedInclude( scopeString ) ) {
-                    arrayAppend( parentIncludes, scopeString );
-                }
+            if ( arrayLen( scopes ) <= 1 ) {
+                continue;
+            }
+            var scopesToAdd = arraySlice( scopes, 1, arrayLen( scopes ) - 1 );
+            for ( var i = 1; i <= arrayLen( scopesToAdd ); i++ ) {
+                arrayAppend( parentIncludes, arrayToList( arraySlice( scopesToAdd, 1, i ), "." ) );
             }
         }
-        arrayAppend( includes, parentIncludes, true );
+        for ( var parentInclude in parentIncludes ) {
+            if ( ! arrayContains( variables.includes, parentInclude ) ) {
+                arrayAppend( variables.includes, parentInclude );
+            }
+        }
     }
 
     private function combineIdentifiers( identifierA, identifierB ) {

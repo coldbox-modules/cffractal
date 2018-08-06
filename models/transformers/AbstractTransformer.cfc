@@ -123,10 +123,21 @@ component accessors="true" {
     * @returns An array of transformed data to merge in to the current scope.
     */
     function processIncludes( scope, data ) {
-        var allIncludes = filterIncludes( scope );
+        var scopedIncludes = filterIncludes( scope );
         var includedData = [];
-        for ( var include in allIncludes ) {
-            var resource = invoke( this, "include#include#", { 1 = data } );
+
+        var scopedExcludes = scope.getExcludes( scoped = true );
+        var allIncludes = scope.getIncludes();
+        var allExcludes = scope.getExcludes();
+
+        for ( var include in scopedIncludes ) {
+            var resource = invoke( this, "include#include#", {
+                1 = data,
+                2 = scopedIncludes,
+                3 = scopedExcludes,
+                4 = allIncludes,
+                5 = allExcludes
+            } );
             if ( isSimpleValue( resource ) ) {
                 resource = item(
                     resource,

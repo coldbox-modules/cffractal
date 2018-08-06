@@ -89,7 +89,7 @@ component accessors="true" {
             return scope.getNullDefaultValue();
         }
 
-        var transformedData = transformData( transformer, item );
+        var transformedData = transformData( transformer, item, scope );
 
         if ( isNull( transformedData ) ) {
             return scope.getNullDefaultValue();
@@ -191,10 +191,29 @@ component accessors="true" {
     *
     * @returns     The transformed data.
     */
-    private function transformData( transformer, item ) {
-        return isClosure( transformer ) || isCustomFunction( transformer ) ?
-            transformer( isNull( item ) ? javacast( "null", "" ) : item ) :
-            transformer.transform( isNull( item ) ? javacast( "null", "" ) : item );
+    private function transformData( transformer, item, scope ) {
+        var scopedIncludes = scope.getIncludes( scoped = true );
+        var scopedExcludes = scope.getExcludes( scoped = true );
+        var allIncludes = scope.getIncludes();
+        var allExcludes = scope.getExcludes();
+
+        if ( isClosure( transformer ) || isCustomFunction( transformer ) ) {
+            return transformer(
+                isNull( item ) ? javacast( "null", "" ) : item,
+                scopedIncludes,
+                scopedExcludes,
+                allIncludes,
+                allExcludes
+            );
+        }
+
+        return transformer.transform(
+            isNull( item ) ? javacast( "null", "" ) : item,
+            scopedIncludes,
+            scopedExcludes,
+            allIncludes,
+            allExcludes
+        );
     }
 
     /**

@@ -417,6 +417,187 @@ component extends="testbox.system.BaseSpec" {
                             };
                             expect( scope.convert() ).toBe( expectedData );
                         } );
+
+                        it( "makes the scoped includes available in a closure transformer", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var resource = fractal.item( book, function( book, includes ) {
+                                expect( isNull( includes ) ).toBeFalse( "includes should not be null" );
+                                expect( includes ).toBeArray();
+                                expect( includes ).toHaveLength( 2 );
+                                expect( includes ).toBe( [ "year", "author" ] );
+                                return {};
+                            } );
+
+                            fractal.createData(
+                                resource = resource,
+                                includes = "year,author.name"
+                            ).convert();
+                        } );
+
+                        it( "passes an empty array for scoped includes and all includes if there are no includes", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var resource = fractal.item( book, function( book, includes ) {
+                                expect( isNull( includes ) ).toBeFalse( "includes should not be null" );
+                                expect( includes ).toBeArray();
+                                expect( includes ).toBeEmpty();
+                                return {};
+                            } );
+
+                            fractal.createData(
+                                resource = resource,
+                                includes = ""
+                            ).convert();
+                        } );
+
+                        it( "makes the full includes available in a closure transformer", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var resource = fractal.item( book, function( book, includes, excludes, allIncludes ) {
+                                expect( isNull( allIncludes ) ).toBeFalse( "allIncludes should not be null" );
+                                expect( allIncludes ).toBeArray();
+                                expect( allIncludes ).toHaveLength( 3 );
+                                expect( allIncludes ).toBe( [ "year", "author.name", "author" ] );
+                                return {};
+                            } );
+
+                            fractal.createData(
+                                resource = resource,
+                                includes = "year,author.name"
+                            ).convert();
+                        } );
+
+                        it( "makes the scoped includes available in a component transformer", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var bookTransformer = createMock( "tests.resources.BookTransformer" ).setManager( fractal );
+                            bookTransformer.$( "transform", {} );
+                            var authorTransformer = createMock( "tests.resources.AuthorTransformer" ).setManager( fractal );
+                            authorTransformer.$( "transform", {} );
+                            bookTransformer.$property( propertyName = "authorTransformer", mock = authorTransformer );
+                            var resource = fractal.item( book, bookTransformer );
+                            fractal.createData(
+                                resource = resource,
+                                includes = "year,author.name"
+                            ).convert();
+
+                            // Book Transformer
+                            var callLog = bookTransformer.$callLog();
+                            expect( callLog ).toBeStruct();
+                            expect( callLog ).toHaveKey( "transform" );
+                            var transformCallLog = callLog.transform;
+                            expect( transformCallLog ).toBeArray();
+                            expect( transformCallLog ).toHaveLength( 1 );
+                            var firstCall = transformCallLog[ 1 ];
+                            expect( arrayLen( firstCall ) ).toBeGTE( 2, "At least two arguments should be passed to the transform function" );
+                            var scopedIncludes = firstCall[ 2 ];
+                            expect( scopedIncludes ).toBeArray();
+                            expect( scopedIncludes ).toHaveLength( 2 );
+                            expect( scopedIncludes ).toBe( [ "year", "author" ] );
+
+                            // Author Transformer
+                            var callLog = authorTransformer.$callLog();
+                            expect( callLog ).toBeStruct();
+                            expect( callLog ).toHaveKey( "transform" );
+                            var transformCallLog = callLog.transform;
+                            expect( transformCallLog ).toBeArray();
+                            expect( transformCallLog ).toHaveLength( 1 );
+                            var firstCall = transformCallLog[ 1 ];
+                            expect( arrayLen( firstCall ) ).toBeGTE( 2, "At least two arguments should be passed to the transform function" );
+                            var scopedIncludes = firstCall[ 2 ];
+                            expect( scopedIncludes ).toBeArray();
+                            expect( scopedIncludes ).toHaveLength( 1 );
+                            expect( scopedIncludes ).toBe( [ "name" ] );
+                        } );
+
+                        it( "makes the full includes available in a component transformer", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var bookTransformer = createMock( "tests.resources.BookTransformer" ).setManager( fractal );
+                            bookTransformer.$( "transform", {} );
+                            var authorTransformer = createMock( "tests.resources.AuthorTransformer" ).setManager( fractal );
+                            authorTransformer.$( "transform", {} );
+                            bookTransformer.$property( propertyName = "authorTransformer", mock = authorTransformer );
+                            var resource = fractal.item( book, bookTransformer );
+                            fractal.createData(
+                                resource = resource,
+                                includes = "year,author.name"
+                            ).convert();
+
+                            // Book Transformer
+                            var callLog = bookTransformer.$callLog();
+                            expect( callLog ).toBeStruct();
+                            expect( callLog ).toHaveKey( "transform" );
+                            var transformCallLog = callLog.transform;
+                            expect( transformCallLog ).toBeArray();
+                            expect( transformCallLog ).toHaveLength( 1 );
+                            var firstCall = transformCallLog[ 1 ];
+                            expect( arrayLen( firstCall ) ).toBeGTE( 4, "At least four arguments should be passed to the transform function" );
+                            var allIncludes = firstCall[ 4 ];
+                            expect( allIncludes ).toBeArray();
+                            expect( allIncludes ).toHaveLength( 3 );
+                            expect( allIncludes ).toBe( [ "year", "author.name", "author" ] );
+
+                            // Author Transformer
+                            var callLog = authorTransformer.$callLog();
+                            expect( callLog ).toBeStruct();
+                            expect( callLog ).toHaveKey( "transform" );
+                            var transformCallLog = callLog.transform;
+                            expect( transformCallLog ).toBeArray();
+                            expect( transformCallLog ).toHaveLength( 1 );
+                            var firstCall = transformCallLog[ 1 ];
+                            expect( arrayLen( firstCall ) ).toBeGTE( 4, "At least four arguments should be passed to the transform function" );
+                            var allIncludes = firstCall[ 4 ];
+                            expect( allIncludes ).toBeArray();
+                            expect( allIncludes ).toHaveLength( 3 );
+                            expect( allIncludes ).toBe( [ "year", "author.name", "author" ] );
+                        } );
                     } );
 
                     describe( "excludes", function() {
@@ -570,6 +751,189 @@ component extends="testbox.system.BaseSpec" {
                                 }
                             };
                             expect( scope.convert() ).toBe( expectedData );
+                        } );
+
+                        it( "makes the scoped excludes available in a closure transformer", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var resource = fractal.item( book, function( book, includes, excludes ) {
+                                expect( isNull( excludes ) ).toBeFalse( "excludes should not be null" );
+                                expect( excludes ).toBeArray();
+                                expect( excludes ).toHaveLength( 1 );
+                                expect( excludes ).toBe( [ "year" ] );
+                                return {};
+                            } );
+
+                            fractal.createData(
+                                resource = resource,
+                                excludes = "year,author.name"
+                            ).convert();
+                        } );
+
+                        it( "passes an empty array for scoped excludes and all excludes if there are no excludes", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var resource = fractal.item( book, function( book, includes, excludes ) {
+                                expect( isNull( excludes ) ).toBeFalse( "excludes should not be null" );
+                                expect( excludes ).toBeArray();
+                                expect( excludes ).toBeEmpty();
+                                return {};
+                            } );
+
+                            fractal.createData(
+                                resource = resource,
+                                excludes = ""
+                            ).convert();
+                        } );
+
+                        it( "makes the full excludes available in a closure transformer", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var resource = fractal.item( book, function( book, includes, excludes, allIncludes, allExcludes ) {
+                                expect( isNull( allExcludes ) ).toBeFalse( "allExcludes should not be null" );
+                                expect( allExcludes ).toBeArray();
+                                expect( allExcludes ).toHaveLength( 2 );
+                                expect( allExcludes ).toBe( [ "year", "author.name" ] );
+                                return {};
+                            } );
+
+                            fractal.createData(
+                                resource = resource,
+                                excludes = "year,author.name"
+                            ).convert();
+                        } );
+
+                        it( "makes the scoped excludes available in a component transformer", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var bookTransformer = createMock( "tests.resources.BookTransformer" ).setManager( fractal );
+                            bookTransformer.$( "transform", {} );
+                            var authorTransformer = createMock( "tests.resources.AuthorTransformer" ).setManager( fractal );
+                            authorTransformer.$( "transform", {} );
+                            bookTransformer.$property( propertyName = "authorTransformer", mock = authorTransformer );
+                            var resource = fractal.item( book, bookTransformer );
+                            fractal.createData(
+                                resource = resource,
+                                includes = "author",
+                                excludes = "year,author.name"
+                            ).convert();
+
+                            // Book Transformer
+                            var callLog = bookTransformer.$callLog();
+                            expect( callLog ).toBeStruct();
+                            expect( callLog ).toHaveKey( "transform" );
+                            var transformCallLog = callLog.transform;
+                            expect( transformCallLog ).toBeArray();
+                            expect( transformCallLog ).toHaveLength( 1 );
+                            var firstCall = transformCallLog[ 1 ];
+                            expect( arrayLen( firstCall ) ).toBeGTE( 3, "At least three arguments should be passed to the transform function" );
+                            var scopedExcludes = firstCall[ 3 ];
+                            expect( scopedExcludes ).toBeArray();
+                            expect( scopedExcludes ).toHaveLength( 1 );
+                            expect( scopedExcludes ).toBe( [ "year" ] );
+
+                            // Author Transformer
+                            var callLog = authorTransformer.$callLog();
+                            expect( callLog ).toBeStruct();
+                            expect( callLog ).toHaveKey( "transform" );
+                            var transformCallLog = callLog.transform;
+                            expect( transformCallLog ).toBeArray();
+                            expect( transformCallLog ).toHaveLength( 1 );
+                            var firstCall = transformCallLog[ 1 ];
+                            expect( arrayLen( firstCall ) ).toBeGTE( 3, "At least three arguments should be passed to the transform function" );
+                            var scopedExcludes = firstCall[ 3 ];
+                            expect( scopedExcludes ).toBeArray();
+                            expect( scopedExcludes ).toHaveLength( 1 );
+                            expect( scopedExcludes ).toBe( [ "name" ] );
+                        } );
+
+                        it( "makes the full excludes available in a component transformer", function() {
+                            var book = new tests.resources.Book( {
+                                id = 1,
+                                title = "To Kill a Mockingbird",
+                                year = "1960",
+                                author = new tests.resources.Author( {
+                                    id = 1,
+                                    name = "Harper Lee",
+                                    birthdate = createDate( 1926, 04, 28 )
+                                } )
+                            } );
+
+                            var bookTransformer = createMock( "tests.resources.BookTransformer" ).setManager( fractal );
+                            bookTransformer.$( "transform", {} );
+                            var authorTransformer = createMock( "tests.resources.AuthorTransformer" ).setManager( fractal );
+                            authorTransformer.$( "transform", {} );
+                            bookTransformer.$property( propertyName = "authorTransformer", mock = authorTransformer );
+                            var resource = fractal.item( book, bookTransformer );
+                            fractal.createData(
+                                resource = resource,
+                                includes = "author",
+                                excludes = "year,author.name"
+                            ).convert();
+
+                            // Book Transformer
+                            var callLog = bookTransformer.$callLog();
+                            expect( callLog ).toBeStruct();
+                            expect( callLog ).toHaveKey( "transform" );
+                            var transformCallLog = callLog.transform;
+                            expect( transformCallLog ).toBeArray();
+                            expect( transformCallLog ).toHaveLength( 1 );
+                            var firstCall = transformCallLog[ 1 ];
+                            expect( arrayLen( firstCall ) ).toBeGTE( 5, "At least five arguments should be passed to the transform function" );
+                            var allIncludes = firstCall[ 5 ];
+                            expect( allIncludes ).toBeArray();
+                            expect( allIncludes ).toHaveLength( 2 );
+                            expect( allIncludes ).toBe( [ "year", "author.name" ] );
+
+                            // Author Transformer
+                            var callLog = authorTransformer.$callLog();
+                            expect( callLog ).toBeStruct();
+                            expect( callLog ).toHaveKey( "transform" );
+                            var transformCallLog = callLog.transform;
+                            expect( transformCallLog ).toBeArray();
+                            expect( transformCallLog ).toHaveLength( 1 );
+                            var firstCall = transformCallLog[ 1 ];
+                            expect( arrayLen( firstCall ) ).toBeGTE( 5, "At least five arguments should be passed to the transform function" );
+                            var allIncludes = firstCall[ 5 ];
+                            expect( allIncludes ).toBeArray();
+                            expect( allIncludes ).toHaveLength( 2 );
+                            expect( allIncludes ).toBe( [ "year", "author.name" ] );
                         } );
                     } );
                 } );

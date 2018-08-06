@@ -17,6 +17,7 @@ component extends="testbox.system.BaseSpec" {
             it( "can add postTransformationCallbacks", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$property( propertyName = "includes", mock = [] );
                 mockScope.$property( propertyName = "excludes", mock = [] );
                 mockScope.$( "getNullDefaultValue", {} );
                 var collection = new cffractal.models.resources.Collection( [
@@ -46,6 +47,8 @@ component extends="testbox.system.BaseSpec" {
             it( "it never calls the postTransformationCallbacks if the data is null", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$property( propertyName = "includes", mock = [] );
+                mockScope.$property( propertyName = "excludes", mock = [] );
                 mockScope.$( "getNullDefaultValue", {} );
                 var collection = new cffractal.models.resources.Collection(
                     javacast( "null", "" ),

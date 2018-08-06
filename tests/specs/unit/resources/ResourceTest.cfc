@@ -5,6 +5,7 @@ component extends="testbox.system.BaseSpec" {
             it( "processing with a transformer and includes", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$property( propertyName = "includes", mock = [] );
                 mockScope.$property( propertyName = "excludes", mock = [] );
                 var mockTransformer = getMockBox().createMock( "cffractal.models.transformers.AbstractTransformer" );
                 mockTransformer.$( "transform", { "foo" = "bar" } );
@@ -30,6 +31,7 @@ component extends="testbox.system.BaseSpec" {
             it( "can specify a specific serializer", function() {
                 var mockSerializer = getMockBox().createMock( "cffractal.models.serializers.DataSerializer" );
                 var mockScope = getMockBox().createMock( "cffractal.models.Scope" );
+                mockScope.$property( propertyName = "includes", mock = [] );
                 mockScope.$property( propertyName = "excludes", mock = [] );
                 var mockTransformer = getMockBox().createMock( "cffractal.models.transformers.AbstractTransformer" );
                 mockTransformer.$( "transform", { "foo" = "bar" } );
