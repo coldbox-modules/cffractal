@@ -183,7 +183,7 @@ component accessors="true" {
     * @returns An array of includes to fetch for the transformer.
     */
     public array function filterIncludes( scope ) {
-        var filteredIncludes = variables.defaultIncludes;
+        var filteredIncludes = duplicate( variables.defaultIncludes );
         for ( var include in variables.availableIncludes ) {
             if ( scope.requestedInclude( include ) ) {
                 arrayAppend( filteredIncludes, include );
@@ -228,7 +228,6 @@ component accessors="true" {
     */
     private function collection( data, transformer, serializer, itemCallback ) {
         if ( isNull( arguments.serializer ) && ! isNull( variables.collectionSerializer ) ) {
-            writeDump( var = 'here', top = 2 );
             arguments.serializer = variables.collectionSerializer;
         }
         return manager.collection( argumentCollection = arguments );
