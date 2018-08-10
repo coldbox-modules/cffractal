@@ -143,9 +143,9 @@ component accessors="true" {
     * @returns The transformed and serialized data.
     */
     function convert() {
-        var serializer = resource.getSerializer();
+        var serializer = variables.resource.getSerializer();
 
-        if ( identifier != "" ) {
+        if ( variables.identifier != "" ) {
             return serializer.scopeData( resource.process( this ), identifier );
         }
 

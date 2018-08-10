@@ -129,7 +129,7 @@ component accessors="true" {
         var scopedExcludes = scope.getExcludes( scoped = true );
         var allIncludes = scope.getIncludes();
         var allExcludes = scope.getExcludes();
-
+        // TODO: use array map
         for ( var include in scopedIncludes ) {
             var resource = invoke( this, "include#include#", {
                 1 = data,
@@ -142,6 +142,7 @@ component accessors="true" {
                 resource = item(
                     resource,
                     function( item ) { return item; },
+                    // TODO: Retrieve from wirebox
                     new cffractal.models.serializers.SimpleSerializer()
                 );
             }

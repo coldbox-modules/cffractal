@@ -42,17 +42,16 @@ component singleton accessors="true" {
         variables.nullDefaultValue = arguments.nullDefaultValue;
         return this;
     }
-
+    
+    /**
+     * Create a new fractal builder object
+     * 
+     * @return cffractal.models.Builder
+     */
     function builder() {
         if ( structKeyExists( variables, "wirebox" ) ) {
-            return wirebox.getInstance(
-                name = "Builder@cffractal",
-                initArguments = {
-                    manager = this
-                }
-            );
-        }
-        else {
+            return wirebox.getInstance( "Builder@cffractal" );
+        } else {
             return new cffractal.models.Builder( this );
         }
     }

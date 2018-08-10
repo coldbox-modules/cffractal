@@ -15,15 +15,15 @@ component extends="cffractal.models.resources.AbstractResource" {
     * @returns The transformed data. 
     */
     function process( scope ) {
-        if ( isNull( data ) ) {
+        if ( isNull( variables.data ) ) {
             return [];
         }
 
         var transformedDataArray = [];
 
-        arrayEach( data, function( value ){
+        arrayEach( variables.data, function( value ){
         	var transformedItem = processItem( scope, value );
-            for ( var callback in postTransformationCallbacks ) {
+            for ( var callback in variables.postTransformationCallbacks ) {
                 transformedItem = paramNull(
                     callback(
                         transformedItem,

@@ -89,7 +89,7 @@ component accessors="true" {
             return scope.getNullDefaultValue();
         }
 
-        var transformedData = transformData( transformer, item, scope );
+        var transformedData = transformData( variables.transformer, item, scope );
 
         if ( isNull( transformedData ) ) {
             return scope.getNullDefaultValue();
@@ -100,21 +100,22 @@ component accessors="true" {
             scope.filteredExcludes()
         );
 
-        if ( isClosure( transformer ) || isCustomFunction( transformer ) ) {
+        if ( isClosure( variables.transformer ) || isCustomFunction( variables.transformer ) ) {
             return isNull( transformedData ) ? javacast( "null", "" ) : transformedData;
         }
 
         transformedData = removeUnusedAvailableIncludes(
             transformedData,
-            transformer.getAvailableIncludes(),
-            transformer.filterIncludes( scope )
+            variables.transformer.getAvailableIncludes(),
+            variables.transformer.filterIncludes( scope )
         );
 
-        if ( ! transformer.hasIncludes() ) {
+        if ( ! variables.transformer.hasIncludes() ) {
             return isNull( transformedData ) ? javacast( "null", "" ) : transformedData;
         }
 
-        var includedData = transformer.processIncludes(
+        // TODO: Leverage each and avoid assignments to local variables.
+        var includedData = variables.transformer.processIncludes(
             scope,
             item
         );

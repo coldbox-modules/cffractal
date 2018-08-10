@@ -48,9 +48,10 @@ component singleton {
 
         var ids = [];
         var map = {};
+        // TODO: Double Looping over returned data, think about optimiations. Consider cbstreams
         for ( var item in processedData ) {
-            arrayAppend( ids, item[ identifier ] );
-            map[ item[ identifier ] ] = item;
+            arrayAppend( ids, item[ variables.identifier ] );
+            map[ item[ variables.identifier ] ] = item;
         }
 
         return {

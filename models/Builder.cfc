@@ -16,13 +16,14 @@ component {
     variables.postTransformationCallbacks = [];
 
     /**
-    * Creates a new builder instance for fluent fractal transformations.
-    *
-    * @manager The fractal manager instance.
-    *
-    * @returns The fractal builder.
-    */
-    function init( manager ) {
+     * Creates a new builder instance for fluent fractal transformations.
+     *
+     * @manager The fractal manager instance.
+     * @manager.inject Manager@cffractal
+     *
+     * @returns The fractal builder.
+     */
+    function init( required manager ) {
         variables.manager = arguments.manager;
         variables.includes = "";
         variables.excludes = "";
@@ -134,7 +135,7 @@ component {
     * @returns The fractal builder.
     */
     function withMeta( key, value ) {
-        meta[ key ] = value;
+        variables.meta[ key ] = value;
         return this;
     }
 
@@ -148,7 +149,7 @@ component {
     * @returns  The fractal builder
     */
     function withItemCallback( callback ) {
-        arrayAppend( postTransformationCallbacks, callback );
+        arrayAppend( variables.postTransformationCallbacks, callback );
         return this;
     }
 
@@ -159,10 +160,10 @@ component {
     */
     function convert() {
         var resource = createResource();
-        for ( var callback in postTransformationCallbacks ) {
+        for ( var callback in variables.postTransformationCallbacks ) {
             resource.addPostTransformationCallback( callback );
         }
-        return manager.createData( resource, includes, excludes ).convert();
+        return variables.manager.createData( resource, variables.includes, variables.excludes ).convert();
     }
 
     /**
@@ -182,9 +183,9 @@ component {
     */
     private function createResource() {
         return addMetadata(
-            invoke( manager, resourceType, {
-                data = data,
-                transformer = transformer,
+            invoke( variables.manager, resourceType, {
+                data = variables.data,
+                transformer = variables.transformer,
                 serializer = getSerializer()
             } )
         );
@@ -198,7 +199,7 @@ component {
     * @returns  The resource instance with added metadata.
     */
     private function addMetadata( resource ) {
-        structEach( meta, function( key, value ) {
+        structEach( variables.meta, function( key, value ) {
             resource.addMeta( key, value );
         } );
         return resource;
@@ -210,13 +211,13 @@ component {
     * @returns  The specified or default serializer.
     */
     private function getSerializer() {
-        if ( ! isNull( serializer ) ) {
-            return serializer;
+        if ( ! isNull( variables.serializer ) ) {
+            return variables.serializer;
         }
 
         return resourceType == "item" ?
-            manager.getItemSerializer() :
-            manager.getCollectionSerializer();
+            variables.manager.getItemSerializer() :
+            variables.manager.getCollectionSerializer();
     }
 
 }
