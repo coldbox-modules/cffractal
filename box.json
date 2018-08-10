@@ -17,11 +17,11 @@
     "dependencies":{},
     "devDependencies":{
         "coldbox":"^4.3.0+188",
-        "testbox":"2.4.*"
+        "testbox":"^2.8.0"
     },
     "installPaths":{
         "testbox":"testbox",
-        "coldbox":"tests/resources/app/coldbox"
+        "coldbox":"tests/resources/app/coldbox/"
     },
     "scripts":{
         "postVersion":"package set location='coldbox-modules/cffractal#v`package version`'"
