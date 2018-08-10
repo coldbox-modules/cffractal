@@ -1,6 +1,7 @@
 {
     "app":{
-        "cfengine":"adobe@10"
+        "cfengine":"adobe@11",
+        "serverHomeDirectory":".engine/acf11"
     },
     "web":{
         "http":{
