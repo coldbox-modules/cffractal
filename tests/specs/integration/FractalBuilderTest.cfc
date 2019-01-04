@@ -314,6 +314,57 @@ component extends="testbox.system.BaseSpec" {
                                 }
                             } );
                         } );
+
+                        it( "returns pagination data in a meta field for the results map serializer", function() {
+                            var books = [
+                                new tests.resources.Book( {
+                                    id = 1,
+                                    title = "To Kill a Mockingbird",
+                                    year = "1960"
+                                } ),
+                                new tests.resources.Book( {
+                                    id = 2,
+                                    title = "A Tale of Two Cities",
+                                    year = "1859"
+                                } )
+                            ];
+
+                            var result = fractal.builder()
+                                .collection( books )
+                                .withSerializer( new cffractal.models.serializers.ResultsMapSerializer() )
+                                .withTransformer( new tests.resources.BookTransformer().setManager( fractal ) )
+                                .withPagination( {
+                                    "maxrows": 50,
+                                    "page": 2,
+                                    "pages": 3,
+                                    "totalRecords": 112
+                                } )
+                                .convert();
+
+                            expect( result ).toBe( {
+                                "results": [ 1, 2 ],
+                                "resultsMap": {
+                                    "1": {
+                                        "id": 1,
+                                        "title": "To Kill a Mockingbird",
+                                        "year": 1960
+                                    },
+                                    "2": {
+                                        "id": 2,
+                                        "title": "A Tale of Two Cities",
+                                        "year": 1859
+                                    }
+                                },
+                                "meta": {
+                                    "pagination": {
+                                        "maxrows": 50,
+                                        "page": 2,
+                                        "pages": 3,
+                                        "totalRecords": 112
+                                    }
+                                }
+                            } );
+                        } );
                     } );
 
                     describe( "postTransformationCallbacks", function() {

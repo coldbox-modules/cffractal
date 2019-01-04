@@ -90,8 +90,9 @@ component singleton {
     *
     * @response The metadata nested under a "meta" key.
     */
-    function meta( resource, scope ) {
-        return { "#variables.metaKey#" = resource.getMeta() };
+    function meta( resource, scope, data ) {
+        structAppend( data, { "#variables.metaKey#" = resource.getMeta() }, true );
+        return data;
     }
 
 }
