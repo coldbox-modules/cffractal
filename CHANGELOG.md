@@ -1,3 +1,12 @@
+# v7.0.1
+## 04 Jan 2019 — 20:34:53 UTC
+
+### fix
+
++ __ResultsMapSerializer:__ Add meta back to serializer output
+ ([d9594d0](https://github.com/coldbox-modules/cffractal/commit/d9594d0789852f0878d1e85f22fc3c302c5a35e7))
+
+
 # v7.0.0
 ## 22 Aug 2018 — 15:04:57 UTC
 
