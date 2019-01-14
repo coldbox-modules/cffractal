@@ -1,3 +1,11 @@
+# v8.0.0
+## 14 Jan 2019 — 21:13:12 UTC
+
+### BREAKING
+
++ __Scope:__ Fix for includes not respecting custom serializers ([06114f0](https://github.com/coldbox-modules/cffractal/commit/06114f02576e8fb9fd958057255585aac9dc3fd0))
+
+
 # v7.0.1
 ## 04 Jan 2019 — 20:34:53 UTC
 
