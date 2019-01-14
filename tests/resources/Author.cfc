@@ -4,6 +4,7 @@ component accessors="true" {
     property name="name";
     property name="birthdate";
     property name="country";
+    property name="books";
 
     function init( struct args = {} ) {
         for ( var arg in args ) {

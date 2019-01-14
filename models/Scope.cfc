@@ -146,7 +146,7 @@ component accessors="true" {
         var serializer = resource.getSerializer();
 
         if ( identifier != "" ) {
-            return serializer.scopeData( resource.process( this ), identifier );
+            return serializer.scopeData( resource, this, identifier );
         }
 
         var serializedData = serializer.data( resource, this );

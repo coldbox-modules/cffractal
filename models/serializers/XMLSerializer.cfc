@@ -22,7 +22,7 @@ component singleton {
     * out random, especially across different engines.
     */
     property name="sortKeys";
-    
+
     function init( rootKey = "root", metaKey = "meta", sortKeys = true ) {
         variables.rootKey = arguments.rootKey;
         variables.metaKey = arguments.metaKey;
@@ -48,12 +48,14 @@ component singleton {
     /**
     * Decides how to nest the data under the given identifier.
     *
-    * @data       The serialized data.
+    * @resource   The serializing resource.
+    * @scope      The current cffractal scope..
     * @identifier The current identifier for the serialization process.
     *
     * @returns    The scoped, serialized data.
     */
-    function scopeData( data, identifier ) {
+    function scopeData( resource, scope, identifier ) {
+        var data = resource.process( scope );
         return { "#listLast( identifier, "." )#" = data };
     }
 

@@ -188,6 +188,54 @@ component extends="testbox.system.BaseSpec" {
                             };
                             expect( result ).toBe( expectedData );
                         } );
+
+                        it( "can handle an includes that returns a collection", function() {
+                            var author = new tests.resources.Author( {
+                                id = 1,
+                                name = "Harper Lee",
+                                birthdate = createDate( 1926, 04, 28 ),
+                                books = [
+                                    new tests.resources.Book( {
+                                        id = 1,
+                                        title = "To Kill a Mockingbird",
+                                        year = "1960"
+                                    } ),
+                                    new tests.resources.Book( {
+                                        id = 2,
+                                        title = "Go Set a Watchman",
+                                        year = "2015"
+                                    } )
+                                ]
+                            } );
+
+                            var result = fractal.builder()
+                                .item( author )
+                                .withIncludes( "books" )
+                                .withTransformer( new tests.resources.AuthorTransformer().setManager( fractal ) )
+                                .convert();
+
+                            var expectedData = {
+                                "data" = {
+                                    "name" = "Harper Lee",
+                                    "books" = {
+                                        "results" = [ 1, 2 ],
+                                        "resultsMap" = {
+                                            "1" = {
+                                                "id" = 1,
+                                                "year" = 1960,
+                                                "title" = "To Kill a Mockingbird"
+                                            },
+                                            "2" = {
+                                                "id" = 2,
+                                                "year" = 2015,
+                                                "title" = "Go Set a Watchman"
+                                            }
+                                        }
+                                    }
+                                }
+                            };
+                            expect( result ).toBe( expectedData );
+                        } );
                     } );
 
                     describe( "excludes", function() {
