@@ -62,13 +62,24 @@ component singleton {
     /**
     * Decides how to nest the data under the given identifier.
     *
-    * @data       The serialized data.
+    * @resource   The serializing resource.
+    * @scope      The current cffractal scope..
     * @identifier The current identifier for the serialization process.
     *
     * @returns    The scoped, serialized data.
     */
-    function scopeData( data, identifier ) {
-        return { "#listLast( arguments.identifier, "." )#" = data };
+    function scopeData( resource, scope, identifier ) {
+        var serializedData = data( resource, scope );
+
+        if ( resource.hasPagingData() ) {
+            resource.addMeta( "pagination", resource.getPagingData() );
+        }
+
+        if ( resource.hasMeta() ) {
+            meta( resource, scope, serializedData );
+        }
+
+        return { "#listLast( arguments.identifier, "." )#" = serializedData };
     }
 
     /**

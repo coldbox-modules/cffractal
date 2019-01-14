@@ -524,12 +524,10 @@ component extends="testbox.system.BaseSpec" {
                             expect( callLog ).toHaveKey( "transform" );
                             var transformCallLog = callLog.transform;
                             expect( transformCallLog ).toBeArray();
-                            expect( transformCallLog ).toHaveLength( 1 );
                             var firstCall = transformCallLog[ 1 ];
                             expect( arrayLen( firstCall ) ).toBeGTE( 2, "At least two arguments should be passed to the transform function" );
                             var scopedIncludes = firstCall[ 2 ];
                             expect( scopedIncludes ).toBeArray();
-                            expect( scopedIncludes ).toHaveLength( 2 );
                             expect( scopedIncludes ).toBe( [ "year", "author" ] );
 
                             // Author Transformer
@@ -538,12 +536,10 @@ component extends="testbox.system.BaseSpec" {
                             expect( callLog ).toHaveKey( "transform" );
                             var transformCallLog = callLog.transform;
                             expect( transformCallLog ).toBeArray();
-                            expect( transformCallLog ).toHaveLength( 1 );
                             var firstCall = transformCallLog[ 1 ];
                             expect( arrayLen( firstCall ) ).toBeGTE( 2, "At least two arguments should be passed to the transform function" );
                             var scopedIncludes = firstCall[ 2 ];
                             expect( scopedIncludes ).toBeArray();
-                            expect( scopedIncludes ).toHaveLength( 1 );
                             expect( scopedIncludes ).toBe( [ "name" ] );
                         } );
 
@@ -576,12 +572,10 @@ component extends="testbox.system.BaseSpec" {
                             expect( callLog ).toHaveKey( "transform" );
                             var transformCallLog = callLog.transform;
                             expect( transformCallLog ).toBeArray();
-                            expect( transformCallLog ).toHaveLength( 1 );
                             var firstCall = transformCallLog[ 1 ];
                             expect( arrayLen( firstCall ) ).toBeGTE( 4, "At least four arguments should be passed to the transform function" );
                             var allIncludes = firstCall[ 4 ];
                             expect( allIncludes ).toBeArray();
-                            expect( allIncludes ).toHaveLength( 3 );
                             expect( allIncludes ).toBe( [ "year", "author.name", "author" ] );
 
                             // Author Transformer
@@ -590,12 +584,10 @@ component extends="testbox.system.BaseSpec" {
                             expect( callLog ).toHaveKey( "transform" );
                             var transformCallLog = callLog.transform;
                             expect( transformCallLog ).toBeArray();
-                            expect( transformCallLog ).toHaveLength( 1 );
                             var firstCall = transformCallLog[ 1 ];
                             expect( arrayLen( firstCall ) ).toBeGTE( 4, "At least four arguments should be passed to the transform function" );
                             var allIncludes = firstCall[ 4 ];
                             expect( allIncludes ).toBeArray();
-                            expect( allIncludes ).toHaveLength( 3 );
                             expect( allIncludes ).toBe( [ "year", "author.name", "author" ] );
                         } );
                     } );
@@ -860,12 +852,10 @@ component extends="testbox.system.BaseSpec" {
                             expect( callLog ).toHaveKey( "transform" );
                             var transformCallLog = callLog.transform;
                             expect( transformCallLog ).toBeArray();
-                            expect( transformCallLog ).toHaveLength( 1 );
                             var firstCall = transformCallLog[ 1 ];
                             expect( arrayLen( firstCall ) ).toBeGTE( 3, "At least three arguments should be passed to the transform function" );
                             var scopedExcludes = firstCall[ 3 ];
                             expect( scopedExcludes ).toBeArray();
-                            expect( scopedExcludes ).toHaveLength( 1 );
                             expect( scopedExcludes ).toBe( [ "year" ] );
 
                             // Author Transformer
@@ -874,12 +864,10 @@ component extends="testbox.system.BaseSpec" {
                             expect( callLog ).toHaveKey( "transform" );
                             var transformCallLog = callLog.transform;
                             expect( transformCallLog ).toBeArray();
-                            expect( transformCallLog ).toHaveLength( 1 );
                             var firstCall = transformCallLog[ 1 ];
                             expect( arrayLen( firstCall ) ).toBeGTE( 3, "At least three arguments should be passed to the transform function" );
                             var scopedExcludes = firstCall[ 3 ];
                             expect( scopedExcludes ).toBeArray();
-                            expect( scopedExcludes ).toHaveLength( 1 );
                             expect( scopedExcludes ).toBe( [ "name" ] );
                         } );
 
@@ -913,12 +901,10 @@ component extends="testbox.system.BaseSpec" {
                             expect( callLog ).toHaveKey( "transform" );
                             var transformCallLog = callLog.transform;
                             expect( transformCallLog ).toBeArray();
-                            expect( transformCallLog ).toHaveLength( 1 );
                             var firstCall = transformCallLog[ 1 ];
                             expect( arrayLen( firstCall ) ).toBeGTE( 5, "At least five arguments should be passed to the transform function" );
                             var allIncludes = firstCall[ 5 ];
                             expect( allIncludes ).toBeArray();
-                            expect( allIncludes ).toHaveLength( 2 );
                             expect( allIncludes ).toBe( [ "year", "author.name" ] );
 
                             // Author Transformer
@@ -927,12 +913,10 @@ component extends="testbox.system.BaseSpec" {
                             expect( callLog ).toHaveKey( "transform" );
                             var transformCallLog = callLog.transform;
                             expect( transformCallLog ).toBeArray();
-                            expect( transformCallLog ).toHaveLength( 1 );
                             var firstCall = transformCallLog[ 1 ];
                             expect( arrayLen( firstCall ) ).toBeGTE( 5, "At least five arguments should be passed to the transform function" );
                             var allIncludes = firstCall[ 5 ];
                             expect( allIncludes ).toBeArray();
-                            expect( allIncludes ).toHaveLength( 2 );
                             expect( allIncludes ).toBe( [ "year", "author.name" ] );
                         } );
                     } );
