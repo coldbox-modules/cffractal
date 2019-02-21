@@ -235,8 +235,10 @@ component accessors="true" {
     * @returns           The transformed data without any excluded keys.
     */
     private function removeExcludes( transformedData, excludes ) {
-        for ( var exclude in excludes ) {
-            structDelete( transformedData, exclude );
+        if ( isStruct( transformedData ) && ! isObject( transformedData ) ) {
+            for ( var exclude in excludes ) {
+                structDelete( transformedData, exclude );
+            }
         }
         return transformedData;
     }

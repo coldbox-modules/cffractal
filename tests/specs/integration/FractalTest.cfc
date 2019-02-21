@@ -263,7 +263,7 @@ component extends="testbox.system.BaseSpec" {
                             var resource = fractal.item( book, new tests.resources.DefaultIncludesBookTransformer().setManager( fractal ) );
 
                             var scope = fractal.createData( resource );
-                            expect( scope.convert() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}} );
+                            expect( scope.convert() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"bookCount":4,"author":{"data":{"name":"Harper Lee"}}}} );
                         } );
 
                         it( "can use a special serializer for an include", function() {
@@ -611,7 +611,7 @@ component extends="testbox.system.BaseSpec" {
                                 resource = resource,
                                 excludes = "author"
                             );
-                            expect( scope.convert() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}} );
+                            expect( scope.convert() ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"bookCount":4}} );
                         } );
 
                         it( "can ignore a nested default include", function() {
@@ -649,7 +649,8 @@ component extends="testbox.system.BaseSpec" {
                                         "data" = {
                                             "name" = "Harper Lee"
                                         }
-                                    }
+                                    },
+                                    "bookCount" = 4
                                 }
                             };
                             expect( scope.convert() ).toBe( expectedData );
@@ -730,6 +731,7 @@ component extends="testbox.system.BaseSpec" {
                                     "year" = 1960,
                                     "title" = "To Kill a Mockingbird",
                                     "id" = 1,
+                                    "bookCount" = 4,
                                     "author" = {
                                         "data" = {
                                             "name" = "Harper Lee",
