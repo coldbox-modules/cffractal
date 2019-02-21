@@ -1,3 +1,11 @@
+# v8.0.1
+## 21 Feb 2019 — 13:50:14 UTC
+
+### fix
+
++ __AbstractResource:__ Ignore non-struct data when excluding keys ([a9d1e04](https://github.com/coldbox-modules/cffractal/commit/a9d1e04035d61f888d966368778bea197c15cee9))
+
+
 # v8.0.0
 ## 14 Jan 2019 — 21:13:12 UTC
 
