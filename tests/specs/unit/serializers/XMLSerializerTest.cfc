@@ -54,7 +54,7 @@ component extends="testbox.system.BaseSpec" {
 
                     var scope = fractal.createData( resource );
                     expect( scope.convert() ).toMatch( '<root><book><year>1960</year><title>To Kill a Mockingbird</title><id>1</id></book></root>' );
-                } );  
+                } );
             });
 
             describe( "includes", function() {
@@ -109,7 +109,7 @@ component extends="testbox.system.BaseSpec" {
                     var resource = fractal.item( book, new tests.resources.DefaultIncludesBookTransformer().setManager( fractal ) );
 
                     var scope = fractal.createData( resource );
-                    expect( scope.convert() ).toMatch( '<root><book><author><name>Harper Lee</name></author><id>1</id><title>To Kill a Mockingbird</title><year>1960</year></book></root>' );
+                    expect( scope.convert() ).toMatch( '<root><book><author><name>Harper Lee</name></author><bookCount>4</bookCount><id>1</id><title>To Kill a Mockingbird</title><year>1960</year></book></root>' );
                 } );
 
                 it( "can parse an item with a nested includes", function() {

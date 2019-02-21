@@ -1,7 +1,7 @@
 component extends="cffractal.models.transformers.AbstractTransformer" {
 
     variables.resourceKey = "book";
-    variables.defaultIncludes = [ "author" ];
+    variables.defaultIncludes = [ "author", "bookCount" ];
 
     function init( withDefaultCountry = false ) {
         variables.withDefaultCountry = arguments.withDefaultCountry;
@@ -21,6 +21,10 @@ component extends="cffractal.models.transformers.AbstractTransformer" {
             book.getAuthor(),
             new tests.resources.DefaultIncludesAuthorTransformer( withDefaultCountry ).setManager( manager )
         );
+    }
+
+    function includeBookCount( book ) {
+        return 4;
     }
 
 }

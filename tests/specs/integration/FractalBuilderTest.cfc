@@ -100,7 +100,7 @@ component extends="testbox.system.BaseSpec" {
                                 .withTransformer( new tests.resources.DefaultIncludesBookTransformer().setManager( fractal ) )
                                 .convert();
 
-                            expect( result ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"author":{"data":{"name":"Harper Lee"}}}} );
+                            expect( result ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"bookCount":4,"author":{"data":{"name":"Harper Lee"}}}} );
                         } );
 
                         it( "can parse an item with a nested includes", function() {
@@ -257,7 +257,7 @@ component extends="testbox.system.BaseSpec" {
                                 .withExcludes( "author" )
                                 .convert();
 
-                            expect( result ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1}} );
+                            expect( result ).toBe( {"data":{"year":1960,"title":"To Kill a Mockingbird","id":1,"bookCount":4}} );
                         } );
                     } );
                 } );
