@@ -23,10 +23,16 @@ component singleton {
     */
     property name="sortKeys";
 
-    function init( rootKey = "root", metaKey = "meta", sortKeys = true ) {
+     /**
+    * The separator key to use when serializing an array. Default "item"
+    */
+    property name="itemKey";
+
+    function init( rootKey = "root", metaKey = "meta", sortKeys = true, itemKey = "item" ) {
         variables.rootKey = arguments.rootKey;
         variables.metaKey = arguments.metaKey;
         variables.sortKeys = arguments.sortKeys;
+        variables.itemKey = arguments.itemKey;
         return this;
     }
 
@@ -98,7 +104,7 @@ component singleton {
     private function populateNode( parent, contents, root ) {
         if ( isArray( contents ) ) {
             arrayEach( contents, function( item ) {
-                var newNode = XMLElemNew( root, "item" );
+                var newNode = XMLElemNew( root, variables.itemKey );
                 populateNode( newNode, item, root );
                 arrayAppend( parent.XmlChildren, newNode );
             } );
