@@ -1,3 +1,11 @@
+# v8.1.0
+## 28 May 2019 — 21:20:14 UTC
+
+### feat
+
++ __XMLSerializer:__ Allow for a variable array separator in XML serialization other than <item> ([1c25b18](https://github.com/coldbox-modules/cffractal/commit/1c25b18da3c608b558dbc5af261a6747bc8be259))
+
+
 # v8.0.1
 ## 21 Feb 2019 — 13:50:14 UTC
 
