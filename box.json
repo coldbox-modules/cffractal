@@ -2,7 +2,7 @@
     "name":"cffractal",
     "version":"8.1.0",
     "author":"Eric Peterson",
-    "location":"coldbox-modules/cffractal#v8.1.0",
+    "location":"forgeboxStorage",
     "homepage":"https://github.com/coldbox-modules/cffractal",
     "documentation":"https://github.com/coldbox-modules/cffractal",
     "repository":{
@@ -23,9 +23,7 @@
         "testbox":"testbox/",
         "coldbox":"tests/resources/app/coldbox/"
     },
-    "scripts":{
-        "postVersion":"package set location='coldbox-modules/cffractal#v`package version`'"
-    },
+    "scripts":{},
     "ignore":[
         "**/.*",
         "test",
