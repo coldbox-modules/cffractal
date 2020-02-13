@@ -1,3 +1,12 @@
+# v8.1.1
+## 13 Feb 2020 — 17:49:55 UTC
+
+### other
+
++ __\*:__ chore: Use OpenJDK instead of OracleJDK ([8a6b8ca](https://github.com/coldbox-modules/cffractal/commit/8a6b8ca2fb61e6b31e85adea67379f5163ab9981))
++ __\*:__ chore: Use forgeboxStorage ([133118a](https://github.com/coldbox-modules/cffractal/commit/133118a6b37cc12ecf4ceab6e5fe4fc4fc71f48d))
+
+
 # v8.1.0
 ## 28 May 2019 — 21:20:14 UTC
 
